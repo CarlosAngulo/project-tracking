@@ -1,0 +1,13 @@
+<div class="bar">
+    <div class="partial">
+        <div *ngFor="let status of statuses" [class]="status | lowercase" [style.width]="data[status] * 100 / totalEstimation + '%'">
+            {{data[status] * 100 / totalEstimation | number: '1.1-1'}} %
+        </div>
+    </div>
+    <div class="convention">
+        <div class="convention-item" *ngFor="let status of statuses">
+            <span class="dot" [class]="status | lowercase"></span>
+            {{status | titlecase}}
+        </div>
+    </div>
+</div>

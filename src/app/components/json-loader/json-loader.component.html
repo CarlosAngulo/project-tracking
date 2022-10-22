@@ -1,0 +1,13 @@
+<div class="overlay">
+    <div class="loader">
+        <h2>JSON Loader</h2>
+        <p>Please insert the source font of your project in JSON format.</p>
+        <textarea [(ngModel)]="projectValue" rows="14">
+        </textarea>
+        <p class="error" *ngIf="parseJSONError">The object you are trying to insert is not valid.</p>
+        <div class="button-area">
+            <button (click)="onInsert()">Insert</button>
+            <button (click)="onClose()" class="cancel">Cancel</button>
+        </div>
+    </div>
+</div>

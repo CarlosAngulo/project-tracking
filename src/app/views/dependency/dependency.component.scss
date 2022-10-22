@@ -1,0 +1,66 @@
+.graph {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    &-header {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #CCC;
+        font-size: 14px;
+        font-weight: 700;
+        div {
+            border-right: 1px solid #CCC;
+            padding: 0 20px;
+            align-items: center;
+            display: flex;
+        }
+        &-title {
+            flex-grow: 1;
+            font-size: 16px;
+        }
+        &-progress {
+            flex-basis: 50%;
+            display: block !important;
+        }
+        &-leader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-right: 1px solid #CCC;
+            padding: 0 30px;
+            span {
+                background-color: #333;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-weight: 700;
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                color: white;
+            }
+        }
+        &-sprint {
+            ul {
+                // display: none;
+            }
+        }
+    }
+    &-viewer {
+        overflow: auto;
+        background-color: #F0F0F0;
+        flex-grow: 1;
+        position: relative;
+    }
+}
+
+h1 {
+    font-size: 16px;
+    margin: 0;
+}
+
+app-menu {
+    position: absolute;
+    margin-top: 12px;
+    margin-left: 10px;
+}

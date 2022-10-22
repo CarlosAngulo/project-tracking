@@ -1,0 +1,64 @@
+.overlay {
+    position: fixed;
+    z-index: 20000;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(180, 180, 180, 0.4);
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(3px);
+}
+
+.loader {
+    background-color: #FFF;
+    border-radius: 12px;
+    border: 1px solid #CCC;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+    padding: 20px;
+    width: 600px;
+}
+
+textarea {
+    display: block;
+    width: 100%;
+    border: 1px solid #CCC;
+    border-radius: 6px;
+}
+
+h2 {
+    font-size: 16px;
+    margin: 0;
+}
+
+p {
+    margin: 5px 0 10px;
+}
+
+.button-area {
+    margin-top: 10px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+button {
+    background-color: rgb(1, 74, 156);
+    color: white;
+    font-weight: bold;
+    padding: 6px 12px;
+    border: medium none;
+    border-radius: 6px;
+    text-transform: uppercase;
+    cursor: pointer;
+    &.cancel {
+        background-color: rgb(181, 1, 118);
+    }
+}
+
+.error {
+    color: red;
+    font-size: 11px;
+}
