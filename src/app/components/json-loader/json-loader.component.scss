@@ -56,6 +56,10 @@ button {
     &.cancel {
         background-color: rgb(181, 1, 118);
     }
+    &[disabled] {
+        opacity: 0.4;
+        cursor: default;
+    }
 }
 
 .error {

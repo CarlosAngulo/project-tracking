@@ -1,16 +1,5 @@
 <div class="graph">
-    <div class="graph-header">
-        <div class="graph-header-leader"><span>CA</span></div>
-        <div class="graph-header-title"><h1>{{title}}</h1></div>
-        <div class="graph-header-sprint">
-            <app-dropdown [options]="mvps" (onSelect)="onSelectMVP($event)"></app-dropdown>
-        </div>
-        <div class="graph-header-progress">
-            <app-progress-bar [data]="progressStatus"></app-progress-bar>
-        </div>
-    </div>
     <div class="graph-viewer" #container>
-        <app-menu></app-menu>
         <app-card
             *ngFor="let node of nodeTree"
             (selectNode)="onSelectNode($event)"
@@ -19,5 +8,3 @@
         ></app-card>
     </div>
 </div>
-
-<app-json-loader *ngIf="showLoader" (onCancel)="onShowLoader($event)" (onLoad)="onJSONLoad($event)"></app-json-loader>

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NodeTreeService } from './services/nodetree.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,18 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'project_tracking';
+  showLoader = true;
+
+  constructor(private nodeTreeService: NodeTreeService) {
+    
+  }
+
+  onJSONLoad(project:any) {
+    this.onShowLoader(false);
+    this.nodeTreeService.loadProject(project)
+  }
+  
+  onShowLoader(event:boolean) {
+    this.showLoader = event;
+  }
 }

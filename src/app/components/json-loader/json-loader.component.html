@@ -6,8 +6,8 @@
         </textarea>
         <p class="error" *ngIf="parseJSONError">The object you are trying to insert is not valid.</p>
         <div class="button-area">
-            <button (click)="onInsert()">Insert</button>
-            <button (click)="onClose()" class="cancel">Cancel</button>
+            <button (click)="onInsert()" [disabled]="parseJSONError">Insert</button>
+            <button (click)="onClose()" class="cancel" [disabled]="!projectLoaded">Cancel</button>
         </div>
     </div>
 </div>

@@ -1,17 +1,22 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { IProject } from 'src/app/interfaces/nodes.inteface';
+import { NodeTreeService } from 'src/app/services/nodetree.service';
 
 @Component({
   selector: 'app-json-loader',
   templateUrl: './json-loader.component.html',
   styleUrls: ['./json-loader.component.scss']
 })
-export class JsonLoaderComponent implements OnInit {
+export class JsonLoaderComponent {
   @Output() onLoad: EventEmitter<any> = new EventEmitter();
   @Output() onCancel: EventEmitter<boolean> = new EventEmitter();
 
   parseJSONError = false;
+  projectLoaded = false;
 
-  project = {    
+  project: IProject = {
+    leader: 'Carlos Angulo',
+    name: 'Q3.3.1 Grouping in Report Builder (Composition and Profile Report)',
     tickets : [
       {
         title: 'Feature Leading Tasks',
@@ -441,7 +446,7 @@ export class JsonLoaderComponent implements OnInit {
     ]
   }
 
-  constructor() { }
+  constructor(readonly nodeTreeService: NodeTreeService) { }
 
   get projectValue () {
     return JSON.stringify(this.project, null, 2);
@@ -458,14 +463,12 @@ export class JsonLoaderComponent implements OnInit {
   }
 
   onInsert() {
-    this.onLoad.next(this.project)
+    this.onLoad.next(this.project);
+    this.projectLoaded = true;
   }
 
   onClose() {
     this.onCancel.next(false)
-  }
-
-  ngOnInit(): void {
   }
 
 }

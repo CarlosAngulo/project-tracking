@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { IBoxConstrainsPx, IRelativesPos, INode, NodeStatus } from 'src/app/services/ticketss.service';
+import { IBoxConstrainsPx, IRelativesPos, INode, NodeStatus } from 'src/app/interfaces/nodes.inteface';
 import { cardProps } from './card.props';
 
 export interface ISVGCoords {
