@@ -1,3 +1,7 @@
 export const environment = {
-  production: true
+  production: true,
+  jira: {
+    user: '<your jira user>',
+    token: '<your token>',
+  },
 };
