@@ -12,8 +12,8 @@
         display: flex;
     }
     &-title {
-        flex-grow: 1;
         font-size: 16px;
+        max-width: 35%;
     }
     &-progress {
         flex-basis: 50%;
@@ -42,10 +42,14 @@
 h1 {
     font-size: 16px;
     margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 app-menu {
     position: absolute;
     margin-top: 12px;
     margin-left: 10px;
+    z-index: 10;
 }

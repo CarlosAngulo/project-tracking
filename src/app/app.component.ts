@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { NodeTreeService } from './services/nodetree.service';
 
 @Component({
@@ -6,11 +7,14 @@ import { NodeTreeService } from './services/nodetree.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
   showLoader = true;
+  private unsub$ = new Subject<void>();
 
   constructor(private nodeTreeService: NodeTreeService) {
-    
+    nodeTreeService.isLoadWindowOpen()
+    .pipe(takeUntil(this.unsub$))
+    .subscribe(res => this.showLoader = res)
   }
 
   onJSONLoad(project:any) {
@@ -20,5 +24,10 @@ export class AppComponent {
   
   onShowLoader(event:boolean) {
     this.showLoader = event;
+  }
+
+  ngOnDestroy() {
+    this.unsub$.next();
+    this.unsub$.unsubscribe();
   }
 }

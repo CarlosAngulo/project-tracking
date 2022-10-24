@@ -7,7 +7,7 @@ import { NodeTreeService } from 'src/app/services/nodetree.service';
   templateUrl: './json-loader.component.html',
   styleUrls: ['./json-loader.component.scss']
 })
-export class JsonLoaderComponent {
+export class JsonLoaderComponent implements OnInit {
   @Output() onLoad: EventEmitter<any> = new EventEmitter();
   @Output() onCancel: EventEmitter<boolean> = new EventEmitter();
 
@@ -447,6 +447,10 @@ export class JsonLoaderComponent {
   }
 
   constructor(readonly nodeTreeService: NodeTreeService) { }
+
+  ngOnInit(): void {
+    this.projectLoaded = this.nodeTreeService.isProjectLoaded;
+  }
 
   get projectValue () {
     return JSON.stringify(this.project, null, 2);

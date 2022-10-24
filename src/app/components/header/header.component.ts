@@ -9,9 +9,10 @@ import { NodeTreeService } from 'src/app/services/nodetree.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   
-  title = '';
   mvps = {}
+  leader = '';
   progressStatus!: any[];
+  title = '';
   private unsub$ = new Subject<void>();
 
   constructor(private nodeTreeService: NodeTreeService) {
@@ -26,6 +27,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     nodeTreeService.getTitle()
     .pipe(takeUntil(this.unsub$))
     .subscribe((title: string) => this.title = title);
+    
+    nodeTreeService.getLeader()
+    .pipe(takeUntil(this.unsub$))
+    .subscribe((leader: string) => this.leader = leader);
   }
 
   ngOnInit(): void {
@@ -34,6 +39,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onSelectMVP(mvp?: string) {
     this.nodeTreeService
     .onSelectMVP(mvp);
+  }
+
+  onUploadClick(evt: boolean) {
+    this.nodeTreeService.openLoadWindow();
   }
 
   ngOnDestroy() {

@@ -1,5 +1,5 @@
 <div class="header">
-    <div class="header-leader"><span>CA</span></div>
+    <div class="header-leader"><span>{{leader | initials}}</span></div>
     <div class="header-title"><h1>{{title}}</h1></div>
     <div class="header-sprint">
         <app-dropdown [options]="mvps" (onSelect)="onSelectMVP($event)"></app-dropdown>
@@ -9,4 +9,4 @@
     </div>
 </div>
 
-<app-menu></app-menu>
+<app-menu (onUploadClick)="onUploadClick($event)"></app-menu>

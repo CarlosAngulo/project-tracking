@@ -12,6 +12,9 @@ export class NodeTreeService {
   
   private _title: Subject<string> = new Subject();
   private title$: Observable<string> = this._title.asObservable();
+  
+  private _leader: Subject<string> = new Subject();
+  private leader$: Observable<string> = this._leader.asObservable();
 
   private  nodeTree: INode[] = [];
   private  _nodeTree: Subject<INode[]> = new Subject();
@@ -19,6 +22,9 @@ export class NodeTreeService {
 
   private _treeProgress: Subject<any[]> = new Subject();
   private treeProgress$: Observable<any[]> = this._treeProgress.asObservable();
+
+  private _isLoadWindowOpen: Subject<boolean> = new Subject();
+  private isLoadWindowOpen$: Observable<boolean> = this._isLoadWindowOpen.asObservable();
 
   public isProjectLoaded = false;
    
@@ -39,11 +45,25 @@ export class NodeTreeService {
   getTitle(): Observable<string> {
     return this.title$;
   }
+  
+  getLeader(): Observable<string> {
+    return this.leader$;
+  }
 
   loadProject(project: IProject) {
     this._title.next(project.name);
-    this.isProjectLoaded = false;
+    this._leader.next(project.leader);
+    this.isProjectLoaded = true;
     this.sortDependencies(project.tickets);
+  }
+
+  // TO DO: Move to NgRx
+  openLoadWindow() {
+    this._isLoadWindowOpen.next(true);
+  }
+  
+  isLoadWindowOpen(): Observable<boolean> {
+    return this.isLoadWindowOpen$;
   }
 
   private sortDependencies(nodes: INode[]) {
@@ -294,7 +314,6 @@ export class NodeTreeService {
   }
 
   onSelectMVP(mvp?: string) {
-    console.log(mvp)
     const nodes = this.nodeTree.filter(node=> node.mvp.name === mvp)
     const codes = nodes.map(t=>t.code) || [];
     this.nodeTree = this.highlightNodes(this.nodeTree, codes, false);
