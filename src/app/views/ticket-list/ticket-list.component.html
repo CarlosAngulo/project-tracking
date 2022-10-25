@@ -1,0 +1,26 @@
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Asignee</th>
+                <th>title</th>
+                <th>estimation</th>
+                <th>status</th>
+                <th>effort</th>
+                <th>parents</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let ticket of ticketList; let i = index">
+                <td>{{ticket.code}}</td>
+                <td>{{ticket.asignee.name | initials}}</td>
+                <td>{{ticket.title}}</td>
+                <td>{{ticket.estimation}}</td>
+                <td>{{ticket.status}}</td>
+                <td>{{ticket.effort}}</td>
+                <td>{{ticket.parents}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

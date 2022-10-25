@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy} from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
 
@@ -7,7 +7,7 @@ import { NodeTreeService } from 'src/app/services/nodetree.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnDestroy {
   
   mvps = {}
   leader = '';
@@ -24,16 +24,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsub$))
     .subscribe((progress: any[]) => this.progressStatus = progress);
     
-    nodeTreeService.getTitle()
+    nodeTreeService.getProjectName()
     .pipe(takeUntil(this.unsub$))
     .subscribe((title: string) => this.title = title);
     
     nodeTreeService.getLeader()
     .pipe(takeUntil(this.unsub$))
     .subscribe((leader: string) => this.leader = leader);
-  }
-
-  ngOnInit(): void {
   }
 
   onSelectMVP(mvp?: string) {

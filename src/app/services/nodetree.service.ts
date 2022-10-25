@@ -10,9 +10,11 @@ export class NodeTreeService {
   private _mvps: Subject<any[]> = new Subject();
   private mvps$: Observable<any[]> = this._mvps.asObservable();
   
-  private _title: Subject<string> = new Subject();
-  private title$: Observable<string> = this._title.asObservable();
+  private name!: string;
+  private _name: Subject<string> = new Subject();
+  private name$: Observable<string> = this._name.asObservable();
   
+  private leader!: string;
   private _leader: Subject<string> = new Subject();
   private leader$: Observable<string> = this._leader.asObservable();
 
@@ -20,6 +22,7 @@ export class NodeTreeService {
   private  _nodeTree: Subject<INode[]> = new Subject();
   private nodeTree$: Observable<INode[]> = this._nodeTree.asObservable();
 
+  public treeProgress!: any[];
   private _treeProgress: Subject<any[]> = new Subject();
   private treeProgress$: Observable<any[]> = this._treeProgress.asObservable();
 
@@ -29,6 +32,10 @@ export class NodeTreeService {
   public isProjectLoaded = false;
    
   constructor() {};
+
+  getStaticNodeTree() {
+    return this.nodeTree;
+  }
   
   getNodeTree():Observable<INode[]> {
     return this.nodeTree$;
@@ -42,19 +49,47 @@ export class NodeTreeService {
     return this.treeProgress$;
   }
   
-  getTitle(): Observable<string> {
-    return this.title$;
+  getProjectName(): Observable<string> {
+    return this.name$;
   }
   
   getLeader(): Observable<string> {
     return this.leader$;
   }
 
+  loadFromLocalStorage() {
+    let project: any = localStorage.getItem('project');
+    if (project) {
+      const parsedProject = JSON.parse(project);
+      this.loadProject(parsedProject);
+    }
+  }
+  
   loadProject(project: IProject) {
-    this._title.next(project.name);
+    localStorage.setItem('project', JSON.stringify(project));
+    this._name.next(project.name);
+    this.name = project.name;
     this._leader.next(project.leader);
+    this.leader = project.leader;
     this.isProjectLoaded = true;
-    this.sortDependencies(project.tickets);
+    const parsedProject = this.parseProject(project);
+    this.sortDependencies(parsedProject.tickets);
+  }
+
+  parseProject(project:IProject):IProject {
+    return {
+      ...project,
+      tickets: project.tickets.map((ticket:INode) => ({
+        ...ticket,
+        children: [],
+        childrenTree: [],
+        index: 0,
+        level: 0,
+        position: {x: 0, y:0},
+        blockedByParents: false,
+        selected: false,
+      }))
+    }
   }
 
   // TO DO: Move to NgRx
@@ -83,7 +118,7 @@ export class NodeTreeService {
     nodeTree = this.blockByParents(nodeTree);
 
     this.nodeTree = nodeTree;
-
+    
     this._nodeTree.next(nodeTree);
 
     this.calculateTreeProgres(this.nodeTree);
@@ -300,7 +335,8 @@ export class NodeTreeService {
       }
     }, {})
 
-    this._treeProgress.next(progress)
+    this._treeProgress.next(progress);
+    localStorage.setItem('progress', JSON.stringify(progress));
   }
 
   onSelectNode(nodeID: string) {

@@ -13,7 +13,6 @@ export class JiraService {
     }
 
     getEpic() {
-        console.log(btoa(`${this.credentials.user}:${this.credentials.token}`))
         return this.http.get('https://projects.mbww.com/rest/api/3/issue/AMC-10451', {
             headers: {
                 'Content-Type':  'application/json',

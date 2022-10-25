@@ -14,7 +14,7 @@ export interface INode {
     effort?: IRoles[];
     parents: string[];
     treeParents?: string[];
-    asignee?: IDeveloper;
+    asignee: IDeveloper;
     position: {x: number, y: number};
     level: number;
     index: number;

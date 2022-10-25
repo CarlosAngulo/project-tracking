@@ -15,7 +15,7 @@
         </span>
     </div>
     <div class="card-header">
-        <div class="card-header-asignee" *ngIf="nodeData.asignee?.name">{{nodeData.asignee?.name | initials}}</div>
+        <div class="card-header-asignee" *ngIf="nodeData.asignee.name">{{nodeData.asignee.name | initials}}</div>
         <div class="card-header-code">{{nodeData.code}}</div>
         <div class="card-header-status" [class]="nodeData.status | lowercase">{{nodeData.status}}</div>
     </div>

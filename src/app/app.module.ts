@@ -14,6 +14,7 @@ import { JsonLoaderComponent } from './components/json-loader/json-loader.compon
 import { MenuComponent } from './components/menu/menu.component';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './components/header/header.component';
+import { TicketListComponent } from './views/ticket-list/ticket-list.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { HeaderComponent } from './components/header/header.component';
     DropdownComponent,
     JsonLoaderComponent,
     MenuComponent,
-    HeaderComponent
+    HeaderComponent,
+    TicketListComponent
   ],
   imports: [
     BrowserModule,

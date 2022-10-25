@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { IProject } from 'src/app/interfaces/nodes.inteface';
+import { INode, IProject } from 'src/app/interfaces/nodes.inteface';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class JsonLoaderComponent implements OnInit {
   parseJSONError = false;
   projectLoaded = false;
 
-  project: IProject = {
+  PROJECT: any = {
     leader: 'Carlos Angulo',
     name: 'Q3.3.1 Grouping in Report Builder (Composition and Profile Report)',
     tickets : [
@@ -25,13 +25,6 @@ export class JsonLoaderComponent implements OnInit {
         description: 'Ticket description',
         status: 'DONE',
         effort: ['BE'],
-        position: {x: 0, y:0},
-        blockedByParents: false,
-        selected: false,
-        index: 0,
-        level: 0,
-        children: [],
-        childrenTree: [],
         parents: [],
         estimation: 5,
         mvp: {
@@ -50,13 +43,6 @@ export class JsonLoaderComponent implements OnInit {
         description: 'Ticket description',
         status: 'DONE',
         effort: ['BE'],
-        position: {x: 0, y:0},
-        blockedByParents: false,
-        selected: false,
-        index: 0,
-        level: 0,
-        children: [],
-        childrenTree: [],
         parents: ['AMC-12159'],
         estimation: 5,
         mvp: {
@@ -75,13 +61,6 @@ export class JsonLoaderComponent implements OnInit {
         description: 'Ticket description',
         status: 'PROGRESS',
         effort: ['BE'],
-        position: {x: 0, y:0},
-        blockedByParents: false,
-        selected: false,
-        index: 0,
-        level: 0,
-        children: [],
-        childrenTree: [],
         parents: ['AMC-12159'],
         estimation: 2,
         mvp: {
@@ -100,13 +79,6 @@ export class JsonLoaderComponent implements OnInit {
         description: 'Ticket description',
         status: 'DONE',
         effort: ['BE'],
-        position: {x: 0, y:0},
-        blockedByParents: false,
-        selected: false,
-        index: 0,
-        level: 0,
-        children: [],
-        childrenTree: [],
         parents: ['AMC-12159'],
         estimation: 3,
         mvp: {
@@ -125,13 +97,6 @@ export class JsonLoaderComponent implements OnInit {
         description: 'Ticket description',
         status: 'BLOCKED',
         effort: ['BE'],
-        position: {x: 0, y:0},
-        blockedByParents: false,
-        selected: false,
-        index: 0,
-        level: 0,
-        children: [],
-        childrenTree: [],
         parents: ['AMC-12191'],
         estimation: 5,
         mvp: {
@@ -150,13 +115,6 @@ export class JsonLoaderComponent implements OnInit {
         description: 'Ticket description',
         status: 'NEW',
         effort: ['BE'],
-        position: {x: 0, y:0},
-        blockedByParents: false,
-        selected: false,
-        index: 0,
-        level: 0,
-        children: [],
-        childrenTree: [],
         parents: ['AMC-12XXX'],
         estimation: 5,
         mvp: {
@@ -175,13 +133,6 @@ export class JsonLoaderComponent implements OnInit {
         description: 'Ticket description',
         status: 'PROGRESS',
         effort: ['FE'],
-        position: {x: 0, y:0},
-        blockedByParents: false,
-        selected: false,
-        index: 0,
-        level: 0,
-        children: [],
-        childrenTree: [],
         parents: ['AMC-12191'],
         estimation: 1,
         mvp: {
@@ -200,13 +151,6 @@ export class JsonLoaderComponent implements OnInit {
         description: 'Ticket description',
         status: 'PROGRESS',
         effort: ['BE'],
-        position: {x: 0, y:0},
-        blockedByParents: false,
-        selected: false,
-        index: 0,
-        level: 0,
-        children: [],
-        childrenTree: [],
         parents: ['AMC-12442'],
         estimation: 1,
         mvp: {
@@ -225,13 +169,6 @@ export class JsonLoaderComponent implements OnInit {
         description: 'Ticket description',
         status: 'PROGRESS',
         effort: ['BE'],
-        position: {x: 0, y:0},
-        blockedByParents: false,
-        selected: false,
-        index: 0,
-        level: 0,
-        children: [],
-        childrenTree: [],
         parents: ['AMC-1XXXX'],
         estimation: 1,
         mvp: {
@@ -250,13 +187,6 @@ export class JsonLoaderComponent implements OnInit {
         description: 'Ticket description',
         status: 'DONE',
         effort: ['BE'],
-        position: {x: 0, y:0},
-        blockedByParents: false,
-        selected: false,
-        index: 0,
-        level: 0,
-        children: [],
-        childrenTree: [],
         parents: [],
         estimation: 1,
         mvp: {
@@ -275,13 +205,6 @@ export class JsonLoaderComponent implements OnInit {
         description: 'Ticket description',
         status: 'NEW',
         effort: ['BE'],
-        position: {x: 0, y:0},
-        blockedByParents: false,
-        selected: false,
-        index: 0,
-        level: 0,
-        children: [],
-        childrenTree: [],
         parents: ['AMC-12191'],
         estimation: 1,
         mvp: {
@@ -300,13 +223,6 @@ export class JsonLoaderComponent implements OnInit {
         description: 'Ticket description',
         status: 'NEW',
         effort: ['BE'],
-        position: {x: 0, y:0},
-        blockedByParents: false,
-        selected: false,   
-        index: 0,
-        level: 0,
-        children: [],
-        childrenTree: [],
         parents: ['AMC-12443'],
         estimation: 1,
         mvp: {
@@ -325,13 +241,6 @@ export class JsonLoaderComponent implements OnInit {
         description: 'Ticket description',
         status: 'NEW',
         effort: ['BE'],
-        position: {x: 0, y:0},
-        blockedByParents: false,
-        selected: false,   
-        index: 0,
-        level: 0,
-        children: [],
-        childrenTree: [],
         parents: ['AMC-12443'],
         estimation: 1,
         mvp: {
@@ -350,13 +259,6 @@ export class JsonLoaderComponent implements OnInit {
         description: 'Ticket description',
         status: 'NEW',
         effort: ['BE'],
-        position: {x: 0, y:0},
-        blockedByParents: false,
-        selected: false,   
-        index: 0,
-        level: 0,
-        children: [],
-        childrenTree: [],
         parents: ['AMC-12442', 'AMC-12450'],
         estimation: 1,
         mvp: {
@@ -375,13 +277,6 @@ export class JsonLoaderComponent implements OnInit {
         description: 'Ticket description',
         status: 'NEW',
         effort: ['BE'],
-        position: {x: 0, y:0},
-        blockedByParents: false,
-        selected: false,   
-        index: 0,
-        level: 0,
-        children: [],
-        childrenTree: [],
         parents: ['AMC-EEE'],
         estimation: 1,
         mvp: {
@@ -400,13 +295,6 @@ export class JsonLoaderComponent implements OnInit {
         description: 'Ticket description',
         status: 'NEW',
         effort: ['BE'],
-        position: {x: 0, y:0},
-        blockedByParents: false,
-        selected: false,   
-        index: 0,
-        level: 0,
-        children: [],
-        childrenTree: [],
         parents: ['AMC-AAAA', 'AMC-11191'],
         estimation: 1,
         mvp: {
@@ -425,13 +313,6 @@ export class JsonLoaderComponent implements OnInit {
         description: 'Ticket description',
         status: 'NEW',
         effort: ['BE'],
-        position: {x: 0, y:0},
-        blockedByParents: false,
-        selected: false,   
-        index: 0,
-        level: 0,
-        children: [],
-        childrenTree: [],
         parents: ['AMC-11191', 'AMC-GGG'],
         estimation: 1,
         mvp: {
@@ -446,7 +327,16 @@ export class JsonLoaderComponent implements OnInit {
     ]
   }
 
-  constructor(readonly nodeTreeService: NodeTreeService) { }
+  project!: IProject;
+
+  constructor(readonly nodeTreeService: NodeTreeService) {
+    const localStorageProject: any = localStorage.getItem('project');
+    if (localStorageProject) {
+      this.project = JSON.parse(localStorageProject);
+    } else {
+      this.project = this.PROJECT;
+    }
+  }
 
   ngOnInit(): void {
     this.projectLoaded = this.nodeTreeService.isProjectLoaded;
