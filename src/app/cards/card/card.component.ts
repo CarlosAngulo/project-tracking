@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { IBoxConstrainsPx, IRelativesPos, INode, NodeStatus } from 'src/app/interfaces/nodes.inteface';
+import { IBoxconstraintsPx, IRelativesPos, INode, NodeStatus } from 'src/app/interfaces/nodes.inteface';
 import { cardProps } from './card.props';
 
 export interface ISVGCoords {
@@ -25,7 +25,7 @@ export class CardComponent implements OnInit, AfterViewInit {
 
   nodeStatus = NodeStatus;
   nodeData!:INode;
-  arrowContainerStyles: IBoxConstrainsPx[] = [];
+  arrowContainerStyles: IBoxconstraintsPx[] = [];
   arrowViewBox: string[] = [];
   svgCoords: ISVGCoords[]  = [];
   bezierCoords: {M: number[], c: number[][]}[] = [];

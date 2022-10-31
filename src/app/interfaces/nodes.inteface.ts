@@ -43,7 +43,7 @@ export interface IRelativesPos {
     }
 }
   
-export interface IBoxConstrainsPx {
+export interface IBoxconstraintsPx {
     left: string,
     top: string,
     width: string,
@@ -74,7 +74,7 @@ export interface IDeveloper {
 }
 
 
-export interface IConstrains {
+export interface Iconstraints {
     top: number;
     left: number;
     bottom: number;

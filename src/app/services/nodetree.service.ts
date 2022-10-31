@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { cardProps } from '../cards/card/card.props';
-import { IConstrains, INode, IProject, NodeStatus } from '../interfaces/nodes.inteface';
+import { Iconstraints, INode, IProject, NodeStatus } from '../interfaces/nodes.inteface';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({
@@ -18,9 +18,9 @@ export class NodeTreeService {
   private _leader: Subject<string> = new Subject();
   private leader$: Observable<string> = this._leader.asObservable();
   
-  private constrains!: IConstrains;
-  private _constrains: Subject<IConstrains> = new Subject();
-  private constrains$: Observable<IConstrains> = this._constrains.asObservable();
+  private constraints!: Iconstraints;
+  private _constraints: Subject<Iconstraints> = new Subject();
+  private constraints$: Observable<Iconstraints> = this._constraints.asObservable();
 
   private  nodeTree: INode[] = [];
   private  _nodeTree: Subject<INode[]> = new Subject();
@@ -62,8 +62,8 @@ export class NodeTreeService {
     return this.leader$;
   }
 
-  getConstrains(): Observable<IConstrains> {
-    return this.constrains$;
+  getconstraints(): Observable<Iconstraints> {
+    return this.constraints$;
   }
 
   loadFromLocalStorage() {
@@ -297,14 +297,14 @@ export class NodeTreeService {
       }
     })
 
-    const constrains = this.calculateConstrains(nodes);
-    this._constrains.next(constrains);
+    const constraints = this.calculateconstraints(nodes);
+    this._constraints.next(constraints);
     
     return nodes.map(node=> ({
       ...node,
       position: {
         y: node.position.y,
-        x: node.position.x - constrains.left + cardProps.margin.x
+        x: node.position.x - constraints.left + cardProps.margin.x
       } 
     }));
   }
@@ -327,7 +327,7 @@ export class NodeTreeService {
     }));
   }
 
-  private calculateConstrains(nodes: INode[]) {
+  private calculateconstraints(nodes: INode[]) {
     return nodes.reduce((acc, curr) => {
       acc.left = curr.position.x < acc.left ? curr.position.x : acc.left;
       acc.top = curr.position.y < acc.top ? curr.position.y : acc.top;
