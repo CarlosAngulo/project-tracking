@@ -15,317 +15,300 @@ export class JsonLoaderComponent implements OnInit {
   projectLoaded = false;
 
   PROJECT: any = {
-    leader: 'Carlos Angulo',
-    name: 'Q3.3.1 Grouping in Report Builder (Composition and Profile Report)',
-    tickets : [
-      {
-        title: 'Feature Leading Tasks',
-        code: 'AMC-12159',
-        link: 'https://projects.mbww.com/browse/AMC-12159',
-        description: 'Ticket description',
-        status: 'DONE',
-        effort: ['BE'],
-        parents: [],
-        estimation: 5,
-        mvp: {
-          name: 'Setup',
-          id: 1,
-        },
-        asignee: {
-          name: 'Carlos Angulo',
-          role: ['FE'],
-        }
+    "name": "Q4.0.0 Groups Composition and Profile Reports",
+    "leader": "Carlos Angulo",
+    "tickets": [
+    {
+      "title": "[SPIKE] - Groups in report builder Data Structure",
+      "code": "AMC-12443",
+      "link": "https://projects.mbww.com/browse/AMC-12443",
+      "description": "[SPIKE] - Groups in report builder Data Structure",
+      "status": "PROGRESS",
+      "effort": ["BE"],
+      "parents": [],
+      "estimation": 5,
+      "mvp": {
+        "name": "Setup",
+        "id": 1
       },
-      {
-        title: 'SPIKE - Create a backward compatible data structure',
-        code: 'AMC-12443',
-        link: 'https://projects.mbww.com/browse/AMC-12443',
-        description: 'Ticket description',
-        status: 'DONE',
-        effort: ['BE'],
-        parents: ['AMC-12159'],
-        estimation: 5,
-        mvp: {
-          name: 'Setup',
-          id: 1,
-        },
-        asignee: {
-          name: 'Luis Hernandez',
-          role: ['BE'],
-        }
-      },
-      {
-        title: 'Add Feature Flag',
-        code: 'AMC-12458',
-        link: 'https://projects.mbww.com/browse/AMC-12458',
-        description: 'Ticket description',
-        status: 'PROGRESS',
-        effort: ['BE'],
-        parents: ['AMC-12159'],
-        estimation: 2,
-        mvp: {
-          name: 'Setup',
-          id: 1,
-        },
-        asignee: {
-          name: 'Carlos Angulo',
-          role: ['FE'],
-        }
-      },
-      {
-        title: 'Modify Report data structure',
-        code: 'AMC-12191',
-        link: 'https://projects.mbww.com/browse/AMC-12191',
-        description: 'Ticket description',
-        status: 'DONE',
-        effort: ['BE'],
-        parents: ['AMC-12159'],
-        estimation: 3,
-        mvp: {
-          name: 'Setup',
-          id: 1,
-        },
-        asignee: {
-          name: 'Carlos Angulo',
-          role: ['FE'],
-        }
-      },
-      {
-        title: 'Create endpoint to calculate group sizes',
-        code: 'AMC-12442',
-        link: 'https://projects.mbww.com/browse/AMC-12442',
-        description: 'Ticket description',
-        status: 'BLOCKED',
-        effort: ['BE'],
-        parents: ['AMC-12191'],
-        estimation: 5,
-        mvp: {
-          name: 'Report View',
-          id: 3,
-        },
-        asignee: {
-          name: 'Carlos Angulo',
-          role: ['FE'],
-        }
-      },
-      {
-        title: 'Modify Datasources panel',
-        code: 'AMC-11191',
-        link: 'https://projects.mbww.com/browse/AMC-11191',
-        description: 'Ticket description',
-        status: 'NEW',
-        effort: ['BE'],
-        parents: ['AMC-12XXX'],
-        estimation: 5,
-        mvp: {
-          name: 'Export',
-          id: 4,
-        },
-        asignee: {
-          name: 'Carlos Angulo',
-          role: ['FE'],
-        }
-      },
-      {
-        title: 'Modify Overview panel',
-        code: 'AMC-12450',
-        link: 'https://projects.mbww.com/browse/AMC-12450',
-        description: 'Ticket description',
-        status: 'PROGRESS',
-        effort: ['FE'],
-        parents: ['AMC-12191'],
-        estimation: 1,
-        mvp: {
-          name: 'Creation',
-          id: 2,
-        },
-        asignee: {
-          name: 'Carlos Angulo',
-          role: ['FE'],
-        }
-      },
-      {
-        title: 'Modify the attribute chips',
-        code: 'AMC-12446',
-        link: 'https://projects.mbww.com/browse/AMC-12446',
-        description: 'Ticket description',
-        status: 'PROGRESS',
-        effort: ['BE'],
-        parents: ['AMC-12442'],
-        estimation: 1,
-        mvp: {
-          name: 'Report View',
-          id: 3,
-        },
-        asignee: {
-          name: 'Carlos Angulo',
-          role: ['FE'],
-        }
-      },
-      {
-        title: 'Edit Reports',
-        code: 'AMC-12XXX',
-        link: 'https://projects.mbww.com/browse/AMC-12XXX',
-        description: 'Ticket description',
-        status: 'PROGRESS',
-        effort: ['BE'],
-        parents: ['AMC-1XXXX'],
-        estimation: 1,
-        mvp: {
-          name: 'Export',
-          id: 4,
-        },
-        asignee: {
-          name: 'Carlos Angulo',
-          role: ['FE'],
-        }
-      },
-      {
-        title: 'Next ticket',
-        code: 'AMC-1XXXX',
-        link: 'https://projects.mbww.com/browse/AMC-1XXXX',
-        description: 'Ticket description',
-        status: 'DONE',
-        effort: ['BE'],
-        parents: [],
-        estimation: 1,
-        mvp: {
-          name: 'Export',
-          id: 4,
-        },
-        asignee: {
-          name: 'Carlos Angulo',
-          role: ['FE'],
-        }
-      },
-      {
-        title: 'Add MORE TST',
-        code: 'AMC-AAAA',
-        link: 'https://projects.mbww.com/browse/AMC-AAAA',
-        description: 'Ticket description',
-        status: 'NEW',
-        effort: ['BE'],
-        parents: ['AMC-12191'],
-        estimation: 1,
-        mvp: {
-          name: 'Report View',
-          id: 3,
-        },
-        asignee: {
-          name: 'Carlos Angulo',
-          role: ['FE'],
-        }
-      },
-      {
-        title: 'Add MORE TST',
-        code: 'AMC-BBB',
-        link: 'https://projects.mbww.com/browse/AMC-BBB',
-        description: 'Ticket description',
-        status: 'NEW',
-        effort: ['BE'],
-        parents: ['AMC-12443'],
-        estimation: 1,
-        mvp: {
-          name: 'Creation',
-          id: 2,
-        },
-        asignee: {
-          name: 'Carlos Angulo',
-          role: ['FE'],
-        }
-      },
-      {
-        title: 'Add MORE TST',
-        code: 'AMC-CCC',
-        link: 'https://projects.mbww.com/browse/AMC-CCC',
-        description: 'Ticket description',
-        status: 'NEW',
-        effort: ['BE'],
-        parents: ['AMC-12443'],
-        estimation: 1,
-        mvp: {
-          name: 'Creation',
-          id: 2,
-        },
-        asignee: {
-          name: 'Carlos Angulo',
-          role: ['FE'],
-        }
-      },
-      {
-        title: 'Add MORE TST',
-        code: 'AMC-EEE',
-        link: 'https://projects.mbww.com/browse/AMC-CCC',
-        description: 'Ticket description',
-        status: 'NEW',
-        effort: ['BE'],
-        parents: ['AMC-12442', 'AMC-12450'],
-        estimation: 1,
-        mvp: {
-          name: 'Report View',
-          id: 3,
-        },
-        asignee: {
-          name: 'Carlos Angulo',
-          role: ['FE'],
-        }
-      },
-      {
-        title: 'Add MORE TST',
-        code: 'AMC-FFF',
-        link: 'https://projects.mbww.com/browse/AMC-FFF',
-        description: 'Ticket description',
-        status: 'NEW',
-        effort: ['BE'],
-        parents: ['AMC-EEE'],
-        estimation: 1,
-        mvp: {
-          name: 'Certification',
-          id: 5,
-        },
-        asignee: {
-          name: 'Carlos Angulo',
-          role: ['FE'],
-        }
-      },
-      {
-        title: 'Add MORE TST',
-        code: 'AMC-GGG',
-        link: 'https://projects.mbww.com/browse/AMC-GGG',
-        description: 'Ticket description',
-        status: 'NEW',
-        effort: ['BE'],
-        parents: ['AMC-AAAA', 'AMC-11191'],
-        estimation: 1,
-        mvp: {
-          name: 'Certification',
-          id: 5,
-        },
-        asignee: {
-          name: 'Carlos Angulo',
-          role: ['FE'],
-        }
-      },
-      {
-        title: 'Add MORE TST',
-        code: 'AMC-HHH',
-        link: 'https://projects.mbww.com/browse/AMC-HHH',
-        description: 'Ticket description',
-        status: 'NEW',
-        effort: ['BE'],
-        parents: ['AMC-11191', 'AMC-GGG'],
-        estimation: 1,
-        mvp: {
-          name: 'Certification',
-          id: 5,
-        },
-        asignee: {
-          name: 'Carlos Angulo',
-          role: ['FE'],
-        }
+      "asignee": {
+        "name": "Luis Hernandezs",
+        "role": ["BE"]
       }
-    ]
-  }
+    },
+    {
+      "title": "[BE - FE] Create a Feature Flag",
+      "code": "AMC-12458",
+      "link": "https://projects.mbww.com/browse/AMC-12458",
+      "description": "[BE - FE] Create a Feature Flag",
+      "status": "PROGRESS",
+      "effort": ["FE", "BE"],
+      "parents": [],
+      "estimation": 2,
+      "mvp": {
+        "name": "Setup",
+        "id": 1
+      },
+      "asignee": {
+        "name": "Andres Avendaño",
+        "role": ["FE"]
+      }
+    },
+    {
+      "title": "[POC] Change D3 bar charts to pure HTML/CSS",
+      "code": "AMC-12524",
+      "link": "https://projects.mbww.com/browse/AMC-12524",
+      "description": "[POC] Change D3 bar charts to pure HTML/CSS",
+      "status": "PROGRESS",
+      "effort": ["BE"],
+      "parents": [],
+      "estimation": 2,
+      "mvp": {
+        "name": "Setup",
+        "id": 1
+      },
+      "asignee": {
+        "name": "Juan Casas",
+        "role": ["FE"]
+      }
+    },
+    {
+      "title": "Change D3 bar charts on Profile Report",
+      "code": "AMC-12530",
+      "link": "https://projects.mbww.com/browse/AMC-12530",
+      "description": "Change D3 bar charts on Profile Report",
+      "status": "NEW",
+      "effort": ["FE"],
+      "parents": ["AMC-12524"],
+      "estimation": 0,
+      "mvp": {
+        "name": "Setup",
+        "id": 1
+      },
+      "asignee": {
+        "name": "--",
+        "role": ["FE"]
+      }
+    },
+    {
+      "title": "Change D3 bar charts on Composition Report",
+      "code": "AMC-1253X",
+      "link": "https://projects.mbww.com/browse/AMC-1253X",
+      "description": "Change D3 bar charts on Profile Report",
+      "status": "NEW",
+      "effort": ["FE"],
+      "parents": ["AMC-12524"],
+      "estimation": 0,
+      "mvp": {
+        "name": "Setup",
+        "id": 1
+      },
+      "asignee": {
+        "name": "--",
+        "role": ["FE"]
+      }
+    },
+    {
+      "title": "[BE] - Modify Report data structure",
+      "code": "AMC-12509",
+      "link": "https://projects.mbww.com/browse/AMC-12509",
+      "description": "[BE] - Modify Report data structure",
+      "status": "NEW",
+      "effort": ["BE"],
+      "parents": ["AMC-12443"],
+      "estimation": 0,
+      "mvp": {
+        "name": "Setup",
+        "id": 1
+      },
+      "asignee": {
+        "name": "--",
+        "role": ["BE"]
+      }
+    },
+    {
+      "title": "[BE] - Endpoint to calculate Group Size - Report Builder",
+      "code": "AMC-12442",
+      "link": "https://projects.mbww.com/browse/AMC-12442",
+      "description": "[BE] - Endpoint to calculate Group Size - Report Builder",
+      "status": "NEW",
+      "effort": ["BE"],
+      "parents": ["AMC-12509"],
+      "estimation": 5,
+      "mvp": {
+        "name": "Setup",
+        "id": 1
+      },
+      "asignee": {
+        "name": "--",
+        "role": ["BE"]
+      }
+    },
+    {
+      "title": "Implement charts on pure HTML/CSS to remove D3",
+      "code": "AMC-12530",
+      "link": "https://projects.mbww.com/browse/AMC-12530",
+      "description": "Implement charts on pure HTML/CSS to remove D3",
+      "status": "NEW",
+      "effort": ["FE"],
+      "parents": ["AMC-12524"],
+      "estimation": 0,
+      "mvp": {
+        "name": "Setup",
+        "id": 1
+      },
+      "asignee": {
+        "name": "--",
+        "role": ["FE"]
+      }
+    },
+    {
+      "title": "[FE] Modify Datasource Panel",
+      "code": "AMC-11191",
+      "link": "https://projects.mbww.com/browse/AMC-11191",
+      "description": "[FE] Modify Datasource Panel",
+      "status": "PROGRESS",
+      "effort": ["FE"],
+      "parents": ["AMC-12458"],
+      "estimation": 3,
+      "mvp": {
+        "name": "Setup",
+        "id": 1
+      },
+      "asignee": {
+        "name": "Carlos Angulo",
+        "role": ["FE"]
+      }
+    },
+    {
+      "title": "[FE] - Modify Overview Panel",
+      "code": "AMC-12450",
+      "link": "https://projects.mbww.com/browse/AMC-12450",
+      "description": "[FE] - Modify Overview Panel",
+      "status": "NEW",
+      "effort": ["FE"],
+      "parents": ["AMC-11191", "AMC-12509", "AMC-12442"],
+      "estimation": 5,
+      "mvp": {
+        "name": "Setup",
+        "id": 1
+      },
+      "asignee": {
+        "name": "--",
+        "role": ["FE"]
+      }
+    },
+    {
+      "title": "[FE] - Modify chips on the overview Panel",
+      "code": "AMC-12446",
+      "link": "https://projects.mbww.com/browse/AMC-12446",
+      "description": "[FE] - Modify chips on the overview Panel",
+      "status": "PROGRESS",
+      "effort": ["FE"],
+      "parents": ["AMC-12458"],
+      "estimation": 3,
+      "mvp": {
+        "name": "Setup",
+        "id": 1
+      },
+      "asignee": {
+        "name": "Andres Avendaño",
+        "role": ["FE"]
+      }
+    },
+    {
+      "title": "[FE-BE] Saving groups in reports",
+      "code": "AMC-12560",
+      "link": "https://projects.mbww.com/browse/AMC-12560",
+      "description": "[FE-BE] Saving groups in reports",
+      "status": "NEW",
+      "effort": ["FE"],
+      "parents": ["AMC-12450", "AMC-12509", "AMC-12446"],
+      "estimation": 3,
+      "mvp": {
+        "name": "Setup",
+        "id": 1
+      },
+      "asignee": {
+        "name": "--",
+        "role": ["FE"]
+      }
+    },
+    {
+      "title": "Table - Profile Report Summary",
+      "code": "AMC-12503",
+      "link": "https://projects.mbww.com/browse/AMC-12503",
+      "description": "Table - Profile Report Summary",
+      "status": "NEW",
+      "effort": ["FE"],
+      "parents": ["AMC-12560", "AMC-12530"],
+      "estimation": 3,
+      "mvp": {
+        "name": "Setup",
+        "id": 1
+      },
+      "asignee": {
+        "name": "--",
+        "role": ["FE"]
+      }
+    },
+    {
+      "title": "Graph - Profile Report Summary",
+      "code": "AMC-12151",
+      "link": "https://projects.mbww.com/browse/AMC-12151",
+      "description": "Table - Profile Report Summary",
+      "status": "NEW",
+      "effort": ["FE"],
+      "parents": ["AMC-12560", "AMC-12530"],
+      "estimation": 3,
+      "mvp": {
+        "name": "Setup",
+        "id": 1
+      },
+      "asignee": {
+        "name": "--",
+        "role": ["FE"]
+      }
+    },
+    {
+      "title": "Graph - Composition Report Summary.",
+      "code": "AMC-12118",
+      "link": "https://projects.mbww.com/browse/AMC-12118",
+      "description": "Graph - Composition Report Summary",
+      "status": "NEW",
+      "effort": ["FE"],
+      "parents": ["AMC-12560", "AMC-1253X"],
+      "estimation": 3,
+      "mvp": {
+        "name": "Setup",
+        "id": 1
+      },
+      "asignee": {
+        "name": "--",
+        "role": ["FE"]
+      }
+    },
+    {
+      "title": "[FE-BE] Export Composition report",
+      "code": "AMC-AAAAA",
+      "link": "https://projects.mbww.com/browse/AMC-AAAAA",
+      "description": "Graph - Composition Report Summary",
+      "status": "NEW",
+      "effort": ["FE"],
+      "parents": ["AMC-12118"],
+      "estimation": 3,
+      "mvp": {
+        "name": "Setup",
+        "id": 1
+      },
+      "asignee": {
+        "name": "--",
+        "role": ["FE"]
+      }
+    }
+  ]
+}
+
 
   project!: IProject;
 

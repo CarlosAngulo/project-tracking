@@ -9,6 +9,15 @@
     transition: 0.3s box-shadow;
     z-index: 10;
     cursor: pointer;
+    &.disabled {
+        box-shadow: unset;
+        > div {
+            opacity: 0.5;
+        }
+        + .svg {
+            opacity: 0.3
+        }
+    }
     &.selected {
         border: 1px solid #333;
         background-color: #DDD;
@@ -22,15 +31,21 @@
     }
     &:hover {
         box-shadow: 1px 1px 6px rgba(0,0,0,0.6);
-        + .svg .connector {
-            stroke-width: 1.5;
-            stroke: rgb(153, 0, 255);
+        > div {
+            opacity: 1;
         }
         .card-iconset {
             display: flex;
         }
-        + .svg line {
-            stroke-width: 3;
+        + .svg {
+            opacity: 1;
+            .connector {
+                stroke-width: 1.5;
+                stroke: rgb(153, 0, 255);
+            }
+            line.connector {
+                stroke-width: 3;
+            }
         }
     }
     &.child::after {
@@ -53,7 +68,7 @@
         border-radius: 50%;
         background-color: #888;
         display: block;
-        top: 50%;
+        top: 44px;
         left: -2px;
         margin-left: -1px;
         margin-top: -2px;
@@ -145,6 +160,10 @@
 
 svg {
     display: block;
+}
+
+.svg {
+    position: relative;
 }
 
 .svg-container {

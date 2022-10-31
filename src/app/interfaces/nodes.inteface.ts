@@ -21,6 +21,7 @@ export interface INode {
     paretsPosition?: IRelativesPos[];
     children: string[];
     childrenTree: string[][];
+    simpleChildrenTree: string[][];
     selected: boolean;
     blockedByParents: boolean;
     test?: any;
@@ -70,4 +71,12 @@ export interface IDeveloper {
     name: string;
     role: IRoles[];
     initial?: string;
+}
+
+
+export interface IConstrains {
+    top: number;
+    left: number;
+    bottom: number;
+    right: number;
 }

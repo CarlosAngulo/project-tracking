@@ -13,7 +13,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let ticket of ticketList; let i = index">
-                <td>{{ticket.code}}</td>
+                <td><a [href]="ticket.link" target="_blank">{{ticket.code}}</a></td>
                 <td>{{ticket.asignee.name | initials}}</td>
                 <td>{{ticket.title}}</td>
                 <td>{{ticket.estimation}}</td>

@@ -1,6 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { INode} from 'src/app/interfaces/nodes.inteface';
+import { cardProps } from 'src/app/cards/card/card.props';
+import { IConstrains, INode} from 'src/app/interfaces/nodes.inteface';
 import { JiraService } from 'src/app/services/jira.service';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
 
@@ -10,6 +11,7 @@ import { NodeTreeService } from 'src/app/services/nodetree.service';
   styleUrls: ['./dependency.component.scss']
 })
 export class DependencyComponent implements OnInit {
+  bgStyles: any = {};
   nodeTree:  INode[] = [];
   private unsub$ = new Subject<void>();
 
@@ -24,6 +26,14 @@ export class DependencyComponent implements OnInit {
     .pipe(takeUntil(this.unsub$))
     .subscribe((nodeTree: INode[]) => {
       this.nodeTree = nodeTree;
+    })
+    this.nodeTreeService.getConstrains()
+    .pipe(takeUntil(this.unsub$))
+    .subscribe((constrains: IConstrains) => {
+      this.bgStyles = {
+        width: constrains.right - constrains.left + cardProps.width + (2 * cardProps.margin.x) + 'px',
+        height: constrains.bottom - constrains.top + cardProps.height + cardProps.margin.y + 'px'
+      };
     })
   }
   

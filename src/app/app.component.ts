@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { NodeTreeService } from './services/nodetree.service';
 
@@ -7,7 +7,7 @@ import { NodeTreeService } from './services/nodetree.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnDestroy, OnInit {
+export class AppComponent implements OnDestroy, OnInit{
   showLoader = true;
   private unsub$ = new Subject<void>();
 
@@ -15,6 +15,7 @@ export class AppComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.nodeTreeService.loadFromLocalStorage();
+    localStorage.clear();
 
     if (localStorage.getItem('project')) {
       this.showLoader = false;

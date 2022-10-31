@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { cardProps } from '../cards/card/card.props';
-import { INode, IProject, NodeStatus } from '../interfaces/nodes.inteface';
+import { IConstrains, INode, IProject, NodeStatus } from '../interfaces/nodes.inteface';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({
@@ -17,6 +17,10 @@ export class NodeTreeService {
   private leader!: string;
   private _leader: Subject<string> = new Subject();
   private leader$: Observable<string> = this._leader.asObservable();
+  
+  private constrains!: IConstrains;
+  private _constrains: Subject<IConstrains> = new Subject();
+  private constrains$: Observable<IConstrains> = this._constrains.asObservable();
 
   private  nodeTree: INode[] = [];
   private  _nodeTree: Subject<INode[]> = new Subject();
@@ -30,6 +34,7 @@ export class NodeTreeService {
   private isLoadWindowOpen$: Observable<boolean> = this._isLoadWindowOpen.asObservable();
 
   public isProjectLoaded = false;
+  private childrenList: string[] = [];
    
   constructor() {};
 
@@ -55,6 +60,10 @@ export class NodeTreeService {
   
   getLeader(): Observable<string> {
     return this.leader$;
+  }
+
+  getConstrains(): Observable<IConstrains> {
+    return this.constrains$;
   }
 
   loadFromLocalStorage() {
@@ -83,6 +92,7 @@ export class NodeTreeService {
         ...ticket,
         children: [],
         childrenTree: [],
+        simpleChildrenTree: [],
         index: 0,
         level: 0,
         position: {x: 0, y:0},
@@ -103,10 +113,12 @@ export class NodeTreeService {
 
   private sortDependencies(nodes: INode[]) {
     // Creates the three
+    this.childrenList = [];
     let nodeTree = this.nodesTree(nodes);
 
     // Add children
     nodeTree = this.addChildren(nodeTree);
+    // console.log(this.addSimpleChildrenTree(nodeTree))
     
     // Add positions
     nodeTree = this.addPositions(nodeTree);
@@ -118,6 +130,8 @@ export class NodeTreeService {
     nodeTree = this.blockByParents(nodeTree);
 
     this.nodeTree = nodeTree;
+
+    console.log(this.nodeTree)
     
     this._nodeTree.next(nodeTree);
 
@@ -137,10 +151,11 @@ export class NodeTreeService {
 
     if (parentNodes?.length === 0) {
       // creates next level
-      secondList.forEach((parentNode) => {
+      secondList.map((parentNode) => {
         parentNodes = parentNodes
         .concat(firstList
-          .filter(node => node.parents?.includes(parentNode.code))
+          // .filter(node => node.parents?.includes(parentNode.code))
+          .filter(node => node.parents[0] === parentNode.code)
           .map(node => ({...node, level, index: 0}))
         )
       });
@@ -173,7 +188,7 @@ export class NodeTreeService {
   }
 
   private addChildren(nodes: INode[]) {
-    const newNodes = [...nodes]
+    let newNodes: INode[] = [...nodes];
     nodes.forEach(node => {
       node.parents?.forEach(parent => {
         const parentIndex = newNodes.findIndex( newNode => newNode.code === parent);
@@ -181,10 +196,36 @@ export class NodeTreeService {
         newNodes[parentIndex].childrenTree = [newNodes[parentIndex].children];
       })
     });
-    nodes.forEach(node => {
+    newNodes = newNodes.map(currentNode => ({
+      ...currentNode,
+      // childrenTree: [nodes.filter(node => node.parents.includes(currentNode.code)).map(node=>node.code)],
+      simpleChildrenTree: [nodes.filter(node => node.parents[0] === currentNode.code).map(node=>node.code)]
+    }))
+    newNodes.forEach(node => {
       this.addChildrenTree(nodes, node);
+      this.addSimpleChildrenTree(nodes, node)
     });
     return newNodes;
+  }
+
+  private addSimpleChildrenTree(nodes: INode[], node?: INode) : INode | void {
+    if (!node) {
+      return;
+    }
+    const nextChildrenLevel = this.addSimpleTreeChildrenNextLevel(nodes, node);
+    if (nextChildrenLevel.length === 0) {
+      return node;
+    }
+    node.simpleChildrenTree.push(nextChildrenLevel);
+    return this.addSimpleChildrenTree(nodes, node);
+  }
+
+  private addSimpleTreeChildrenNextLevel(nodes: INode[], currentNode: INode): string[] {
+    if (!currentNode) {
+      return [];
+    }
+    const currentTree = currentNode.simpleChildrenTree[currentNode.simpleChildrenTree.length - 1];
+    return nodes.filter( node => currentTree.includes(node.parents[0])).map(node=>node.code)
   }
 
   private addChildrenTree(nodes: INode[], node?: INode): INode | void {
@@ -207,7 +248,7 @@ export class NodeTreeService {
     let childrenNextLevel: string[] = []
     if (currentTree) {
       childrenNextLevel = currentTree.map(nodeCode => nodes
-        .find( item => item.code === nodeCode)?.children || []
+        .find( item => item.code === nodeCode)?.childrenTree[0] || []
       )
       .flat()
     }
@@ -221,11 +262,12 @@ export class NodeTreeService {
         .map(node => this.nodeBiggestChildRow(node) * (cardProps.width + cardProps.gap.x))
         .reduce((acc, curr) => acc + curr, 0);
       const centerPosition = this.nodeBiggestChildRow(currentNode) * (cardProps.width + cardProps.gap.x) / 2;
+      console.log(currentNode.code, this.nodeBiggestChildRow(currentNode), currentNode.simpleChildrenTree)
       return {
         ...currentNode,
         position: {
           x: previousPositions + centerPosition,
-          y: currentNode.level * (cardProps.height + cardProps.gap.y) + cardProps.header
+          y: currentNode.level * (cardProps.height + cardProps.gap.y) + cardProps.margin.y
         }
       };
     })
@@ -241,18 +283,34 @@ export class NodeTreeService {
     // Calculates positions for nodes in levels higher than maxNodesLevel
     nodes.forEach(currentNode => {
       const parent = nodes.find(node => node.code === currentNode.parents[0]);
-      const offsetByParent = (parent?.position.x || 0) - (((parent?.children.length || 0) - 1) * (cardProps.width + cardProps.gap.x) / 2 );
-      const indexOnParent = parent?.children.findIndex(childrenCode => childrenCode === currentNode.code) || 0;
+      const offsetByParent = (parent?.position.x || 0) - (((parent?.simpleChildrenTree[0].length || 0) - 1) * (cardProps.width + cardProps.gap.x) / 2 );
+      const indexOnParent = parent?.simpleChildrenTree[0].findIndex(childrenCode => childrenCode === currentNode.code) || 0;
       const offsetBySiblings = (indexOnParent) * (cardProps.width + cardProps.gap.x);
       if (currentNode.level > maxNodesLevel.index ) {
         currentNode.position.x = offsetByParent + offsetBySiblings;
       }
+      if (currentNode.level < maxNodesLevel.index ) {
+        const child = currentNode.childrenTree[0];
+        const posXFirstChildren =  nodes.find(node => node.code === child[0])?.position.x || 0;
+        const posXLastChildren =  nodes.find(node => node.code === child[child.length - 1])?.position.x || 0;
+        currentNode.position.x = posXLastChildren + ((posXFirstChildren - posXLastChildren ) / 2);
+      }
     })
-    return nodes;
+
+    const constrains = this.calculateConstrains(nodes);
+    this._constrains.next(constrains);
+    
+    return nodes.map(node=> ({
+      ...node,
+      position: {
+        y: node.position.y,
+        x: node.position.x - constrains.left + cardProps.margin.x
+      } 
+    }));
   }
 
   private nodeBiggestChildRow(node:INode) :number {
-    return node.childrenTree.reduce((acc, curr)=> acc > curr.length ? acc : curr.length , 1)
+    return node.simpleChildrenTree.reduce((acc, curr)=> acc > curr.length ? acc : curr.length, 1)
   }
 
   private addParentCoodrs(nodes: INode[]) {
@@ -269,17 +327,32 @@ export class NodeTreeService {
     }));
   }
 
+  private calculateConstrains(nodes: INode[]) {
+    return nodes.reduce((acc, curr) => {
+      acc.left = curr.position.x < acc.left ? curr.position.x : acc.left;
+      acc.top = curr.position.y < acc.top ? curr.position.y : acc.top;
+      acc.right = curr.position.x > acc.right ? curr.position.x : acc.right;
+      acc.bottom = curr.position.y > acc.bottom ? curr.position.y : acc.bottom;
+      return acc;
+    }, {
+      left: 20000,
+      top: 0,
+      right: 0,
+      bottom: 0
+    });
+  }
+
   private selectDescendant(nodes: INode[], nodeID: string, reclutedNodes: string[][] = []): string[] {
     if (!reclutedNodes[0]) {
       const parentNode = nodes.find(t => t.code === nodeID);
       if (parentNode) {
         reclutedNodes[0] = [parentNode.code];
-        reclutedNodes.push(parentNode.children);
+        reclutedNodes.push(parentNode.childrenTree[0]);
       }
     } else {
       let nextLevelNodes: string[] = [];
-      reclutedNodes[reclutedNodes.length - 1].forEach((nodeID) => {
-        const parentNode = nodes.find(t => t.code === nodeID)?.children;
+      reclutedNodes[reclutedNodes.length - 1].map((nodeID) => {
+        const parentNode = nodes.find(t => t.code === nodeID)?.childrenTree[0];
         if (parentNode) {
           nextLevelNodes = nextLevelNodes.concat(parentNode);
         }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { IBoxConstrainsPx, IRelativesPos, INode, NodeStatus } from 'src/app/interfaces/nodes.inteface';
 import { cardProps } from './card.props';
 
@@ -14,12 +14,13 @@ export interface ISVGCoords {
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss']
 })
-export class CardComponent implements OnInit {
+export class CardComponent implements OnInit, AfterViewInit {
+  @ViewChild('card') card!: ElementRef; 
   @Output() selectNode: EventEmitter<string> = new EventEmitter();
   @Output() infoNode: EventEmitter<INode> = new EventEmitter();
   @Input() set node(nodeData: INode) {
     this.nodeData = {...nodeData};
-    nodeData.paretsPosition?.forEach( parent => this.calculateArrows(parent));
+    this.nodeData.paretsPosition?.forEach( parent => this.calculateArrows(parent, cardProps.height));
   };
 
   nodeStatus = NodeStatus;
@@ -31,14 +32,19 @@ export class CardComponent implements OnInit {
   bezierCoordString!: string[];
   bezier: boolean[] = [];
   childLeft: boolean = false;
+  cardHeight = 0;
 
   constructor() { }
 
-  calculateArrows(parent: IRelativesPos) {
+  ngAfterViewInit(): void {
+    this.cardHeight = this.card.nativeElement.clientHeight;
+  }
+
+  calculateArrows(parent: IRelativesPos, cardHeight: number) {
     let left = parent.x + (cardProps.width/2);
-    let top = parent.y + cardProps.height - 3;
+    let top = parent.y + cardHeight - 3;
     let width = Math.abs(this.nodeData.position.x - parent.x);
-    let height = Math.abs(this.nodeData.position?.y - parent.y - cardProps.height) + 5;
+    let height = Math.abs(this.nodeData.position?.y - parent.y - cardHeight) + 5;
 
     this.svgCoords.push({
       x1: 0,
@@ -49,7 +55,7 @@ export class CardComponent implements OnInit {
 
     this.bezierCoords.push({
       M: [1, 0],
-      c: [[1, height], [width-1, 0], [width-1, height]]
+      c: [[1, height/2], [width-1, height/2], [width-1, height]]
     })
 
     const index = this.svgCoords.length - 1;
@@ -57,8 +63,8 @@ export class CardComponent implements OnInit {
 
     if (parent.x === this.nodeData.position.x) {
       width = 4;
-      this.svgCoords[index].x1 = 20;
-      this.svgCoords[index].x2 = 20;
+      this.svgCoords[index].x1 = 0;
+      this.svgCoords[index].x2 = 0;
       this.bezier[index] = false;
     }
 
@@ -72,20 +78,34 @@ export class CardComponent implements OnInit {
         y2: 100
       }
       this.bezierCoords[index] = {
-        M: [1, 45],
-        c: [[1, -height], [width-1, 0], [width-1, -height]]
+        M: [1, height],
+        c: [[1, -height/2], [width-1, -height/2], [width-1, -height]]
       }
+      
+      console.log(this.nodeData.code, parent.code)
     }
 
     if (parent.y === this.nodeData.position.y) {
       height = 4;
       this.childLeft = true;
-      top = parent.y + cardProps.height/2 - 3;
+      top = parent.y + cardHeight/2 - 3;
       this.svgCoords[index].x1 = 0;
       this.svgCoords[index].x2 = 100;
-      this.svgCoords[index].y1 = 2;
-      this.svgCoords[index].y2 = 2;
+      this.svgCoords[index].y1 = 0;
+      this.svgCoords[index].y2 = 0;
       this.bezier[index] = false;
+    }
+
+    if (parent.y > this.nodeData.position.y) {
+      top = this.nodeData.position.y + cardHeight/2 - 3;
+      height = parent.y - this.nodeData.position.y;
+      left = parent.x + cardProps.width;
+      width = this.nodeData.position.x - left;
+      this.bezierCoords[index] = {
+        M: [0, height],
+        c: [[width/2, 0], [width/2, -height], [width, -height]]
+      }
+      this.bezier[index] = true;
     }
 
     this.arrowContainerStyles.push({

@@ -1,8 +1,10 @@
 <div 
+    #card
     class="card"
     (click)="onNodeClick()"
     [class.blocked]="nodeData.status == nodeStatus.blocked || nodeData.blockedByParents == true"
     [class.selected]="nodeData.selected"
+    [class.disabled]="nodeData.asignee.name=='--' || nodeData.estimation === 0"
     [class.child-left]="childLeft"
     [class.child]="(nodeData.parents.length || 0) > 0"
     [style.transform]="'translate(' + nodeData.position.x + 'px, ' + nodeData.position.y + 'px)'">
@@ -28,14 +30,14 @@
     </div>
 </div>
 
-<div class="svg">
+<div class="svg" *ngIf="bezier.length > 0">
     <div
         class="svg-container"
         *ngFor="let parent of nodeData.paretsPosition; let i = index"
         [style]="arrowContainerStyles[i]">
         <svg xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="arrowViewBox[i]">
             <path *ngIf="bezier[i] === true" class="connector" [attr.d]="bezierCoordString[i]" stroke="#888" stroke-width="0.8" fill="none"/>
-            <line *ngIf="bezier[i] === false" class="connector" [attr.x1]="svgCoords[i].x1 + '%'" [attr.y1]="svgCoords[i].y1 + '%'" [attr.x2]="svgCoords[i].x2 + '%'" [attr.y2]="svgCoords[i].y2 + '%'" stroke="#888" stroke-width="1"/>
+            <line *ngIf="bezier[i] === false" class="connector" [attr.x1]="svgCoords[i].x1 + '%'" [attr.y1]="svgCoords[i].y1 + '%'" [attr.x2]="svgCoords[i].x2 + '%'" [attr.y2]="svgCoords[i].y2 + '%'" stroke="#888" stroke-width="2"/>
         </svg>
     </div>
 </div>
