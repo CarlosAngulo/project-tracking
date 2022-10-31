@@ -41,6 +41,10 @@ export class NodeTreeService {
   getStaticNodeTree() {
     return this.nodeTree;
   }
+
+  getConstraints() {
+    return this.constraints;
+  }
   
   getNodeTree():Observable<INode[]> {
     return this.nodeTree$;
@@ -256,6 +260,7 @@ export class NodeTreeService {
   }
 
   private addPositions(nodes: INode[]): INode[] {
+    console.log('addPositions')
     nodes = nodes.map(currentNode => {
       const previousPositions = nodes
         .filter(node=> node.level === currentNode.level && node.index < currentNode.index)
@@ -297,14 +302,14 @@ export class NodeTreeService {
       }
     })
 
-    const constraints = this.calculateconstraints(nodes);
-    this._constraints.next(constraints);
+    this.constraints = this.calculateconstraints(nodes);
+    this._constraints.next(this.constraints);
     
     return nodes.map(node=> ({
       ...node,
       position: {
         y: node.position.y,
-        x: node.position.x - constraints.left + cardProps.margin.x
+        x: node.position.x - this.constraints.left + cardProps.margin.x
       } 
     }));
   }

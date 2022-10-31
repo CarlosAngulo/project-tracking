@@ -20,6 +20,7 @@ export class DependencyComponent implements OnInit {
     readonly nodeTreeService: NodeTreeService
   ){
     if (localStorage.getItem('project')) {
+      this.bgStyles = this.calculateBg(nodeTreeService.getConstraints())
       this.nodeTree = nodeTreeService.getStaticNodeTree();
     }
     this.nodeTreeService.getNodeTree()
@@ -30,11 +31,15 @@ export class DependencyComponent implements OnInit {
     this.nodeTreeService.getconstraints()
     .pipe(takeUntil(this.unsub$))
     .subscribe((constraints: Iconstraints) => {
-      this.bgStyles = {
-        width: constraints.right - constraints.left + cardProps.width + (2 * cardProps.margin.x) + 'px',
-        height: constraints.bottom - constraints.top + cardProps.height + cardProps.margin.y + 'px'
-      };
+      this.bgStyles = this.calculateBg(constraints);
     })
+  }
+
+  calculateBg(constraints: Iconstraints) {
+    return {
+      width: constraints.right - constraints.left + cardProps.width + (2 * cardProps.margin.x) + 'px',
+      height: constraints.bottom - constraints.top + cardProps.height + cardProps.margin.y + 'px'
+    };
   }
   
   ngOnInit(): void {
