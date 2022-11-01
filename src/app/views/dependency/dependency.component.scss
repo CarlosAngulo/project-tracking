@@ -1,13 +1,10 @@
 .graph {
-    display: flex;
     flex-direction: column;
     height: calc(100vh - 52px);
+    overflow: auto;
+    background-color: #F0F0F0;
     &-viewer {
-        overflow: auto;
-        background-color: #F0F0F0;
-        flex-grow: 1;
         position: relative;
-        display: flex;
-        justify-content: center;
+        margin: auto;
     }
 }

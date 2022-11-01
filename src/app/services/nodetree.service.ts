@@ -260,14 +260,12 @@ export class NodeTreeService {
   }
 
   private addPositions(nodes: INode[]): INode[] {
-    console.log('addPositions')
     nodes = nodes.map(currentNode => {
       const previousPositions = nodes
         .filter(node=> node.level === currentNode.level && node.index < currentNode.index)
         .map(node => this.nodeBiggestChildRow(node) * (cardProps.width + cardProps.gap.x))
         .reduce((acc, curr) => acc + curr, 0);
       const centerPosition = this.nodeBiggestChildRow(currentNode) * (cardProps.width + cardProps.gap.x) / 2;
-      console.log(currentNode.code, this.nodeBiggestChildRow(currentNode), currentNode.simpleChildrenTree)
       return {
         ...currentNode,
         position: {
@@ -294,8 +292,10 @@ export class NodeTreeService {
       if (currentNode.level > maxNodesLevel.index ) {
         currentNode.position.x = offsetByParent + offsetBySiblings;
       }
-      if (currentNode.level < maxNodesLevel.index ) {
-        const child = currentNode.childrenTree[0];
+    })
+    nodes.forEach(currentNode => {
+      if (currentNode.simpleChildrenTree[0].length > 0 && currentNode.level < maxNodesLevel.index ) {
+        const child = currentNode.simpleChildrenTree[0];
         const posXFirstChildren =  nodes.find(node => node.code === child[0])?.position.x || 0;
         const posXLastChildren =  nodes.find(node => node.code === child[child.length - 1])?.position.x || 0;
         currentNode.position.x = posXLastChildren + ((posXFirstChildren - posXLastChildren ) / 2);

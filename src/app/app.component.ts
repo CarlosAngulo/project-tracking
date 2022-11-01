@@ -14,8 +14,8 @@ export class AppComponent implements OnDestroy, OnInit{
   constructor(private nodeTreeService: NodeTreeService) {}
 
   ngOnInit(): void {
-    this.nodeTreeService.loadFromLocalStorage();
     localStorage.clear();
+    this.nodeTreeService.loadFromLocalStorage();
 
     if (localStorage.getItem('project')) {
       this.showLoader = false;

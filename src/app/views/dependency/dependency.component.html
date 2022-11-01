@@ -1,12 +1,10 @@
 <div class="graph">
-    <div class="graph-viewer" #container>
-        <div class="graph-viewer-bg" [ngStyle]="bgStyles">
-            <app-card
-                *ngFor="let node of nodeTree"
-                (selectNode)="onSelectNode($event)"
-                (infoNode)="onInfoNode($event)"
-                [node]="node"
-            ></app-card>
-        </div>
+    <div class="graph-viewer" #container [ngStyle]="bgStyles">
+        <app-card
+            *ngFor="let node of nodeTree"
+            (selectNode)="onSelectNode($event)"
+            (infoNode)="onInfoNode($event)"
+            [node]="node"
+        ></app-card>
     </div>
 </div>

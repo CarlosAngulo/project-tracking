@@ -81,8 +81,6 @@ export class CardComponent implements OnInit, AfterViewInit {
         M: [1, height],
         c: [[1, -height/2], [width-1, -height/2], [width-1, -height]]
       }
-      
-      console.log(this.nodeData.code, parent.code)
     }
 
     if (parent.y === this.nodeData.position.y) {
