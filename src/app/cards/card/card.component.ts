@@ -42,7 +42,7 @@ export class CardComponent implements OnInit, AfterViewInit {
 
   calculateArrows(parent: IRelativesPos, cardHeight: number) {
     let left = parent.x + (cardProps.width/2);
-    let top = parent.y + cardHeight - 3;
+    let top = parent.y + cardHeight - 5;
     let width = Math.abs(this.nodeData.position.x - parent.x);
     let height = Math.abs(this.nodeData.position?.y - parent.y - cardHeight) + 5;
 

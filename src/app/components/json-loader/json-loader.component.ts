@@ -56,6 +56,24 @@ export class JsonLoaderComponent implements OnInit {
         }
       },
       {
+        "title": "[FE] - Modify chips on the overview Panel",
+        "code": "AMC-12446",
+        "link": "https://projects.mbww.com/browse/AMC-12446",
+        "description": "[FE] - Modify chips on the overview Panel",
+        "status": "PROGRESS",
+        "effort": ["FE"],
+        "parents": ["AMC-12458","AMC-12443"],
+        "estimation": 3,
+        "mvp": {
+          "name": "Creation",
+          "id": 2
+        },
+        "asignee": {
+          "name": "Andres Avendaño",
+          "role": ["FE"]
+        }
+      },
+      {
         "title": "[POC] Change D3 bar charts to pure HTML/CSS",
         "code": "AMC-12524",
         "link": "https://projects.mbww.com/browse/AMC-12524",
@@ -170,7 +188,7 @@ export class JsonLoaderComponent implements OnInit {
         "description": "[FE] - Modify Overview Panel",
         "status": "NEW",
         "effort": ["FE"],
-        "parents": ["AMC-11191", "AMC-12509", "AMC-12442"],
+        "parents": ["AMC-11191", "AMC-12509", "AMC-12442", "AMC-12446"],
         "estimation": 5,
         "mvp": {
           "name": "Creation",
@@ -182,31 +200,13 @@ export class JsonLoaderComponent implements OnInit {
         }
       },
       {
-        "title": "[FE] - Modify chips on the overview Panel",
-        "code": "AMC-12446",
-        "link": "https://projects.mbww.com/browse/AMC-12446",
-        "description": "[FE] - Modify chips on the overview Panel",
-        "status": "PROGRESS",
-        "effort": ["FE"],
-        "parents": ["AMC-12458"],
-        "estimation": 3,
-        "mvp": {
-          "name": "Creation",
-          "id": 2
-        },
-        "asignee": {
-          "name": "Andres Avendaño",
-          "role": ["FE"]
-        }
-      },
-      {
         "title": "[FE-BE] Saving groups in reports",
         "code": "AMC-12560",
         "link": "https://projects.mbww.com/browse/AMC-12560",
         "description": "[FE-BE] Saving groups in reports",
         "status": "NEW",
         "effort": ["FE"],
-        "parents": ["AMC-12450", "AMC-12509", "AMC-12446"],
+        "parents": ["AMC-12450", "AMC-12509"],
         "estimation": 3,
         "mvp": {
           "name": "Creation",
