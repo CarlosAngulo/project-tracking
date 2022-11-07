@@ -1,28 +1,51 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
+export interface IDropDown {
+  name: string;
+  value: string | number;
+}
 @Component({
   selector: 'app-dropdown',
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.scss']
 })
-export class DropdownComponent implements OnInit {
-  @Output() onSelect: EventEmitter<string> = new EventEmitter();
-  @Input() set options(val:any) {
-    this. sortedOptions = Object.values(val)
-  };
-  sortedOptions!: string[];
+export class DropdownComponent implements OnChanges {
+  @Output() onSelect: EventEmitter<string | number> = new EventEmitter();
+  @Input() label!: string;
+
+  _defaultOption!: IDropDown;
+  @Input() set defaultOption(val: string) {
+    this._defaultOption = {name: val, value: ''}
+  }
+  _options!: IDropDown[];
+  @Input() set options(values: IDropDown[] | any[]) {
+    this._options = values.every(val => this.dropDownType(val)) ? values : values.map(value => ({
+      name: value,
+      value
+    }));
+    if (this._defaultOption) {
+      this._options.unshift(this._defaultOption)
+    }
+  }
   
-  DEFAULT_VALUE = 'None'
-  selectedValue = this.DEFAULT_VALUE;
+  selectedValue: string | number = this.defaultOption;
 
   constructor() { }
 
-  ngOnInit(): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['options'].currentValue.length > 0) {
+      this.onElementClick(this._options[0])
+    }
   }
 
-  onElementClick(value:string = '') {
-    this.selectedValue = value;
-    this.onSelect.next(value);
+  dropDownType(object: any): object is IDropDown {
+    if(typeof object === 'string') return false;
+    return 'name' in object && 'value' in object;
+  }
+
+  onElementClick(value: IDropDown) {
+    this.selectedValue = value.name;
+    this.onSelect.next(value.value);
   }
 
 }

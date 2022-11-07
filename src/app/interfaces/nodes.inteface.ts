@@ -25,6 +25,7 @@ export interface INode {
     selected: boolean;
     blockedByParents: boolean;
     test?: any;
+    enabled: boolean;
     mvp: {
         name: string;
         id: number;
@@ -58,6 +59,12 @@ export const NodeStatus = {
     progress: <INodeStatus> 'PROGRESS',
     blocked: <INodeStatus> 'BLOCKED'
 };
+
+export interface IBlockStatus {
+    name: string,
+    count: number,
+    points: number
+}
   
 type IRoles = 'BE' | 'FE' | 'QA';
   
@@ -72,7 +79,6 @@ export interface IDeveloper {
     role: IRoles[];
     initial?: string;
 }
-
 
 export interface Iconstraints {
     top: number;

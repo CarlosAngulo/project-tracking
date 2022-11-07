@@ -7,16 +7,17 @@
     height: 52px;
     div {
         border-right: 1px solid #CCC;
-        padding: 0 20px;
+        padding: 0 16px;
         align-items: center;
         display: flex;
+        flex-shrink: 1;
     }
     &-title {
         font-size: 16px;
-        max-width: 35%;
     }
     &-progress {
         flex-basis: 50%;
+        flex-grow: 2;
         display: block !important;
     }
     &-leader {
@@ -52,4 +53,9 @@ app-menu {
     margin-top: 12px;
     margin-left: 10px;
     z-index: 1000;
+}
+
+app-dropdown {
+    width: 210px;
+    display: block;
 }

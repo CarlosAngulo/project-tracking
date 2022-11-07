@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { cardProps } from '../cards/card/card.props';
-import { Iconstraints, INode, IProject, NodeStatus } from '../interfaces/nodes.inteface';
+import { IBlockStatus, Iconstraints, INode, IProject, NodeStatus } from '../interfaces/nodes.inteface';
 import { Observable, Subject } from 'rxjs';
+import { IDropDown } from '../components/dropdown/dropdown.component';
 
 @Injectable({
   providedIn: 'root'
@@ -26,9 +27,9 @@ export class NodeTreeService {
   private  _nodeTree: Subject<INode[]> = new Subject();
   private nodeTree$: Observable<INode[]> = this._nodeTree.asObservable();
 
-  public treeProgress!: any[];
-  private _treeProgress: Subject<any[]> = new Subject();
-  private treeProgress$: Observable<any[]> = this._treeProgress.asObservable();
+  public treeProgress!: IBlockStatus[];
+  private _treeProgress: Subject<IBlockStatus[]> = new Subject();
+  private treeProgress$: Observable<IBlockStatus[]> = this._treeProgress.asObservable();
 
   private _isLoadWindowOpen: Subject<boolean> = new Subject();
   private isLoadWindowOpen$: Observable<boolean> = this._isLoadWindowOpen.asObservable();
@@ -99,6 +100,7 @@ export class NodeTreeService {
         simpleChildrenTree: [],
         index: 0,
         level: 0,
+        enabled: true,
         position: {x: 0, y:0},
         blockedByParents: false,
         selected: false,
@@ -133,13 +135,16 @@ export class NodeTreeService {
     // Block child nodes
     nodeTree = this.blockByParents(nodeTree);
 
+    // Enable node if parents are done
+    nodeTree = this.disableNodes(nodeTree);
+
     this.nodeTree = nodeTree;
 
     console.log(this.nodeTree)
     
     this._nodeTree.next(nodeTree);
 
-    this.calculateTreeProgres(this.nodeTree);
+    this.calculateTreeProgress(this.nodeTree);
 
     this.extractMVPs(nodes);
   }
@@ -391,30 +396,55 @@ export class NodeTreeService {
   }
 
   private extractMVPs(nodes:INode[]) {
-    const mvps = nodes.reduce((accum: any, current) => {
+    const mvps: IDropDown[] = nodes.reduce((accum: any, current) => {
       const name = current.mvp.name;
       const id = current.mvp.id;
-      return {
-        ...accum,
-        [id]: name
+      const mvpIndex = accum.findIndex((item:IDropDown) => item.value === current.mvp.id)
+      if (mvpIndex === -1) {
+        return [
+          ...accum,
+          {
+            name,
+            value:id
+          }
+        ]
+      } else {
+        return accum
       }
-    }, {})
-
+    }, [])
+    console.log('mvps', mvps)
     this._mvps.next(mvps);
   }
 
-  private calculateTreeProgres(nodes: INode[]) {
+  private calculateTreeProgress(nodes: INode[]) {
     const progress = nodes.reduce((accum:any, current) => {
       const pts = current.estimation;
-      const status = current.status;
-      return {
-        ...accum,
-        [status]: (accum[status] || 0) + pts
+      const currentStatus = current.status;
+      const currentStatusIndex = accum.findIndex((status:IBlockStatus) => status.name === currentStatus) || 0;
+      const newStatus = {
+        name: currentStatus,
+        count: (accum[currentStatusIndex]?.count || 0) + 1,
+        points: (accum[currentStatusIndex]?.points || 0) + pts
       }
-    }, {})
+      if (currentStatusIndex > -1) {
+        accum[currentStatusIndex] = newStatus
+      } else {
+        accum.push(newStatus)
+      }
+      return accum
+    }, [])
 
     this._treeProgress.next(progress);
     localStorage.setItem('progress', JSON.stringify(progress));
+  }
+
+  disableNodes(nodes: INode[]): INode[] {
+    return nodes.map(currentNode => ({
+      ...currentNode,
+      enabled: nodes
+      .filter(node => currentNode.parents.includes(node.code))
+      .every(node => node.status === NodeStatus.done)
+    }))
   }
 
   onSelectNode(nodeID: string) {
@@ -427,12 +457,12 @@ export class NodeTreeService {
     console.log(nodeData)
   }
 
-  onSelectMVP(mvp?: string) {
-    const nodes = this.nodeTree.filter(node=> node.mvp.name === mvp)
+  onSelectMVP(mvp?: string | number) {
+    const nodes = this.nodeTree.filter(node=> node.mvp.id === mvp)
     const codes = nodes.map(t=>t.code) || [];
     this.nodeTree = this.highlightNodes(this.nodeTree, codes, false);
-    const nodesToCalculate = mvp === 'None' ? this.nodeTree : nodes;
+    const nodesToCalculate = mvp === '' ? this.nodeTree : nodes;
     this._nodeTree.next(this.nodeTree);
-    this.calculateTreeProgres(nodesToCalculate);
+    this.calculateTreeProgress(nodesToCalculate);
   }
 }

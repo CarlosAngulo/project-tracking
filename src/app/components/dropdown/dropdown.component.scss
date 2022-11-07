@@ -1,11 +1,11 @@
 .dropdown {
     position: relative;
     padding: 10px;
-    width: 160px;
+    width: 100%;
         &:hover ul {
         display: block;
     }
-    &:after {
+    &-selector:after {
         content: '';
         border-left: 2px solid #333;
         border-bottom: 2px solid #333;
@@ -15,6 +15,7 @@
         right: 0;
         top: 14px;
         transform: rotate(-45deg);
+        margin-left: 12px;
     }
 }
 
@@ -22,7 +23,7 @@ ul {
     z-index: 1000;
     display: none;
     position: absolute;
-    margin: 0;
+    margin: 0 0 0 -12px;
     padding: 0;
     list-style: none;
     background-color: white;
@@ -33,7 +34,7 @@ ul {
     margin-top: 10px;
     width: 100%;
     li {
-        padding: 4px 12px;
+        padding: 6px 12px;
         cursor: pointer;
         &:hover {
             background-color: #EEE;

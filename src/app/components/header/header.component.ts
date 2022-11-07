@@ -1,6 +1,8 @@
 import { Component, OnDestroy} from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
+import { IBlockStatus } from 'src/app/interfaces/nodes.inteface';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
+import { IDropDown } from '../dropdown/dropdown.component';
 
 @Component({
   selector: 'app-header',
@@ -9,9 +11,9 @@ import { NodeTreeService } from 'src/app/services/nodetree.service';
 })
 export class HeaderComponent implements OnDestroy {
   
-  mvps = {}
+  mvps: IDropDown[] = []
   leader = '';
-  progressStatus!: any[];
+  progressStatus!: IBlockStatus[];
   title = '';
   private unsub$ = new Subject<void>();
 
@@ -33,7 +35,8 @@ export class HeaderComponent implements OnDestroy {
     .subscribe((leader: string) => this.leader = leader);
   }
 
-  onSelectMVP(mvp?: string) {
+  onSelectMVP(mvp?: string | number) {
+    console.log(mvp)
     this.nodeTreeService
     .onSelectMVP(mvp);
   }

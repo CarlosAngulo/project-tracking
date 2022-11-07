@@ -4,7 +4,7 @@
     (click)="onNodeClick()"
     [class.blocked]="nodeData.status == nodeStatus.blocked || nodeData.blockedByParents == true"
     [class.selected]="nodeData.selected"
-    [class.disabled]="nodeData.asignee.name=='--' || nodeData.estimation === 0"
+    [class.disabled]="!nodeData.enabled"
     [class.child-left]="childLeft"
     [class.child]="(nodeData.parents.length || 0) > 0"
     [style.transform]="'translate(' + nodeData.position.x + 'px, ' + nodeData.position.y + 'px)'">

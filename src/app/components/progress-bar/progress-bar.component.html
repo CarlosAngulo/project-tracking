@@ -1,13 +1,24 @@
-<div class="bar">
-    <div class="partial">
-        <div *ngFor="let status of statuses" [class]="status | lowercase" [style.width]="data[status] * 100 / totalEstimation + '%'">
-            {{data[status] * 100 / totalEstimation | number: '1.1-1'}} %
-        </div>
+<div class="container">
+    <div class="selector">
+        <app-dropdown [options]="selectByOpts" (onSelect)="selectType($event)" ></app-dropdown>
     </div>
-    <div class="convention">
-        <div class="convention-item" *ngFor="let status of statuses">
-            <span class="dot" [class]="status | lowercase"></span>
-            {{status | titlecase}}
+    <div class="bar">
+        <div class="info">
+            <span>Completed: 
+                <span *ngIf="completed">{{completed[selectBy] * 100 / total[selectBy]| number: '1.0-0'}}</span>%
+            </span>
+            <div class="convention">
+                <div class="convention-item" *ngFor="let status of statuses">
+                    <span class="dot" [class]="status.name | lowercase"></span>
+                    {{status.name | titlecase}}
+                </div>
+            </div>
+        </div>
+        <div class="partial">
+            <div *ngFor="let status of statuses" [class]="status.name | lowercase" [style.width]="status[selectBy] * 100 / total[selectBy] + '%'">
+                {{status[selectBy] * 100 / total[selectBy]| number: '1.1-1'}} %
+            </div>
         </div>
     </div>
 </div>
+

@@ -1,9 +1,8 @@
 <div class="dropdown">
-    <span>
-        MVP: {{selectedValue}}
-    </span> 
+    <div class="dropdown-selector">
+        <span *ngIf="label">{{label}}:</span> {{selectedValue}}
+    </div> 
     <ul>
-        <li (click)="onElementClick(DEFAULT_VALUE)">{{DEFAULT_VALUE}}</li>
-        <li *ngFor="let mvp of sortedOptions; let i = index" (click)="onElementClick(mvp)">{{i + 1}}. {{mvp}}</li>
+        <li *ngFor="let option of _options; let i = index" (click)="onElementClick(option)">{{option.name}}</li>
     </ul>
 </div>

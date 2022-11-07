@@ -2,10 +2,10 @@
     <div class="header-leader"><span>{{leader | initials}}</span></div>
     <div class="header-title"><h1>{{title}}</h1></div>
     <div class="header-sprint">
-        <app-dropdown [options]="mvps" (onSelect)="onSelectMVP($event)"></app-dropdown>
+        <app-dropdown [options]="mvps" [label]="'MVP'" [defaultOption]="'None'" (onSelect)="onSelectMVP($event)"></app-dropdown>
     </div>
     <div class="header-progress">
-        <app-progress-bar [data]="progressStatus"></app-progress-bar>
+        <app-progress-bar [statuses]="progressStatus"></app-progress-bar>
     </div>
 </div>
 

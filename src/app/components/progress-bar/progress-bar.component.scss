@@ -1,32 +1,38 @@
+.container {
+    display: flex;
+    gap: 20px;
+}
+
+.selector {
+    display: flex;
+    align-items: center;
+}
+
 .bar {
     color: white;
     font-size: 9px;
     font-weight: 700;
     padding: 10px 0;
+    flex-grow: 1;
 }
 
 .partial {
     background-color: white;
     display: flex;
-    margin-bottom: 6px;
+    margin-top: 6px;
     border-radius: 8px;
     overflow: hidden;
     div {
         padding: 1px 12px;
+        overflow: hidden;
+        white-space: nowrap;
     }
 }
 
-.new {
-    background-color: rgb(0, 157, 255);
-}
-.blocked {
-    background-color: red;
-}
-.done {
-    background-color: rgb(139 0 128);
-}
-.progress {
-    background-color: rgb(0 135 33);
+.info {
+    display: flex;
+    color: #333;
+    gap: 20px;
 }
 
 .convention {
@@ -34,6 +40,7 @@
     gap: 40px;
     justify-content: center;
     color: #333;
+    flex-grow: 2;
     &-item {
         display: flex;
         align-items: center;
@@ -45,4 +52,25 @@
         margin-right: 5px;
         border-radius: 50%;
     }
+}
+
+app-dropdown {
+    width: 90px;
+    display: block;
+}
+
+.new {
+    background-color: rgb(0, 157, 255);
+}
+
+.blocked {
+    background-color: red;
+}
+
+.done {
+    background-color: rgb(139 0 128);
+}
+
+.progress {
+    background-color: rgb(0 135 33);
 }
