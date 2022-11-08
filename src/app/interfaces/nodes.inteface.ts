@@ -10,7 +10,7 @@ export interface INode {
     link?: string;
     description?: string;
     status: INodeStatus;
-    estimation?: number;
+    estimation: number;
     effort?: IRoles[];
     parents: string[];
     treeParents?: string[];

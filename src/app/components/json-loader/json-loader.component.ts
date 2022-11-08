@@ -160,10 +160,34 @@ export class JsonLoaderComponent implements OnInit {
         }
       },
       {
-        "title": "[DEV] Modify Report data structure",
+        "title": "[DEV] Modify Profile Report Data Structure",
         "code": "AMC-12509",
         "link": "https://projects.mbww.com/browse/AMC-12509",
-        "description": "[DEV] Modify Report data structure",
+        "description": "[DEV] Modify Profile Report Data Structure",
+        "status": "NEW",
+        "effort": [
+          "BE"
+        ],
+        "parents": [
+          "AMC-12443"
+        ],
+        "estimation": 0,
+        "mvp": {
+          "name": "Setup",
+          "id": 1
+        },
+        "asignee": {
+          "name": "--",
+          "role": [
+            "BE"
+          ]
+        }
+      },
+      {
+        "title": "[DEV] Modify Audience Composition Report Data Structure",
+        "code": "AMC-12649",
+        "link": "https://projects.mbww.com/browse/AMC-12649",
+        "description": "[DEV] Modify Audience Composition Report Data Structure",
         "status": "NEW",
         "effort": [
           "BE"
@@ -243,6 +267,7 @@ export class JsonLoaderComponent implements OnInit {
         "parents": [
           "AMC-12446",
           "AMC-11191",
+          "AMC-12649",
           "AMC-12509",
           "AMC-12442"
         ],
@@ -270,7 +295,7 @@ export class JsonLoaderComponent implements OnInit {
         "parents": [
           "AMC-12450"
         ],
-        "estimation": 3,
+        "estimation": 0,
         "mvp": {
           "name": "Creation",
           "id": 2
@@ -294,7 +319,7 @@ export class JsonLoaderComponent implements OnInit {
         "parents": [
           "AMC-12560"
         ],
-        "estimation": 3,
+        "estimation": 0,
         "mvp": {
           "name": "Creation",
           "id": 2
@@ -319,7 +344,7 @@ export class JsonLoaderComponent implements OnInit {
           "AMC-MMMMM",
           "AMC-12530"
         ],
-        "estimation": 3,
+        "estimation": 0,
         "mvp": {
           "name": "Summary - Export",
           "id": 3
@@ -344,7 +369,7 @@ export class JsonLoaderComponent implements OnInit {
           "AMC-MMMMM",
           "AMC-12530"
         ],
-        "estimation": 3,
+        "estimation": 0,
         "mvp": {
           "name": "Summary - Export",
           "id": 3
@@ -369,7 +394,7 @@ export class JsonLoaderComponent implements OnInit {
           "AMC-MMMMM",
           "AMC-12598"
         ],
-        "estimation": 3,
+        "estimation": 8,
         "mvp": {
           "name": "Summary - Export",
           "id": 3
@@ -393,7 +418,7 @@ export class JsonLoaderComponent implements OnInit {
         "parents": [
           "AMC-12118"
         ],
-        "estimation": 3,
+        "estimation": 0,
         "mvp": {
           "name": "Summary - Export",
           "id": 3
@@ -417,7 +442,7 @@ export class JsonLoaderComponent implements OnInit {
         "parents": [
           "AMC-12151"
         ],
-        "estimation": 3,
+        "estimation": 0,
         "mvp": {
           "name": "Summary - Export",
           "id": 3
@@ -443,7 +468,7 @@ export class JsonLoaderComponent implements OnInit {
           'AMC-AAAAA',
           'AMC-12503'
         ],
-        "estimation": 3,
+        "estimation": 0,
         "mvp": {
           "name": "Summary - Export",
           "id": 3
@@ -460,23 +485,25 @@ export class JsonLoaderComponent implements OnInit {
 
   project!: IProject;
 
-  csv = `CODE	ASIGNEE	TITLE	ESTIMATION	STATUS	EFFORT	PARENTS	MVP
-AMC-12443	Luis Hernandez,BE	[SPIKE] Groups in report builder Data Structure	5	PROGRESS	BE		1,Setup
-AMC-12458	Andres Avendaño,FE	[DEV] Create a Feature Flag	2	PROGRESS	FE,BE		1,Setup
-AMC-12524	Juan Casas,FE	[POC] Change D3 bar charts to pure HTML/CSS	2	PROGRESS	BE		1,Setup
-AMC-12509	-	[DEV] Modify Report data structure	0	NEW	BE	AMC-12443	1,Setup
-AMC-11191	Carlos Angulo,FE	[DEV] Modify Datasource Panel	3	PROGRESS	FE	AMC-12458	1,Setup
-AMC-12446	Andres Avendaño,FE	[DEV] Modify chips on the overview Panel	3	PROGRESS	FE	AMC-12458	1,Setup
-AMC-12530	-	[DEV] Change D3 bar charts on Profile Report	0	NEW	FE	AMC-12524	1,Setup
-AMC-12598	-	[DEV] Change D3 bar charts on Composition Report	0	NEW	FE	AMC-12524	1,Setup
-AMC-12442	-	[DEV] Endpoint to calculate Group Size - Report Builder	5	NEW	BE	AMC-12509	1,Setup
-AMC-12450	-	[DEV] Modify Overview Panel	5	NEW	FE	AMC-11191,AMC-12509,AMC-12442	1,Setup
-AMC-12560	-	[DEV] Saving groups in reports	3	NEW	FE	AMC-12450,AMC-12509,AMC-12446	1,Setup
-AMC-12503	-	[DEV] Table - Profile Report Summary	3	NEW	FE	AMC-12560,AMC-12530	1,Setup
-AMC-12151	-	[DEV] Graph - Profile Report Summary	3	NEW	FE	AMC-12560,AMC-12530	1,Setup
-AMC-12118	-	[DEV] Graph - Composition Report Summary.	3	NEW	FE	AMC-12560,AMC-12598	1,Setup
-AMC-BBBBB	-	[DEV] Export Profile Report	3	NEW	FE	AMC-12151	1,Setup
-AMC-AAAAA	-	[DEV] Export Composition Report	3	NEW	FE	AMC-12118	1,Setup`;
+  csv = `CODE;ASIGNEE;TITLE;ESTIMATION;STATUS;EFFORT;PARENTS;MVP
+AMC-12443;Luis Hernandez,BE;[SPIKE] Groups in report builder Data Structure;5;DONE;BE;;1,Setup
+AMC-12458;Andres Avedaño,FE;[DEV] Create a Feature Flag;2;DONE;FE,BE;;1,Setup
+AMC-12524;Juan Casas,FE;[POC] Change D3 bar charts to pure HTML/CSS;2;DONE;BE;;1,Setup
+AMC-12509;-;[DEV] Modify Report data structure;0;NEW;BE;AMC-12443;1,Setup
+AMC-12446;Andres Avedaño,FE;[DEV] Modify chips on the overview Panel;3;PROGRESS;FE;AMC-12458,AMC-12443;2,Creation
+AMC-11191;Carlos Angulo-FE;[DEV] Modify Datasource Panel;3;DONE;FE;AMC-12458;2,Creation
+AMC-12530;Juan Casas,FE;[DEV] Change D3 bar charts on Profile Report;0;NEW;FE;AMC-12524;3,Export-Summary
+AMC-12598;-;[DEV] Change D3 bar charts on Composition Report;0;NEW;FE;AMC-12524;3,Export-Summary
+AMC-12442;-;[DEV] Endpoint to calculate Group Size - Report Builder;5;NEW;BE;AMC-12509;2,Creation
+AMC-12450;-;[DEV] Modify Overview Panel;5;NEW;FE;AMC-12446,AMC-11191,AMC-12509,AMC-12442;2,Creation
+AMC-12560;-;[DEV] Saving groups in reports;3;NEW;FE;AMC-12450;2,Creation
+AMC-MMMMM;-;[QA] Creation Certification;3;NEW;FE;AMC-12560;2,Creation
+AMC-12503;-;[DEV] Table - Profile Report Summary;3;NEW;FE;AMC-MMMMM,AMC-12530;3,Export Summary
+AMC-12151;-;[DEV] Graph - Profile Report Summary;3;NEW;FE;AMC-MMMMM,AMC-12530;3,Export Summary
+AMC-12118;-;[DEV] Graph - Composition Report Summary.;3;NEW;FE;AMC-MMMMM,AMC-12598;3,Export Summary
+AMC-BBBBB;-;[DEV] Export Profile Report;3;NEW;FE;AMC-12151;3,Export Summary
+AMC-AAAAA;-;[DEV] Export Composition Report;3;NEW;FE;AMC-12118;3,Export Summary
+AMC-OOOOO;-;[QA] Summary Certification;3;NEW;FE;AMC-BBBBB,AMC-AAAAA,AMC-12503;3,Export Summary`;
 
   constructor(readonly nodeTreeService: NodeTreeService, readonly CSVParser: CSVParserService) {
     const localStorageProject: any = localStorage.getItem('project');
@@ -488,8 +515,8 @@ AMC-AAAAA	-	[DEV] Export Composition Report	3	NEW	FE	AMC-12118	1,Setup`;
 
     const csvPrimitive = CSVParser.csvToArray(this.csv);
     const csvParsed = CSVParser.parseArray(csvPrimitive)
-    // console.log(this.PROJECT.tickets[0])
-    // console.log(csvParsed[0]);
+    console.log(this.PROJECT.tickets[1])
+    console.log(csvParsed[1]);
   }
 
   ngOnInit(): void {

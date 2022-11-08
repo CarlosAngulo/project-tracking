@@ -18,7 +18,7 @@ export class CSVParserService {
     constructor() {
     }
 
-    csvToArray(str: string, delimiter: string = '\t') {
+    csvToArray(str: string, delimiter: string = ';') {
         const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
         const rows = str.slice(str.indexOf("\n") + 1).split("\n");
         return rows.map((row) => {
@@ -43,7 +43,7 @@ export class CSVParserService {
             },
             asignee: {
                 name: ticket.asignee.split(',')[0],
-                role: ticket.asignee.split(',')[1]
+                role: ticket.asignee.split(',').slice(1,ticket.asignee.split(',').length)
             }
         }))
     }

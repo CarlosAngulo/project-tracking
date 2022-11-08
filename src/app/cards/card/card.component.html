@@ -24,7 +24,7 @@
     <div class="card-body">
         <span class="card-header-title">{{nodeData.title}}</span>
     </div>
-    <div class="card-footer">
+    <div class="card-footer" [class.unestimated]="!estimated">
         <div>{{nodeData.effort}}</div>
         <div>{{nodeData.estimation}} PTS</div>
     </div>

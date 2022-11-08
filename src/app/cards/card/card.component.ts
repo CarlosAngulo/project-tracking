@@ -20,6 +20,7 @@ export class CardComponent implements OnInit, AfterViewInit {
   @Output() infoNode: EventEmitter<INode> = new EventEmitter();
   @Input() set node(nodeData: INode) {
     this.nodeData = {...nodeData};
+    this.estimated = this.nodeData.estimation > 0;
     this.nodeData.paretsPosition?.forEach( parent => this.calculateArrows(parent, cardProps.height));
   };
 
@@ -33,6 +34,7 @@ export class CardComponent implements OnInit, AfterViewInit {
   bezier: boolean[] = [];
   childLeft: boolean = false;
   cardHeight = 0;
+  estimated = false;
 
   constructor() { }
 
