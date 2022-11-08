@@ -121,9 +121,9 @@ export class JsonLoaderComponent implements OnInit {
           "FE"
         ],
         "parents": [
-          "AMC-12524"
+          "AMC-12524",
         ],
-        "estimation": 0,
+        "estimation": 5,
         "mvp": {
           "name": "Summary - Export",
           "id": 3
@@ -171,7 +171,7 @@ export class JsonLoaderComponent implements OnInit {
         "parents": [
           "AMC-12443"
         ],
-        "estimation": 0,
+        "estimation": 5,
         "mvp": {
           "name": "Setup",
           "id": 1
@@ -392,7 +392,7 @@ export class JsonLoaderComponent implements OnInit {
         ],
         "parents": [
           "AMC-MMMMM",
-          "AMC-12598"
+          "AMC-12598",
         ],
         "estimation": 8,
         "mvp": {
