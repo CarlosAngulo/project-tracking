@@ -1,3 +1,10 @@
+type TImportType = 'JSON' | 'CSV';
+
+export const ImportType = {
+    json: <TImportType> 'JSON',
+    csv: <TImportType> 'CSV'
+};
+
 export interface IProject {
     leader: string;
     name: string;
@@ -21,7 +28,8 @@ export interface INode {
     paretsPosition?: IRelativesPos[];
     children: string[];
     childrenTree: string[][];
-    simpleChildrenTree: string[][];
+    childrenTreeSimple: string[][];
+    childrenWidth: number;
     selected: boolean;
     blockedByParents: boolean;
     test?: any;

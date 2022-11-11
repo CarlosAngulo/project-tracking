@@ -35,4 +35,9 @@ table {
     tbody tr:last-of-type {
         border-bottom: 2px solid #006db1;
     }
+
+    tbody tr.selected {
+        background-color: #d1dbff;
+        border-bottom: 1px solid #006db1;
+    }
 }

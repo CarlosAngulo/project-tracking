@@ -3,6 +3,7 @@
     class="card"
     (click)="onNodeClick()"
     [class.blocked]="nodeData.status == nodeStatus.blocked || nodeData.blockedByParents == true"
+    [class.done]="nodeData.status == nodeStatus.done"
     [class.selected]="nodeData.selected"
     [class.disabled]="!nodeData.enabled"
     [class.child-left]="childLeft"
