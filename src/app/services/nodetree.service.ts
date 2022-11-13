@@ -102,7 +102,7 @@ export class NodeTreeService {
         level: 0,
         childrenWidth: 0,
         enabled: true,
-        position: {x: 0, y:0},
+        position: {x: 0, y:0, offsetX: 0},
         blockedByParents: false,
         selected: false,
       }))
@@ -211,7 +211,6 @@ export class NodeTreeService {
     });
     newNodes = newNodes.map(currentNode => ({
       ...currentNode,
-      // childrenTree: [nodes.filter(node => node.parents.includes(currentNode.code)).map(node=>node.code)],
       childrenTreeSimple: [nodes.filter(node => node.parents[0] === currentNode.code).map(node=>node.code)]
     }))
     newNodes.forEach(node => {
@@ -276,7 +275,6 @@ export class NodeTreeService {
       let grandChildrenWidth = nodes
         .filter(currentNode => node.childrenTreeSimple[0].includes(currentNode.code))
         .reduce((acc, curr) => acc + curr.childrenWidth, 0);
-      console.log(node.code, nodes.filter(currentNode => node.childrenTreeSimple[0].includes(currentNode.code)), childrenWidth, grandChildrenWidth)
       childrenWidth = childrenWidth > grandChildrenWidth ? childrenWidth : grandChildrenWidth;
       node.childrenWidth = childrenWidth === 0 ? 1 : childrenWidth
     })
@@ -284,77 +282,18 @@ export class NodeTreeService {
   }
 
   private addNewPositions(nodes: INode[]): INode[] {
-    return nodes.map(currentNode => {
-      const previousPositions = nodes
-        .filter(node=> node.level === currentNode.level && node.index < currentNode.index)
-        .map(node => node.childrenWidth * (cardProps.width + cardProps.gap.x))
-        .reduce((acc, curr) => acc + curr, 0);
-      const centerPosition = currentNode.childrenWidth * (cardProps.width + cardProps.gap.x) / 2;
-      return {
-        ...currentNode,
-        position: {
-          x: previousPositions + centerPosition,
-          y: currentNode.level * (cardProps.height + cardProps.gap.y) + cardProps.margin.y
-        }
-      }
-    })
-  }
-
-  private addPositions(nodes: INode[]): INode[] {
-    nodes = nodes.map(currentNode => {
-      const previousPositions = nodes
-        .filter(node=> node.level === currentNode.level && node.index < currentNode.index)
-        .map(node => this.nodeBiggestChildRow(node) * (cardProps.width + cardProps.gap.x))
-        .reduce((acc, curr) => acc + curr, 0);
-      const centerPosition = this.nodeBiggestChildRow(currentNode) * (cardProps.width + cardProps.gap.x) / 2;
-      return {
-        ...currentNode,
-        position: {
-          x: previousPositions + centerPosition,
-          y: currentNode.level * (cardProps.height + cardProps.gap.y) + cardProps.margin.y
-        }
-      };
-    })
-
-    // Selects the level with max number of nodes
-    const maxNodesLevel = nodes
-    .reduce((acc:number[], curr:INode) => {
-      acc[curr.level] = (acc[curr.level] || 0) + 1;
-      return acc;
-    }, [])
-    .reduce((acc, curr, index) => curr > acc.val ? {index, val: curr} : {...acc}, {index: 0, val: 0})
-
-    // Calculates positions for nodes in levels higher than maxNodesLevel
-    nodes.forEach(currentNode => {
-      const parent = nodes.find(node => node.code === currentNode.parents[0]);
-      // const firstChild = nodes.find(node => node.code === parent?.childrenTree[0][0]);
-      // const increment = (parent?.position.x || 0) - (firstChild?.position.x || 0)
-      // if (currentNode.level > maxNodesLevel.index && parent?.childrenTree[0].length === 1) {
-      //   console.log(currentNode.code, parent?.code, firstChild?.code, increment)
-      //   currentNode.position.x += increment;
-      // }
-
-
-      const offsetByParent = (parent?.position.x || 0) - (((parent?.childrenTreeSimple[0].length || 1) - 1) * (cardProps.width + cardProps.gap.x) / 2 );
-      const indexOnParent = parent?.childrenTreeSimple[0].findIndex(childrenCode => childrenCode === currentNode.code) || 0;
-      const offsetBySiblings = (indexOnParent) * (cardProps.width + cardProps.gap.x);
-      if (currentNode.level > maxNodesLevel.index ) {
-        // currentNode.position.x = offsetByParent + offsetBySiblings;
-      }
-    })
-    nodes.forEach(currentNode => {
-      if (currentNode.childrenTreeSimple[0].length > 0 && currentNode.level < maxNodesLevel.index ) {
-        const child = currentNode.childrenTreeSimple[0];
-        const posXFirstChildren =  nodes.find(node => node.code === child[0])?.position.x || 0;
-        const posXLastChildren =  nodes.find(node => node.code === child[child.length - 1])?.position.x || 0;
-        currentNode.position.x = posXLastChildren + ((posXFirstChildren - posXLastChildren ) / 2);
-      }
+    const _nodes = [...nodes];
+    _nodes.forEach(currentNode => {
+      const parent = nodes.find(node => currentNode.parents[0] === node.code);
+      const offsetBySlibing = this.previousPositions(currentNode, nodes, parent);
+      currentNode.position.x = (parent?.position.x || 0) - (((parent?.childrenWidth || 0) - currentNode.childrenWidth) * (cardProps.width + cardProps.gap.x) / 2) + offsetBySlibing;
+      currentNode.position.y= currentNode.level * (cardProps.height + cardProps.gap.y) + cardProps.margin.y;
     })
 
     this.constraints = this.calculateconstraints(nodes);
     this._constraints.next(this.constraints);
     
-    return nodes.map(node=> ({
+    return _nodes.map(node=> ({
       ...node,
       position: {
         y: node.position.y,
@@ -363,15 +302,19 @@ export class NodeTreeService {
     }));
   }
 
-  private nodeBiggestChildRow(node:INode): number {
-    return node.childrenTreeSimple.reduce((acc, curr)=> acc > curr.length ? acc : curr.length, 1)
-  }
-
-  private calculateChildrenWidth(node:INode): number {
-    node.childrenTreeSimple.forEach(childrenLevel => {
-      const childrenCount = childrenLevel.reduce((acc, curr) => curr.length + acc, 0)
-    })
-    return node.childrenWidth;
+  private previousPositions(currentNode: INode | undefined, nodes:INode[], parent?:INode): number {
+    if (!currentNode) return 0;
+    return nodes
+      .filter(node=> {
+        const sameLevel = node.level === currentNode.level;
+        const lowerIndex = node.index < currentNode.index;
+        if (parent === undefined) {
+          return lowerIndex && sameLevel;
+        }
+        return lowerIndex && parent?.childrenTreeSimple[0].includes(node.code);
+      })
+      .map(node => node.childrenWidth * (cardProps.width + cardProps.gap.x))
+      .reduce((acc, curr) => acc + curr, 0);
   }
 
   private addParentCoodrs(nodes: INode[]) {
@@ -396,7 +339,7 @@ export class NodeTreeService {
       acc.bottom = curr.position.y > acc.bottom ? curr.position.y : acc.bottom;
       return acc;
     }, {
-      left: 20000,
+      left: 200000,
       top: 0,
       right: 0,
       bottom: 0
@@ -487,6 +430,15 @@ export class NodeTreeService {
 
     this._treeProgress.next(progress);
     localStorage.setItem('progress', JSON.stringify(progress));
+  }
+
+  private maxNodesLevel(nodes: INode[]): {index: number, val: number} {
+    return nodes
+    .reduce((acc:number[], curr:INode) => {
+      acc[curr.level] = (acc[curr.level] || 0) + 1;
+      return acc;
+    }, [])
+    .reduce((acc, curr, index) => curr > acc.val ? {index, val: curr} : {...acc}, {index: 0, val: 0})
   }
 
   disableNodes(nodes: INode[]): INode[] {

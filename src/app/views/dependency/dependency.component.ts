@@ -4,6 +4,7 @@ import { cardProps } from 'src/app/cards/card/card.props';
 import { Iconstraints, INode} from 'src/app/interfaces/nodes.inteface';
 import { JiraService } from 'src/app/services/jira.service';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
+import { ViewService } from 'src/app/services/view.service';
 
 @Component({
   selector: 'app-dependency',
@@ -12,12 +13,14 @@ import { NodeTreeService } from 'src/app/services/nodetree.service';
 })
 export class DependencyComponent implements OnInit {
   bgStyles: any = {};
+  zoomStyle!: any;
   nodeTree:  INode[] = [];
   private unsub$ = new Subject<void>();
 
   constructor(
     readonly jiraService: JiraService,
-    readonly nodeTreeService: NodeTreeService
+    readonly nodeTreeService: NodeTreeService,
+    readonly viewService: ViewService
   ){
     if (localStorage.getItem('project')) {
       this.bgStyles = this.calculateBg(nodeTreeService.getConstraints())
@@ -32,6 +35,15 @@ export class DependencyComponent implements OnInit {
     .pipe(takeUntil(this.unsub$))
     .subscribe((constraints: Iconstraints) => {
       this.bgStyles = this.calculateBg(constraints);
+    })
+    this.viewService.getZoom()
+    .pipe(takeUntil(this.unsub$))
+    .subscribe((zoomLevel: number) => {
+      this.bgStyles = {
+        ...this.bgStyles,
+        transform: `scale(${0.9 + zoomLevel * 0.1})`
+      }
+      this.zoomStyle = {'transform': `scale(${1 + zoomLevel * 0.1})`};
     })
   }
 

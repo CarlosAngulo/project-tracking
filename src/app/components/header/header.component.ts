@@ -2,6 +2,7 @@ import { Component, OnDestroy} from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { IBlockStatus } from 'src/app/interfaces/nodes.inteface';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
+import { ViewService } from 'src/app/services/view.service';
 import { IDropDown } from '../dropdown/dropdown.component';
 
 @Component({
@@ -17,7 +18,10 @@ export class HeaderComponent implements OnDestroy {
   title = '';
   private unsub$ = new Subject<void>();
 
-  constructor(private nodeTreeService: NodeTreeService) {
+  constructor(
+    private nodeTreeService: NodeTreeService,
+    private viewService: ViewService
+  ) {
     nodeTreeService.getMVPs()
     .pipe(takeUntil(this.unsub$))
     .subscribe((mvps:any[]) => this.mvps = mvps);
@@ -43,6 +47,10 @@ export class HeaderComponent implements OnDestroy {
 
   onUploadClick(evt: boolean) {
     this.nodeTreeService.openLoadWindow();
+  }
+
+  onZoomClick(evt: number) {
+    this.viewService.setZoom(evt)
   }
 
   ngOnDestroy() {

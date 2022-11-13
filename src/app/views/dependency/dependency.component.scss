@@ -4,6 +4,8 @@
     overflow: auto;
     background-color: #EEEEF1;
     &-viewer {
+        transform-origin: 10% top;
+        transform: scale(0.9);
         position: relative;
         margin: auto;
     }

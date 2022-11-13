@@ -404,6 +404,31 @@ export class JsonLoaderComponent implements OnInit {
         }
       },
       {
+        "title": "[DEV] Edit Reports",
+        "code": "AMC-GGGGGG",
+        "link": "https://projects.mbww.com/browse/AMC-GGGGGG",
+        "description": "BE: Incluir grupos en el endpoint que se consume para editar el reporte",
+        "status": "NEW",
+        "effort": [
+          "FE",
+          "BE"
+        ],
+        "parents": [
+          "AMC-MMMMM"
+        ],
+        "estimation": 0,
+        "mvp": {
+          "name": "Creation",
+          "id": 2
+        },
+        "asignee": {
+          "name": "--",
+          "role": [
+            "FE"
+          ]
+        }
+      },
+      {
         "title": "[DEV] Table - Profile Report Summary",
         "code": "AMC-12503",
         "link": "https://projects.mbww.com/browse/AMC-12503",
@@ -470,31 +495,6 @@ export class JsonLoaderComponent implements OnInit {
         "mvp": {
           "name": "Summary - Export",
           "id": 3
-        },
-        "asignee": {
-          "name": "--",
-          "role": [
-            "FE"
-          ]
-        }
-      },
-      {
-        "title": "[DEV] Edit Reports",
-        "code": "AMC-GGGGGG",
-        "link": "https://projects.mbww.com/browse/AMC-GGGGGG",
-        "description": "BE: Incluir grupos en el endpoint que se consume para editar el reporte",
-        "status": "NEW",
-        "effort": [
-          "FE",
-          "BE"
-        ],
-        "parents": [
-          "AMC-MMMMM"
-        ],
-        "estimation": 0,
-        "mvp": {
-          "name": "Creation",
-          "id": 2
         },
         "asignee": {
           "name": "--",
@@ -926,8 +926,8 @@ AMC-OOOOO;--,FE;[QA] Summary Certification;0;NEW;FE;AMC-BBBBB,AMC-AAAAA,AMC-1250
 
     const csvPrimitive = CSVParser.csvToArray(this.csv);
     const csvParsed = CSVParser.parseArray(csvPrimitive)
-    console.log(this.PROJECT.tickets[1])
-    console.log(csvParsed[1]);
+    // console.log(this.PROJECT.tickets[1])
+    // console.log(csvParsed[1]);
     // console.log(this.jsonToCSV(this.PROJECT))
   }
 
@@ -959,10 +959,25 @@ AMC-OOOOO;--,FE;[QA] Summary Certification;0;NEW;FE;AMC-BBBBB,AMC-AAAAA,AMC-1250
   onInsert() {
     this.onLoad.next(this.project);
     this.projectLoaded = true;
+    // this.download(this.jsonToCSV(this.PROJECT), 'proyecto.csv', 'csv')
   }
 
   onClose() {
     this.onCancel.next(false)
+  }
+
+  download(data:string, filename:string, type:string) {
+    var file = new Blob([data], {type: type});
+    var a = document.createElement("a"),
+      url = URL.createObjectURL(file);
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function() {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);  
+    }, 0);
   }
 
 }

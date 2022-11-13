@@ -7,6 +7,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 })
 export class MenuComponent implements OnInit {
   @Output() onUploadClick: EventEmitter<boolean> = new EventEmitter();
+  @Output() onZoomClick: EventEmitter<number> = new EventEmitter();
 
   constructor() { }
 
@@ -15,6 +16,10 @@ export class MenuComponent implements OnInit {
 
   onUploadFile() {
     this.onUploadClick.next(true);
+  }
+
+  onZoom(val: number) {
+    this.onZoomClick.next(val);
   }
 
 }
