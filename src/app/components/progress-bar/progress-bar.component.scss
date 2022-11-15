@@ -26,6 +26,7 @@
         padding: 1px 12px;
         overflow: hidden;
         white-space: nowrap;
+        background-color: #333;
     }
 }
 
@@ -59,18 +60,20 @@ app-dropdown {
     display: block;
 }
 
-.new {
-    background-color: rgb(0, 157, 255);
-}
-
-.blocked {
-    background-color: red;
-}
-
-.done {
-    background-color: rgb(99 0 139);
-}
-
-.progress {
-    background-color: rgb(0 135 33);
+.partial {
+    .new {
+        background-color: rgb(0, 157, 255);
+    }
+    
+    .blocked {
+        background-color: red;
+    }
+    
+    .done {
+        background-color: rgb(99 0 139);
+    }
+    
+    .progress {
+        background-color: rgb(0 135 33);
+    }
 }

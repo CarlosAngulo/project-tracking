@@ -1,13 +1,41 @@
 <div class="overlay">
-    <div class="loader">
-        <h2>JSON Loader</h2>
-        <p>Please insert the source font of your project in JSON format.</p>
-        <textarea [(ngModel)]="projectValue" rows="14">
-        </textarea>
-        <p class="error" *ngIf="parseJSONError">The object you are trying to insert is not valid.</p>
-        <div class="button-area">
-            <button (click)="onInsert()" [disabled]="parseJSONError">Insert</button>
-            <button (click)="onClose()" class="cancel" [disabled]="!projectLoaded">Cancel</button>
+    <div class="modal">
+        <div class="modal-header">
+            <h2>Load your project</h2>
+            <button [disabled]="!projectLoaded" (click)="onClose()" class="modal-close material-symbols-outlined">close</button>
+        </div>
+        <div class="modal-body">
+            <div class="file-container">
+                <input type="file" id="file" class="file-button-hidden" (change)="onUploadFile($event)" accept=".csv, .json">
+                <label class="file-button file-button-upload" for="file" [class]="uploadStatus">
+                    <img class="file-img" src="/assets/file_001.png" alt="">
+                    <p>Load a project from your local machine</p>
+                </label>
+                <div class="file-button file-button-preload" (click)="loadSampleProject()">
+                    <img class="file-img" src="/assets/file_002.png" alt="">
+                    <p>Use the sample project</p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="file-status" *ngIf="uploadStatus === 'success' || uploadStatus === 'failed'">
+                <div class="file-status-message" [class]="uploadStatus">
+                    {{loadProjectMessages[uploadStatus].message}}
+                </div>
+                <div class="file-status-actions">
+                    <button *ngIf="uploadStatus === 'success'; else failed" class="btn btn-primary" (click)="onInsert()">Load</button>
+                    <ng-template #failed>
+                        <button class="btn btn-primary" (click)="downloadFile(fileExtensions.CSV)">
+                            <span class="material-symbols-outlined">file_download</span>
+                            SVG
+                        </button>
+                        <button class="btn btn-primary" (click)="downloadFile(fileExtensions.JSON)">
+                            <span class="material-symbols-outlined">file_download</span>
+                            JSON
+                        </button>
+                    </ng-template>
+                </div>
+            </div>
         </div>
     </div>
 
