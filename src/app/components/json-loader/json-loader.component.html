@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <div class="file-status" *ngIf="uploadStatus === 'success' || uploadStatus === 'failed'">
+            <div class="file-status" *ngIf="uploadStatus === 'success' || uploadStatus === 'failed' || uploadStatus === 'default'">
                 <div class="file-status-message" [class]="uploadStatus">
                     {{loadProjectMessages[uploadStatus].message}}
                 </div>

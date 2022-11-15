@@ -23,7 +23,7 @@ export class JsonLoaderComponent implements OnInit {
   fr!: FileReader;
   fileName!: string;
   fileExtensions = fileExtensions;
-  uploadStatus = '';
+  uploadStatus = 'default';
   project!: IProject;
   loadProjectMessages = {
     success: {
@@ -31,6 +31,9 @@ export class JsonLoaderComponent implements OnInit {
     },
     failed: {
       message: 'The file does not complain the structure needed. Please downdolad one of the following files to create your own with the same strcuture.'
+    },
+    default: {
+      message: "If you don't know what the format should be, please download the sample project:"
     }
   }
 
