@@ -140,7 +140,14 @@ h2 {
     background-color: #ffe0de;
     box-shadow: 0 0 0 1px rgb(152 7 111 / 30%);
 }
-
+.drop-down {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    app-dropdown {
+        flex-grow: 1;
+    }
+}
 // textarea {
 //     display: block;
 //     width: 100%;

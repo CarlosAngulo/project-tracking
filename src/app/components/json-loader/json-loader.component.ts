@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { IProject } from 'src/app/interfaces/nodes.inteface';
 import { CSVParserService } from 'src/app/services/csv-parser.service';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
+import { FirebaseService } from 'src/app/services/project-loader/firebase.service';
 import { PROJECT, PROJECT2 } from './projects';
 
 type AllowedExtensions = fileExtensions.CSV | fileExtensions.JSON;
@@ -25,6 +26,10 @@ export class JsonLoaderComponent implements OnInit {
   fileExtensions = fileExtensions;
   uploadStatus = 'default';
   project!: IProject;
+  preloadedProjects!: any[];
+  preloadedProjectNames!: string[];
+  selectedProjectID!: string;
+
   loadProjectMessages = {
     success: {
       message: 'Congrats! Your projec is valid. Please click on the next button.'
@@ -37,7 +42,11 @@ export class JsonLoaderComponent implements OnInit {
     }
   }
 
-  constructor(readonly nodeTreeService: NodeTreeService, readonly CSVParser: CSVParserService) {
+  constructor(
+    readonly nodeTreeService: NodeTreeService, 
+    readonly CSVParser: CSVParserService,
+    readonly firebaseService: FirebaseService  
+  ) {
     const localStorageProject: any = localStorage.getItem('project');
     if (localStorageProject) {
       this.project = JSON.parse(localStorageProject);
@@ -45,11 +54,28 @@ export class JsonLoaderComponent implements OnInit {
       this.project = PROJECT;
     }
 
+    this.firebaseService.getProjects()
+    .subscribe(projects => {
+      console.log(projects)
+      this.preloadedProjects = projects;
+      this.preloadedProjectNames = projects.map((project:any) => project.name);
+    })
+
+    this.firebaseService.getPerson('8GjRLn6nSHTCtnzpO6j4').subscribe(console.log)
+
     // const csvPrimitive = CSVParser.csvToArray(this.csv);
     // const csvParsed = CSVParser.parseArray(csvPrimitive)
     // console.log(this.PROJECT.tickets[1])
     // console.log(csvParsed[1]);
     // console.log(this.jsonToCSV(this.PROJECT))
+  }
+
+  onSelecProject(evt: string | number) {
+    this.selectedProjectID = evt.toString();
+  }
+
+  onLoadProject(projectID: string) {
+    console.log(this.preloadedProjects.find(project => project.name === projectID))
   }
 
   onUploadFile(event: any) {

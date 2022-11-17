@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { NodeTreeService } from './services/nodetree.service';
 
 @Component({
@@ -11,7 +11,9 @@ export class AppComponent implements OnDestroy, OnInit{
   showLoader = true;
   private unsub$ = new Subject<void>();
 
-  constructor(private nodeTreeService: NodeTreeService) {}
+  constructor(
+    private nodeTreeService: NodeTreeService
+  ) {}
 
   ngOnInit(): void {
     localStorage.clear();

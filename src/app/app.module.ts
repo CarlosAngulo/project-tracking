@@ -16,6 +16,8 @@ import { MenuComponent } from './components/menu/menu.component';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './components/header/header.component';
 import { TicketListComponent } from './views/ticket-list/ticket-list.component';
+import { AngularFireModule } from '@angular/fire/compat';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,8 @@ import { TicketListComponent } from './views/ticket-list/ticket-list.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig)
   ],
   providers: [
     {provide: LocationStrategy, useClass: HashLocationStrategy}
