@@ -62,9 +62,11 @@ export interface IBoxconstraintsPx {
 type INodeStatus = 'NEW' | 'DONE' | 'BLOCKED' | 'PROGRESS'
   
 export const NodeStatus = {
+    undefined: <INodeStatus> 'UNDEFINED',
     new: <INodeStatus> 'NEW',
     done: <INodeStatus> 'DONE',
     progress: <INodeStatus> 'PROGRESS',
+    review: <INodeStatus> 'REVIEW',
     blocked: <INodeStatus> 'BLOCKED'
 };
 

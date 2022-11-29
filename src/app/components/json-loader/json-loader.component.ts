@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { IProject } from 'src/app/interfaces/nodes.inteface';
 import { CSVParserService } from 'src/app/services/csv-parser.service';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
-import { PROJECT, PROJECT2 } from './projects';
+import { PROJECT } from './projects';
 
 type AllowedExtensions = fileExtensions.CSV | fileExtensions.JSON;
 enum fileExtensions {

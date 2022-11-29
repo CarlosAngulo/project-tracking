@@ -158,13 +158,19 @@
         background-color: #F00;
     }
     &.new {
-        background-color: rgb(0, 157, 255);
+        background-color: rgb(0, 221, 74);
     }
     &.progress {
-        background-color: rgb(0, 102, 22);
+        background-color: rgb(0, 157, 255);
     }
     &.done {
-        background-color: rgb(99 0 139);
+        background-color: rgb(0, 61, 99);
+    }
+    &.undefined {
+        background-color: rgb(111, 81, 0);
+    }
+    &.review {
+        background-color: rgb(8, 191, 26);
     }
 }
 
