@@ -138,5 +138,4 @@ export class CardComponent implements OnInit, AfterViewInit {
   onInfoClick() {
     this.infoNode.next(this.nodeData);
   }
-  
 }

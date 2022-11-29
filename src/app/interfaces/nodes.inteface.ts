@@ -12,6 +12,7 @@ export interface IProject {
 }
 
 export interface INode {
+    id?: string;
     title?: string;
     code: string;
     link?: string;

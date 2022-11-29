@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { DocumentReference } from '@angular/fire/compat/firestore';
 import { IProject } from 'src/app/interfaces/nodes.inteface';
 import { CSVParserService } from 'src/app/services/csv-parser.service';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
@@ -54,20 +55,22 @@ export class JsonLoaderComponent implements OnInit {
       this.project = PROJECT;
     }
 
-    this.firebaseService.getProjects()
-    .subscribe(projects => {
-      console.log(projects)
-      this.preloadedProjects = projects;
-      this.preloadedProjectNames = projects.map((project:any) => project.name);
-    })
-
-    this.firebaseService.getPerson('8GjRLn6nSHTCtnzpO6j4').subscribe(console.log)
-
     // const csvPrimitive = CSVParser.csvToArray(this.csv);
     // const csvParsed = CSVParser.parseArray(csvPrimitive)
     // console.log(this.PROJECT.tickets[1])
     // console.log(csvParsed[1]);
     // console.log(this.jsonToCSV(this.PROJECT))
+
+    this.loadFirebaseTemp();
+  }
+
+  loadFirebaseTemp() {
+    this.firebaseService.getProjects()
+    .subscribe(projects => {
+      console.log(projects)
+      this.preloadedProjects = projects;
+      this.preloadedProjectNames = projects.map((project:any) => project.name);
+    });
   }
 
   onSelecProject(evt: string | number) {
@@ -75,7 +78,24 @@ export class JsonLoaderComponent implements OnInit {
   }
 
   onLoadProject(projectID: string) {
-    console.log(this.preloadedProjects.find(project => project.name === projectID))
+    const projectData = this.preloadedProjects.find(project => project.name === projectID);
+    const tickets: DocumentReference[]= projectData.tickets;
+    this.firebaseService.getTicketsChunk(tickets.map(ticket => ticket.id))
+    .subscribe(
+      (res) => {
+        this.project = {
+          leader: 'Carlos Angulo',
+          name: projectData.name,
+          tickets: res.flat()
+        }
+        this.onLoad.next(this.project);
+        this.projectLoaded = true;
+      }
+    )
+
+    // populates the tickets from the project
+    // forkJoin(PROJECT.tickets.map((ticket:INode) => this.firebaseService.createTicket(ticket)))
+    // .subscribe(console.log)
   }
 
   onUploadFile(event: any) {

@@ -18,6 +18,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { TicketListComponent } from './views/ticket-list/ticket-list.component';
 import { AngularFireModule } from '@angular/fire/compat';
 import { environment } from '../environments/environment';
+import { TicketDetailComponent } from './components/ticket-detail/ticket-detail.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { environment } from '../environments/environment';
     JsonLoaderComponent,
     MenuComponent,
     HeaderComponent,
-    TicketListComponent
+    TicketListComponent,
+    TicketDetailComponent
   ],
   imports: [
     BrowserModule,
