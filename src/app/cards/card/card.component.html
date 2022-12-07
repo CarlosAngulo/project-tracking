@@ -7,6 +7,7 @@
     [class.selected]="nodeData.selected"
     [class.disabled]="!nodeData.enabled"
     [class.child-left]="childLeft"
+    [class]="'type--' + nodeData.type"
     [class.child]="(nodeData.parents.length || 0) > 0"
     [style.transform]="'translate(' + nodeData.position.x + 'px, ' + nodeData.position.y + 'px)'">
     <div class="card-iconset">

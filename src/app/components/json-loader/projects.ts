@@ -118,42 +118,18 @@ export const PROJECT: any = {
         }
       },
       {
-        "title": "[DEV] Change D3 bar charts on Composition Report",
-        "code": "AMC-12598",
-        "link": "https://projects.mbww.com/browse/AMC-12598",
-        "description": "[DEV] Change D3 bar charts on Profile Report",
-        "status": "NEW",
-        "effort": [
-          "FE"
-        ],
-        "parents": [
-          "AMC-12524"
-        ],
-        "estimation": 0,
-        "mvp": {
-          "name": "Summary - Export",
-          "id": 3
-        },
-        "asignee": {
-          "name": "--",
-          "role": [
-            "FE"
-          ]
-        }
-      },
-      {
         "title": "[DEV] Modify Profile Report Data Structure",
         "code": "AMC-12509",
         "link": "https://projects.mbww.com/browse/AMC-12509",
         "description": "[DEV] Modify Profile Report Data Structure",
-        "status": "BLOCKED",
+        "status": "PROGRESS",
         "effort": [
           "BE"
         ],
         "parents": [
           "AMC-12443"
         ],
-        "estimation": 5,
+        "estimation": 8,
         "mvp": {
           "name": "Creation",
           "id": 2
@@ -170,7 +146,7 @@ export const PROJECT: any = {
         "code": "AMC-12649",
         "link": "https://projects.mbww.com/browse/AMC-12649",
         "description": "[DEV] Modify Audience Composition Report Data Structure",
-        "status": "PROGRESS",
+        "status": "DONE",
         "effort": [
           "BE"
         ],
@@ -242,7 +218,7 @@ export const PROJECT: any = {
         "code": "AMC-12450",
         "link": "https://projects.mbww.com/browse/AMC-12450",
         "description": "[DEV] Overview Panel",
-        "status": "REVIEW",
+        "status": "DONE",
         "effort": [
           "FE"
         ],
@@ -267,7 +243,7 @@ export const PROJECT: any = {
         "code": "AMC-12560",
         "link": "https://projects.mbww.com/browse/AMC-12560",
         "description": "[DEV] Saving groups in reports",
-        "status": "NEW",
+        "status": "DONE",
         "effort": [
           "FE"
         ],
@@ -276,13 +252,13 @@ export const PROJECT: any = {
           "AMC-12649",
           "AMC-12509"
         ],
-        "estimation": 0,
+        "estimation": 3,
         "mvp": {
           "name": "Creation",
           "id": 2
         },
         "asignee": {
-          "name": "--",
+          "name": "Carlos Angulo",
           "role": [
             "FE"
           ]
@@ -363,13 +339,13 @@ export const PROJECT: any = {
         }
       },
       {
-        "title": "[QA] Certification - Creation",
-        "code": "AMC-MMMMM",
-        "link": "https://projects.mbww.com/browse/AMC-MMMMM",
-        "description": "[QA] Certification - Creation",
-        "status": "UNDEFINED",
+        "title": "Certification MVP Creation",
+        "code": "AMC-12191",
+        "link": "https://projects.mbww.com/browse/AMC-12191",
+        "description": "Certifcation MVP Creation",
+        "status": "DONE",
         "effort": [
-          "FE"
+          "QA"
         ],
         "parents": [
           "AMC-12560"
@@ -380,11 +356,12 @@ export const PROJECT: any = {
           "id": 2
         },
         "asignee": {
-          "name": "--",
+          "name": "Mariana Alzate",
           "role": [
-            "FE"
+            "QA"
           ]
-        }
+        },
+        "type": "e2e"
       },
       {
         "title": "[DEV] Edit Reports",
@@ -397,7 +374,7 @@ export const PROJECT: any = {
           "BE"
         ],
         "parents": [
-          "AMC-MMMMM"
+          "AMC-12191"
         ],
         "estimation": 0,
         "mvp": {
@@ -405,7 +382,7 @@ export const PROJECT: any = {
           "id": 3
         },
         "asignee": {
-          "name": "--",
+          "name": "David Quintero",
           "role": [
             "FE"
           ]
@@ -416,21 +393,20 @@ export const PROJECT: any = {
         "code": "AMC-12503",
         "link": "https://projects.mbww.com/browse/AMC-12503",
         "description": "[DEV] Table - Profile Report Summary",
-        "status": "NEW",
+        "status": "PROGRESS",
         "effort": [
           "FE"
         ],
         "parents": [
-          "AMC-MMMMM",
-          "AMC-12530"
+          "AMC-12191",
         ],
-        "estimation": 0,
+        "estimation": 8,
         "mvp": {
           "name": "Summary - Export",
           "id": 3
         },
         "asignee": {
-          "name": "--",
+          "name": "Jenny Zapata",
           "role": [
             "FE"
           ]
@@ -441,21 +417,21 @@ export const PROJECT: any = {
         "code": "AMC-12151",
         "link": "https://projects.mbww.com/browse/AMC-12151",
         "description": "[DEV] Graph - Profile Report Summary",
-        "status": "NEW",
+        "status": "PROGRESS",
         "effort": [
           "FE"
         ],
         "parents": [
-          "AMC-MMMMM",
+          "AMC-12191",
           "AMC-12530"
         ],
-        "estimation": 0,
+        "estimation": 5,
         "mvp": {
           "name": "Summary - Export",
           "id": 3
         },
         "asignee": {
-          "name": "--",
+          "name": "Juan Casas",
           "role": [
             "FE"
           ]
@@ -466,13 +442,12 @@ export const PROJECT: any = {
         "code": "AMC-12118",
         "link": "https://projects.mbww.com/browse/AMC-12118",
         "description": "[DEV] Graph - Composition Report Summary.",
-        "status": "NEW",
+        "status": "PROGRESS",
         "effort": [
           "FE"
         ],
         "parents": [
-          "AMC-MMMMM",
-          "AMC-12598"
+          "AMC-12191",
         ],
         "estimation": 8,
         "mvp": {
@@ -480,7 +455,7 @@ export const PROJECT: any = {
           "id": 3
         },
         "asignee": {
-          "name": "--",
+          "name": "Andres Avendaño",
           "role": [
             "FE"
           ]
@@ -488,11 +463,12 @@ export const PROJECT: any = {
       },
       {
         "title": "[DEV] Export Composition Report",
-        "code": "AMC-AAAAA",
-        "link": "https://projects.mbww.com/browse/AMC-AAAAA",
+        "code": "AMC-12779",
+        "link": "https://projects.mbww.com/browse/AMC-12779",
         "description": "[DEV] Export Composition report",
-        "status": "UNDEFINED",
+        "status": "NEW",
         "effort": [
+          "BE",
           "FE"
         ],
         "parents": [
@@ -504,20 +480,20 @@ export const PROJECT: any = {
           "id": 3
         },
         "asignee": {
-          "name": "--",
+          "name": "Fabian Herrera",
           "role": [
-            "FE"
+            "BE"
           ]
         }
       },
       {
         "title": "[DEV] Export Profile Report",
-        "code": "AMC-BBBBB",
-        "link": "https://projects.mbww.com/browse/AMC-BBBBB",
+        "code": "AMC-12778",
+        "link": "https://projects.mbww.com/browse/AMC-12778",
         "description": "[DEV] Export Profile Report",
-        "status": "UNDEFINED",
+        "status": "NEW",
         "effort": [
-          "FE"
+          "BE"
         ],
         "parents": [
           "AMC-12151"
@@ -528,9 +504,9 @@ export const PROJECT: any = {
           "id": 3
         },
         "asignee": {
-          "name": "--",
+          "name": "Fabian Herrera",
           "role": [
-            "FE"
+            "BE"
           ]
         }
       },
@@ -541,12 +517,13 @@ export const PROJECT: any = {
         "description": "[QA] Certification - Summary",
         "status": "UNDEFINED",
         "effort": [
-          "FE"
+          "QA"
         ],
         "parents": [
-          "AMC-BBBBB",
-          "AMC-AAAAA",
-          "AMC-12503"
+          "AMC-12778",
+          "AMC-12779",
+          "AMC-12503",
+          "AMC-GGGGGG"
         ],
         "estimation": 0,
         "mvp": {
@@ -556,9 +533,10 @@ export const PROJECT: any = {
         "asignee": {
           "name": "--",
           "role": [
-            "FE"
+            "QA"
           ]
-        }
+        },
+        "type": "e2e"
       },
       {
         "title": "[DEV] Edit Template",
@@ -633,7 +611,34 @@ export const PROJECT: any = {
           "role": [
             "FE"
           ]
-        }
+        },
+        "type": "e2e"
+      },
+      {
+        "title": "[QA] End to End Review",
+        "code": "AMC-575757",
+        "link": "https://projects.mbww.com/browse/AMC-575757",
+        "description": "[QA] End to End Review",
+        "status": "UNDEFINED",
+        "effort": [
+          "QA"
+        ],
+        "parents": [
+          "AMC-444444",
+          "AMC-OOOOO",
+        ],
+        "estimation": 0,
+        "mvp": {
+          "name": "Enhacements",
+          "id": 4
+        },
+        "asignee": {
+          "name": "--",
+          "role": [
+            "FE"
+          ]
+        },
+        "type": "e2e"
       }
     ]
   }

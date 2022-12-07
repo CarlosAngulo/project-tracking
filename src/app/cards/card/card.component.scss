@@ -85,6 +85,18 @@
             background-color: rgb(0 77 255 / 24%);
         }
     }
+    &.type {
+        &--e2e{
+            box-shadow: 0 0 1px 0 rgb(9 30 66 / 31%),
+                0 2px 4px -1px rgb(0 0 0 / 40%),
+                4px 3px 0 0 #cacaca,
+                4px 3px 1px 0 rgb(3 9 20 / 40%),
+                4px 5px 4px -1px rgb(9 36 66 / 25%),
+                8px 6px 0 0 #cacaca,
+                8px 6px 1px 0 rgb(0 0 0 / 40%),
+                8px 8px 4px -1px rgb(0 0 0 / 35%)
+        }
+    }
     &-header {
         display: flex;
         justify-content: space-between;

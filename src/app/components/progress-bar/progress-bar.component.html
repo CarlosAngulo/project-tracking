@@ -5,7 +5,7 @@
     <div class="bar">
         <div class="info">
             <span>Completed: 
-                <span *ngIf="completed">{{completed[selectBy] * 100 / total[selectBy]| number: '1.0-0'}}</span>%
+                <span *ngIf="completed">{{completed[selectBy]}} / {{total[selectBy]}} : {{completed[selectBy] * 100 / total[selectBy]| number: '1.0-0'}}</span>%
             </span>
             <div class="convention">
                 <div class="convention-item" *ngFor="let status of statuses">
