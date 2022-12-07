@@ -4,7 +4,7 @@ import { IProject } from 'src/app/interfaces/nodes.inteface';
 import { CSVParserService } from 'src/app/services/csv-parser.service';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
 import { FirebaseService } from 'src/app/services/project-loader/firebase.service';
-import { PROJECT, PROJECT2 } from './projects';
+import { PROJECT } from './projects';
 
 type AllowedExtensions = fileExtensions.CSV | fileExtensions.JSON;
 enum fileExtensions {

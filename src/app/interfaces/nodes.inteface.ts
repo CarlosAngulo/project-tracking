@@ -34,6 +34,8 @@ export interface INode {
     selected: boolean;
     blockedByParents: boolean;
     test?: any;
+    type?: INodeType;
+    order?: number;
     enabled: boolean;
     mvp: {
         name: string;
@@ -63,10 +65,21 @@ export interface IBoxconstraintsPx {
 type INodeStatus = 'NEW' | 'DONE' | 'BLOCKED' | 'PROGRESS'
   
 export const NodeStatus = {
+    undefined: <INodeStatus> 'UNDEFINED',
     new: <INodeStatus> 'NEW',
     done: <INodeStatus> 'DONE',
     progress: <INodeStatus> 'PROGRESS',
+    review: <INodeStatus> 'REVIEW',
     blocked: <INodeStatus> 'BLOCKED'
+};
+
+type INodeType = 'DEVELOPMENT' | 'E2E' | 'DONE' | 'POC'
+  
+export const NodeType = {
+    development: <INodeType> 'DEVELOPMENT',
+    e2e: <INodeType> 'E2E',
+    spike: <INodeType> 'DONE',
+    poc: <INodeType> 'POC',
 };
 
 export interface IBlockStatus {
