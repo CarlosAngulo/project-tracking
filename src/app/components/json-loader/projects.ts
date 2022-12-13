@@ -122,7 +122,7 @@ export const PROJECT: any = {
         "code": "AMC-12509",
         "link": "https://projects.mbww.com/browse/AMC-12509",
         "description": "[DEV] Modify Profile Report Data Structure",
-        "status": "PROGRESS",
+        "status": "DONE",
         "effort": [
           "BE"
         ],
@@ -266,10 +266,10 @@ export const PROJECT: any = {
       },
       {
         "title": "[DEV] Modify data structure for Templates",
-        "code": "AMC-HHHHHH",
-        "link": "https://projects.mbww.com/browse/AMC-HHHHHH",
+        "code": "AMC-12808",
+        "link": "https://projects.mbww.com/browse/AMC-12808",
         "description": "[DEV] Modify structure for Templates",
-        "status": "UNDEFINED",
+        "status": "NEW",
         "effort": [
           "BE"
         ],
@@ -278,7 +278,7 @@ export const PROJECT: any = {
         ],
         "estimation": 0,
         "mvp": {
-          "name": "Enhacements",
+          "name": "Templates",
           "id": 4
         },
         "asignee": {
@@ -290,20 +290,20 @@ export const PROJECT: any = {
       },
       {
         "title": "[DEV] Save as Template",
-        "code": "AMC-101010",
-        "link": "https://projects.mbww.com/browse/AMC-101010",
+        "code": "AMC-12811",
+        "link": "https://projects.mbww.com/browse/AMC-12811",
         "description": "[DEV] Save as Template",
-        "status": "UNDEFINED",
+        "status": "NEW",
         "effort": [
           "FE",
           "BE"
         ],
         "parents": [
-          "AMC-HHHHHH"
+          "AMC-12808"
         ],
         "estimation": 0,
         "mvp": {
-          "name": "Enhacements",
+          "name": "Templates",
           "id": 4
         },
         "asignee": {
@@ -315,10 +315,10 @@ export const PROJECT: any = {
       },
       {
         "title": "[DEV] Refresh Reports",
-        "code": "AMC-333333",
-        "link": "https://projects.mbww.com/browse/AMC-333333",
+        "code": "AMC-12809",
+        "link": "https://projects.mbww.com/browse/AMC-12809",
         "description": "[DEV] Refresh Reports",
-        "status": "UNDEFINED",
+        "status": "NEW",
         "effort": [
           "FE",
           "BE"
@@ -328,7 +328,7 @@ export const PROJECT: any = {
         ],
         "estimation": 0,
         "mvp": {
-          "name": "Enhacements",
+          "name": "Templates",
           "id": 4
         },
         "asignee": {
@@ -343,7 +343,7 @@ export const PROJECT: any = {
         "code": "AMC-12191",
         "link": "https://projects.mbww.com/browse/AMC-12191",
         "description": "Certifcation MVP Creation",
-        "status": "DONE",
+        "status": "PROGRESS",
         "effort": [
           "QA"
         ],
@@ -364,11 +364,36 @@ export const PROJECT: any = {
         "type": "e2e"
       },
       {
-        "title": "[DEV] Edit Reports",
-        "code": "AMC-GGGGGG",
-        "link": "https://projects.mbww.com/browse/AMC-GGGGGG",
+        "title": "[DEV] Edit Profile Reports",
+        "code": "AMC-12810",
+        "link": "https://projects.mbww.com/browse/AMC-12810",
         "description": "BE: Incluir grupos en el endpoint que se consume para editar el reporte",
-        "status": "UNDEFINED",
+        "status": "NEW",
+        "effort": [
+          "FE",
+          "BE"
+        ],
+        "parents": [
+          "AMC-12191"
+        ],
+        "estimation": 0,
+        "mvp": {
+          "name": "Summary - Export",
+          "id": 3
+        },
+        "asignee": {
+          "name": "David Quintero",
+          "role": [
+            "FE"
+          ]
+        }
+      },
+      {
+        "title": "[DEV] Edit Composition Reports",
+        "code": "AMC-12812",
+        "link": "https://projects.mbww.com/browse/AMC-12812",
+        "description": "BE: Incluir grupos en el endpoint que se consume para editar el reporte",
+        "status": "NEW",
         "effort": [
           "FE",
           "BE"
@@ -512,10 +537,10 @@ export const PROJECT: any = {
       },
       {
         "title": "[QA] Certification - Summary",
-        "code": "AMC-OOOOO",
-        "link": "https://projects.mbww.com/browse/AMC-OOOOO",
+        "code": "AMC-12828",
+        "link": "https://projects.mbww.com/browse/AMC-12828",
         "description": "[QA] Certification - Summary",
-        "status": "UNDEFINED",
+        "status": "NEW",
         "effort": [
           "QA"
         ],
@@ -523,7 +548,8 @@ export const PROJECT: any = {
           "AMC-12778",
           "AMC-12779",
           "AMC-12503",
-          "AMC-GGGGGG"
+          "AMC-12810",
+          "AMC-12812"
         ],
         "estimation": 0,
         "mvp": {
@@ -540,20 +566,20 @@ export const PROJECT: any = {
       },
       {
         "title": "[DEV] Edit Template",
-        "code": "AMC-XXXXXX",
-        "link": "https://projects.mbww.com/browse/AMC-XXXXXX",
+        "code": "AMC-12816",
+        "link": "https://projects.mbww.com/browse/AMC-12816",
         "description": "[BE] Modificar endpoint para editar el template",
-        "status": "UNDEFINED",
+        "status": "NEW",
         "effort": [
           "FE",
           "DE"
         ],
         "parents": [
-          "AMC-101010"
+          "AMC-12811"
         ],
         "estimation": 0,
         "mvp": {
-          "name": "Enhacements",
+          "name": "Templates",
           "id": 4
         },
         "asignee": {
@@ -565,19 +591,19 @@ export const PROJECT: any = {
       },
       {
         "title": "[DEV] Create Report from Template",
-        "code": "AMC-202020",
-        "link": "https://projects.mbww.com/browse/AMC-202020",
+        "code": "AMC-12814",
+        "link": "https://projects.mbww.com/browse/AMC-12814",
         "description": "[DEV] Create Report from Template",
-        "status": "UNDEFINED",
+        "status": "NEW",
         "effort": [
           "FE"
         ],
         "parents": [
-          "AMC-101010"
+          "AMC-12811"
         ],
         "estimation": 0,
         "mvp": {
-          "name": "Enhacements",
+          "name": "Templates",
           "id": 4
         },
         "asignee": {
@@ -589,21 +615,21 @@ export const PROJECT: any = {
       },
       {
         "title": "[QA] Template Certification",
-        "code": "AMC-444444",
-        "link": "https://projects.mbww.com/browse/AMC-444444",
+        "code": "AMC-12815",
+        "link": "https://projects.mbww.com/browse/AMC-12815",
         "description": "[QA] Template Certification",
-        "status": "UNDEFINED",
+        "status": "NEW",
         "effort": [
           "QA"
         ],
         "parents": [
-          "AMC-202020",
-          "AMC-XXXXXX",
-          "AMC-333333"
+          "AMC-12814",
+          "AMC-12816",
+          "AMC-12809"
         ],
         "estimation": 0,
         "mvp": {
-          "name": "Enhacements",
+          "name": "Templates",
           "id": 4
         },
         "asignee": {
@@ -616,20 +642,20 @@ export const PROJECT: any = {
       },
       {
         "title": "[QA] End to End Review",
-        "code": "AMC-575757",
-        "link": "https://projects.mbww.com/browse/AMC-575757",
+        "code": "AMC-12817",
+        "link": "https://projects.mbww.com/browse/AMC-12817",
         "description": "[QA] End to End Review",
-        "status": "UNDEFINED",
+        "status": "NEW",
         "effort": [
           "QA"
         ],
         "parents": [
-          "AMC-444444",
-          "AMC-OOOOO",
+          "AMC-12815",
+          "AMC-12828",
         ],
         "estimation": 0,
         "mvp": {
-          "name": "Enhacements",
+          "name": "Templates",
           "id": 4
         },
         "asignee": {
