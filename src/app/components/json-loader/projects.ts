@@ -321,7 +321,6 @@ export const PROJECT: any = {
         "status": "NEW",
         "effort": [
           "FE",
-          "BE"
         ],
         "parents": [
           "AMC-12560"
@@ -343,7 +342,7 @@ export const PROJECT: any = {
         "code": "AMC-12191",
         "link": "https://projects.mbww.com/browse/AMC-12191",
         "description": "Certifcation MVP Creation",
-        "status": "PROGRESS",
+        "status": "DONE",
         "effort": [
           "QA"
         ],
@@ -389,7 +388,7 @@ export const PROJECT: any = {
         }
       },
       {
-        "title": "[DEV] Edit Composition Reports",
+        "title": "[DEV] Report Actions",
         "code": "AMC-12812",
         "link": "https://projects.mbww.com/browse/AMC-12812",
         "description": "BE: Incluir grupos en el endpoint que se consume para editar el reporte",
@@ -536,6 +535,30 @@ export const PROJECT: any = {
         }
       },
       {
+        "title": "[DEV] Design improvements",
+        "code": "AMC-XX",
+        "link": "https://projects.mbww.com/browse/AMC-XX",
+        "description": "[DEV] Design improvements",
+        "status": "NEW",
+        "effort": [
+          "FE"
+        ],
+        "parents": [
+          "AMC-12191"
+        ],
+        "estimation": 0,
+        "mvp": {
+          "name": "Summary - Export",
+          "id": 3
+        },
+        "asignee": {
+          "name": "--",
+          "role": [
+            "QA"
+          ]
+        },
+      },
+      {
         "title": "[QA] Certification - Summary",
         "code": "AMC-12828",
         "link": "https://projects.mbww.com/browse/AMC-12828",
@@ -549,7 +572,8 @@ export const PROJECT: any = {
           "AMC-12779",
           "AMC-12503",
           "AMC-12810",
-          "AMC-12812"
+          "AMC-12812",
+          "AMC-XX"
         ],
         "estimation": 0,
         "mvp": {
