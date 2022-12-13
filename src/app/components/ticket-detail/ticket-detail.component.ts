@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-ticket-detail',
@@ -6,10 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./ticket-detail.component.scss']
 })
 export class TicketDetailComponent implements OnInit {
-
-  constructor() { }
-
+  @Input() data!: any;
+  constructor() {
+  }
+  
   ngOnInit(): void {
+    this.data = {
+      title: 'Título del ticket',
+      description: '<p>Descripción del ticket</p>';
+    }
   }
 
 }

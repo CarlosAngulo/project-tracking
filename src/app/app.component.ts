@@ -9,7 +9,7 @@ import { NodeTreeService } from './services/nodetree.service';
 })
 export class AppComponent implements OnDestroy, OnInit{
   showLoader = true;
-  showTicketDetail = false;
+  showTicketDetail = true;
   private unsub$ = new Subject<void>();
 
   constructor(
