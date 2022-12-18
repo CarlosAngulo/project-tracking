@@ -320,7 +320,7 @@ export const PROJECT: any = {
         "description": "[DEV] Refresh Reports",
         "status": "NEW",
         "effort": [
-          "FE",
+          "BE",
         ],
         "parents": [
           "AMC-12560"
@@ -363,7 +363,7 @@ export const PROJECT: any = {
         "type": "e2e"
       },
       {
-        "title": "[DEV] Edit Profile Reports",
+        "title": "[DEV] Edit Reports",
         "code": "AMC-12810",
         "link": "https://projects.mbww.com/browse/AMC-12810",
         "description": "BE: Incluir grupos en el endpoint que se consume para editar el reporte",
@@ -375,7 +375,7 @@ export const PROJECT: any = {
         "parents": [
           "AMC-12191"
         ],
-        "estimation": 0,
+        "estimation": 5,
         "mvp": {
           "name": "Summary - Export",
           "id": 3
@@ -394,13 +394,12 @@ export const PROJECT: any = {
         "description": "BE: Incluir grupos en el endpoint que se consume para editar el reporte",
         "status": "NEW",
         "effort": [
-          "FE",
           "BE"
         ],
         "parents": [
           "AMC-12191"
         ],
-        "estimation": 0,
+        "estimation": 3,
         "mvp": {
           "name": "Summary - Export",
           "id": 3
@@ -441,7 +440,7 @@ export const PROJECT: any = {
         "code": "AMC-12151",
         "link": "https://projects.mbww.com/browse/AMC-12151",
         "description": "[DEV] Graph - Profile Report Summary",
-        "status": "PROGRESS",
+        "status": "DONE",
         "effort": [
           "FE"
         ],
@@ -466,7 +465,7 @@ export const PROJECT: any = {
         "code": "AMC-12118",
         "link": "https://projects.mbww.com/browse/AMC-12118",
         "description": "[DEV] Graph - Composition Report Summary.",
-        "status": "PROGRESS",
+        "status": "DONE",
         "effort": [
           "FE"
         ],
@@ -498,7 +497,7 @@ export const PROJECT: any = {
         "parents": [
           "AMC-12118"
         ],
-        "estimation": 0,
+        "estimation": 8,
         "mvp": {
           "name": "Summary - Export",
           "id": 3
@@ -522,7 +521,31 @@ export const PROJECT: any = {
         "parents": [
           "AMC-12151"
         ],
-        "estimation": 0,
+        "estimation": 8,
+        "mvp": {
+          "name": "Summary - Export",
+          "id": 3
+        },
+        "asignee": {
+          "name": "Fabian Herrera",
+          "role": [
+            "BE"
+          ]
+        }
+      },
+      {
+        "title": "[DEV] Export Profile Front",
+        "code": "AMC-12779",
+        "link": "https://projects.mbww.com/browse/AMC-12779",
+        "description": "[DEV] Export Profile Front",
+        "status": "NEW",
+        "effort": [
+          "BE"
+        ],
+        "parents": [
+          "AMC-12151"
+        ],
+        "estimation": 5,
         "mvp": {
           "name": "Summary - Export",
           "id": 3
