@@ -213,10 +213,10 @@ export class NodeTreeService {
       ...currentNode,
       childrenTreeSimple: [nodes.filter(node => node.parents[0] === currentNode.code).map(node=>node.code)]
     }))
-    newNodes.forEach(node => {
+    for (const node of newNodes) {
       this.addChildrenTree(nodes, node);
       this.addSimpleChildrenTree(nodes, node)
-    });
+    };
     return newNodes;
   }
 
