@@ -8,4 +8,12 @@
     border-radius: 8px 0 0 8px;
     box-shadow: -1px 0 2px rgba(0,0,0,0.2);
     z-index: 2000;
+    padding: 16px 28px;
+}
+
+.close-modal {
+    position: absolute;
+    cursor: pointer;
+    right: 16px;
+    top: 16px;
 }

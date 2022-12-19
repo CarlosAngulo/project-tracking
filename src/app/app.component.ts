@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { NodeTreeService } from './services/nodetree.service';
+import { TicketService } from './services/tickets/ticket.service';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +10,12 @@ import { NodeTreeService } from './services/nodetree.service';
 })
 export class AppComponent implements OnDestroy, OnInit{
   showLoader = true;
-  showTicketDetail = true;
+  isDetailPanelOpen = false;
   private unsub$ = new Subject<void>();
 
   constructor(
-    private nodeTreeService: NodeTreeService
+    private nodeTreeService: NodeTreeService,
+    private ticketService: TicketService
   ) {}
 
   ngOnInit(): void {
@@ -26,7 +28,14 @@ export class AppComponent implements OnDestroy, OnInit{
 
     this.nodeTreeService.isLoadWindowOpen()
     .pipe(takeUntil(this.unsub$))
-    .subscribe(res => this.showLoader = res)
+    .subscribe(res => this.showLoader = res);
+
+
+    this.ticketService.isDetailsPanelOpen()
+    .pipe(takeUntil(this.unsub$))
+    .subscribe((res:boolean) => {
+      this.isDetailPanelOpen = res;
+    });
   }
 
   onJSONLoad(project:any) {

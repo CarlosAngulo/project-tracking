@@ -4,6 +4,7 @@ import { cardProps } from 'src/app/cards/card/card.props';
 import { Iconstraints, INode} from 'src/app/interfaces/nodes.inteface';
 import { JiraService } from 'src/app/services/jira.service';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
+import { TicketService } from 'src/app/services/tickets/ticket.service';
 import { ViewService } from 'src/app/services/view.service';
 
 @Component({
@@ -20,7 +21,8 @@ export class DependencyComponent implements OnInit {
   constructor(
     readonly jiraService: JiraService,
     readonly nodeTreeService: NodeTreeService,
-    readonly viewService: ViewService
+    readonly viewService: ViewService,
+    readonly ticketService: TicketService
   ){
     if (localStorage.getItem('project')) {
       this.bgStyles = this.calculateBg(nodeTreeService.getConstraints())
@@ -44,7 +46,7 @@ export class DependencyComponent implements OnInit {
         transform: `scale(${0.9 + zoomLevel * 0.1})`
       }
       this.zoomStyle = {'transform': `scale(${1 + zoomLevel * 0.1})`};
-    })
+    });
   }
 
   calculateBg(constraints: Iconstraints) {
@@ -62,7 +64,8 @@ export class DependencyComponent implements OnInit {
   }
 
   onInfoNode(nodeData: INode) {
-
+    console.log('click')
+    this.ticketService.setNodeData(nodeData);
   }
 
   ngOnDestroy() {
