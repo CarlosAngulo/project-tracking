@@ -1,7 +1,7 @@
 <div 
     #card
     class="card"
-    (click)="onNodeClick()"
+    (click)="onInfoClick()"
     [class.blocked]="nodeData.status == nodeStatus.blocked || nodeData.blockedByParents == true"
     [class.done]="nodeData.status == nodeStatus.done"
     [class.selected]="nodeData.selected"

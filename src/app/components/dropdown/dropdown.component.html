@@ -1,8 +1,21 @@
-<div class="dropdown">
-    <div class="dropdown-selector">
-        <span *ngIf="label">{{label}}:</span> {{selectedValue}}
+<div
+    class="dropdown"
+    [class.active]="isActive"
+    (mouseover)="onMouseOver()"
+    (mouseout)="onMouseOut()">
+    <div class="dropdown-selector" (click)="onLabelClick()">
+        <span class="dropdown-selector-label">
+            <span *ngIf="label">{{label}}:</span>
+            {{selectedValue}}
+        </span>
+        <span class="material-symbols-outlined dropdown-selector-expand"> expand_more </span>
     </div> 
     <ul>
-        <li *ngFor="let option of _options; let i = index" (click)="onElementClick(option)">{{option.name}}</li>
+        <li 
+            *ngFor="let option of _options; let i = index"
+            (click)="onElementClick(i)"
+            [class.selected]="selectedIndex === i">
+            {{option.name}}
+        </li>
     </ul>
 </div>

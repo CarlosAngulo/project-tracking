@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,6 +20,7 @@ import { TicketListComponent } from './views/ticket-list/ticket-list.component';
 import { AngularFireModule } from '@angular/fire/compat';
 import { environment } from '../environments/environment';
 import { TicketDetailComponent } from './components/ticket-detail/ticket-detail.component';
+import { FirebaseService } from './services/project-loader/firebase.service';
 
 @NgModule({
   declarations: [
@@ -40,9 +42,11 @@ import { TicketDetailComponent } from './components/ticket-detail/ticket-detail.
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig)
   ],
   providers: [
+    FirebaseService,
     {provide: LocationStrategy, useClass: HashLocationStrategy}
   ],
   bootstrap: [AppComponent]

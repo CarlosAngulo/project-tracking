@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, Query, FieldPath, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { AngularFirestore, DocumentReference, DocumentData } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
-import { combineLatest, forkJoin, merge, mergeMap, Observable, of } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { INode } from 'src/app/interfaces/nodes.inteface';
 
 @Injectable({
@@ -21,6 +21,9 @@ export class FirebaseService {
         return this.firestore.doc(`epics/${projectID}`).valueChanges();
     }
 
+    addTicketsToProject(projectID: string, tickets: string[]): Promise<any> {
+        return this.firestore.doc(`epics/${projectID}`).update({tickets})
+    }
     // People
     getPeople(): Observable<any> {
         return this.firestore.collection('people').valueChanges();
@@ -48,8 +51,8 @@ export class FirebaseService {
         return this.firestore.doc(`tickets/${ticketID}`).valueChanges();
     }
 
-    createTicket(node: INode) {
-        return this.firestore.collection('tickets').add(node)
+    createTicket(node: INode): Promise<DocumentReference<DocumentData>> {
+        return this.firestore.collection<DocumentData>('tickets').add(node);
     }
 
     sliceIntoChunks(arr:any[], chunkSize :number):any[] {
@@ -59,6 +62,11 @@ export class FirebaseService {
             res.push(chunk);
         }
         return res;
+    }
+
+    //Update Ticket
+    updateTicket(ticketID: string | undefined, data: Partial<firebase.firestore.DocumentData>): Promise<any> {
+        return this.firestore.collection<DocumentData>('tickets').doc(ticketID).update(data);
     }
   
     // https://console.firebase.google.com/project/kinesso-project-tracking/firestore/data/~2Fpeople~2F8GjRLn6nSHTCtnzpO6j4?hl=es-419

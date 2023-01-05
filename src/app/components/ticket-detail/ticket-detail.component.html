@@ -1,17 +1,134 @@
-<div class="modal-window">
-    <ng-container *ngIf="data">
-        <div class="modal-window-header">
-            <h3><span>{{data.code}}</span> {{data.title}}</h3>
-            <span class="material-symbols-outlined close-modal" (click)="closeModal()">
-                close
-            </span>
-        </div>
-        <div class="modal-window-body">
-            <div class="description" [innerHTML]="data.description">
+<form [formGroup]="form" (ngSubmit)="onSave()">
+    <div class="modal-window">
+        <ng-container *ngIf="data">
+            <div class="modal-window-header">
+
+                <div class="field_editable" (click)="onEditField($event, editableFields.CODE)">
+                    <ng-container *ngIf="editingField === editableFields.CODE; else codeEdit">
+                        <input
+                            type="text"
+                            class="field_paragraph"
+                            formControlName="code"
+                            [class.field_error]="form.get('code')?.status?.includes('INVALID') && form.get('code')?.touched">
+                    </ng-container>
+                    <ng-template #codeEdit>
+                        <span class="field_paragraph">{{form.get(editableFields.CODE)?.value}}</span>
+                        <span class="material-symbols-outlined field_editable_icon"> edit </span>
+                    </ng-template>
+                </div>
+
+                <div class="field_editable" (click)="onEditField($event, editableFields.ESTIMATION)">
+                    <ng-container *ngIf="editingField === editableFields.ESTIMATION; else estimationEdit">
+                        <input
+                            class="field_paragraph"
+                            type="number"
+                            formControlName="estimation"
+                            [class.field_error]="form.get('estimation')?.status?.includes('INVALID') && form.get('estimation')?.touched">
+                    </ng-container>
+                    <ng-template #estimationEdit>
+                        <p class="field_paragraph">{{data.estimation}} pts</p>
+                        <span class="material-symbols-outlined field_editable_icon"> edit </span>
+                    </ng-template>
+                </div>
+
+                <div class="field_editable" (click)="onEditField($event, editableFields.STATUS)">
+                    <ng-container *ngIf="editingField === editableFields.STATUS; else statusEdit">
+                        <app-dropdown
+                            formControlName="status" 
+                            (onSelect)="onEditedField($event)"
+                            [defaultOption]="data.status"
+                            [options]="statuses"
+                            [clickable]="true">
+                        </app-dropdown>
+                    </ng-container>
+                    <ng-template #statusEdit>
+                        <span class="status" [class]="data.status">{{form.get(editableFields.STATUS)?.value}}</span>
+                        <span class="material-symbols-outlined field_editable_icon"> edit </span>
+                    </ng-template>
+                </div>
+
+                <span class="material-symbols-outlined close-modal" (click)="closeModal()">
+                    close
+                </span>
             </div>
-        </div>
-        <div class="modal-window-footer">
-    
-        </div>
-    </ng-container>
-</div>
+            <div class="modal-window-body">
+
+                <div class="field_editable" (click)="onEditField($event, editableFields.TITLE)">
+                    <ng-container *ngIf="editingField === editableFields.TITLE; else titleEdit">
+                        <input
+                            class="field_title"
+                            type="text"
+                            formControlName="title"
+                            [class.field_error]="form.get('title')?.status?.includes('INVALID') && form.get('title')?.touched"/>
+                    </ng-container>
+                    <ng-template #titleEdit>
+                        <h3 class="field_title">{{data.title}}</h3>
+                        <span class="material-symbols-outlined field_editable_icon"> edit </span>
+                    </ng-template>
+                </div>
+
+                <section class="field_section">
+                    <h5 class="field_section_title">
+                        <span class="material-symbols-outlined field_section_expand"> expand_more </span>
+                        Asignee:
+                    </h5>
+                    <div class="field_editable" (click)="onEditField($event, editableFields.ASIGNEE)">
+                        <ng-container *ngIf="editingField === editableFields.ASIGNEE; else asigneeEdit">
+                            <input
+                            type="text"
+                            class="field_paragraph"
+                            formControlName="asignee"
+                            [class.field_error]="form.get('asignee')?.status?.includes('INVALID') && form.get('asignee')?.touched">
+                        </ng-container>
+                        <ng-template #asigneeEdit>
+                            <span class="field_paragraph">{{form.get(editableFields.ASIGNEE)?.value}}</span>
+                            <span class="material-symbols-outlined field_editable_icon"> edit </span>
+                        </ng-template>
+                    </div>
+                </section>
+
+                <section class="field_section">
+                    <h5 class="field_section_title">
+                        <span class="material-symbols-outlined field_section_expand"> expand_more </span>
+                        Parents:
+                    </h5>
+                    <div>
+                        <ul class="parents">
+                            <li *ngFor="let parent of parents">
+                                <span class="material-symbols-outlined">
+                                    more_vert
+                                </span>
+                                <span>
+                                    {{parent.code}} - {{parent.title}}
+                                </span>
+                                <span class="material-symbols-outlined delete">
+                                    delete
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="field_section">
+                    <h5 class="field_section_title">
+                        <span class="material-symbols-outlined field_section_expand"> expand_more </span>
+                        Description:
+                    </h5>
+                    <div class="field_editable" (click)="onEditField($event, editableFields.DESCRIPTION)">
+                            <ng-container *ngIf="editingField === editableFields.DESCRIPTION; else descriptionEdit">
+                                <textarea class="field_textarea" formControlName="description"></textarea>
+                            </ng-container>
+                            <ng-template #descriptionEdit>
+                                <div class="field_textarea" [innerHTML]="data.description">
+                                </div>
+                                <span class="material-symbols-outlined field_editable_icon"> edit </span>
+                            </ng-template>
+                        </div>
+                </section>
+            </div>
+            <div class="modal-window-footer">
+                <input type="submit" value="save" [disabled]="!form.dirty">
+            </div>
+        </ng-container>
+    </div>
+</form>

@@ -25,9 +25,9 @@ export class Ticket {
   providedIn: 'root'
 })
 export class TicketService {
-  private ticket: INode | undefined;
-  private _ticket: Subject<INode | undefined> = new Subject();
-  private ticket$: Observable<INode | undefined> = this._ticket.asObservable();
+  private ticket!: INode;
+  private _ticket: Subject<INode> = new Subject();
+  private ticket$: Observable<INode> = this._ticket.asObservable();
   
   private _showDetailsPanel: Subject<boolean> = new Subject();
   private showDetailsPanel$: Observable<boolean> = this._showDetailsPanel.asObservable();
@@ -40,18 +40,18 @@ export class TicketService {
     return this.showDetailsPanel$;
   }
 
-  setNodeData(ticket: INode | undefined) {
+  setNodeData(ticket: INode) {
     console.log('setNodeData', ticket?.code);
     this.ticket = ticket;
     this._ticket.next(ticket);
     this._showDetailsPanel.next(true);
   }
 
-  getNodeData$(): Observable<INode | undefined> {
+  getNodeData$(): Observable<INode> {
     return this.ticket$;
   }
 
-  getnodeData(): INode | undefined {
+  getnodeData(): INode {
     return this.ticket;
   }
 }

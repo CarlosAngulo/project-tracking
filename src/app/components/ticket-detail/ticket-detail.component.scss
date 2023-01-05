@@ -1,3 +1,9 @@
+@import '../../../scss/variables';
+
+h5, p {
+    margin: 0;
+}
+
 .modal-window {
     position: fixed;
     right: 0;
@@ -8,7 +14,99 @@
     border-radius: 8px 0 0 8px;
     box-shadow: -1px 0 2px rgba(0,0,0,0.2);
     z-index: 2000;
-    padding: 16px 28px;
+    font-size: 0.8em;
+    display: flex;
+    flex-direction: column;
+    &-header {
+        padding: 20px 36px 0px 20px;
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+        .field_editable {
+            flex-basis: 120px;
+        }
+    }
+    &-footer {
+        padding: 10px 20px 20px;
+    }
+    &-body {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 10px 20px;
+        flex-grow: 2;
+        overflow-Y: scroll;
+    }
+}
+
+.field {
+    &_editable {
+        display: flex;
+        align-items: stretch;
+        cursor: pointer;
+        &_icon {
+            display: none;
+            color: #666;
+            font-size: 16px;
+            background-color: #F0F0F0;
+            padding: 2px 4px;
+            border-radius: 0 4px 4px 0;
+            align-items: center;
+        }
+        &:hover {
+            .field_editable_icon {
+                display: flex;
+            }
+            .field_title,
+            .field_paragraph,
+            .field_textarea {
+                border-color: rgba(0,0,0,0.05);
+            }
+        }
+    }
+    &_title {
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.2em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 5px 8px;
+        margin: 0;
+        border: 1px solid transparent;
+        border-radius: 4px 0 0 4px;
+    }
+    &_section {
+        &_title {
+            cursor: pointer;
+            margin: 0 0 6px 6px;
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+        &_expand {
+            font-size: 16px;
+        }
+    }
+    &_paragraph, &_textarea, &_title {
+        padding: 4px 8px;
+        border: 1px solid transparent;
+        border-radius: 4px 0 0 4px;
+        width: 100%;
+        &:focus-visible {
+            border: 1px solid #F0F0F0;
+            outline: medium none;
+        }
+    }
+    &_textarea {
+        height: 320px;
+        font-family: inherit;
+        width: 100%;
+        padding: 8px;
+    }
+    &_error {
+        border-color: red;
+    }
 }
 
 .close-modal {
@@ -16,4 +114,41 @@
     cursor: pointer;
     right: 16px;
     top: 16px;
+    font-size: 14px;
+}
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 8px;
+    background-color: #333;
+    border-radius: 4px;
+    color: white;
+    font-size: 11px;
+}
+
+.parents {
+    list-style: none;
+    margin: 0 0 0 8px;
+    padding: 0;
+    li {
+        background-color: #f4edff;
+        padding: 6px;
+        border-radius: 4px;
+        margin: 0 0 4px 0;
+        display: flex;
+        gap: 8px;
+        cursor: pointer;
+        &:hover {
+            background-color: #e9dbff;
+        }
+        &:last-child {
+            margin: 0;
+        }
+        .material-symbols-outlined {
+            font-size: 16px;
+            color: rgba(0,0,0,0.4);
+        }
+    }
 }

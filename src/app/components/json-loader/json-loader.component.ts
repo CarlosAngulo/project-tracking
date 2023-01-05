@@ -1,6 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { DocumentReference } from '@angular/fire/compat/firestore';
-import { IProject } from 'src/app/interfaces/nodes.inteface';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { DocumentData, DocumentReference } from '@angular/fire/compat/firestore';
+import { forkJoin, combineLatest } from 'rxjs';
+import { INode, IProject } from 'src/app/interfaces/nodes.inteface';
 import { CSVParserService } from 'src/app/services/csv-parser.service';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
 import { FirebaseService } from 'src/app/services/project-loader/firebase.service';
@@ -17,8 +18,14 @@ enum fileExtensions {
   styleUrls: ['./json-loader.component.scss']
 })
 export class JsonLoaderComponent implements OnInit {
-  @Output() onLoad: EventEmitter<any> = new EventEmitter();
+  @Output() onLoad: EventEmitter<string> = new EventEmitter();
   @Output() onCancel: EventEmitter<boolean> = new EventEmitter();
+  @Input() set projects(val: any[]) {
+    this.projectNames = val.map((project:any) => ({
+      name: project.name,
+      value: project.docId
+    }));
+  };
 
   parseJSONError = false;
   projectLoaded = false;
@@ -27,8 +34,7 @@ export class JsonLoaderComponent implements OnInit {
   fileExtensions = fileExtensions;
   uploadStatus = 'default';
   project!: IProject;
-  preloadedProjects!: any[];
-  preloadedProjectNames!: string[];
+  projectNames!: {name: string, value: string}[];
   selectedProjectID!: string;
 
   loadProjectMessages = {
@@ -61,41 +67,23 @@ export class JsonLoaderComponent implements OnInit {
     // console.log(csvParsed[1]);
     // console.log(this.jsonToCSV(this.PROJECT))
 
-    this.loadFirebaseTemp();
+    // this.loadFirebaseTemp();
   }
 
-  loadFirebaseTemp() {
-    this.firebaseService.getProjects()
-    .subscribe(projects => {
-      console.log(projects)
-      this.preloadedProjects = projects;
-      this.preloadedProjectNames = projects.map((project:any) => project.name);
-    });
-  }
+  // loadFirebaseTemp() {
+  //   this.firebaseService.getProjects()
+  //   .subscribe(projects => {
+  //     this.projects = projects;
+  //     this.projectNames = projects.map((project:any) => project.name);
+  //   });
+  // }
 
   onSelecProject(evt: string | number) {
     this.selectedProjectID = evt.toString();
   }
 
   onLoadProject(projectID: string) {
-    const projectData = this.preloadedProjects.find(project => project.name === projectID);
-    const tickets: DocumentReference[]= projectData.tickets;
-    this.firebaseService.getTicketsChunk(tickets.map(ticket => ticket.id))
-    .subscribe(
-      (res) => {
-        this.project = {
-          leader: 'Carlos Angulo',
-          name: projectData.name,
-          tickets: res.flat()
-        }
-        this.onLoad.next(this.project);
-        this.projectLoaded = true;
-      }
-    )
-
-    // populates the tickets from the project
-    // forkJoin(PROJECT.tickets.map((ticket:INode) => this.firebaseService.createTicket(ticket)))
-    // .subscribe(console.log)
+    this.onLoad.next(projectID);
   }
 
   onUploadFile(event: any) {
@@ -110,7 +98,7 @@ export class JsonLoaderComponent implements OnInit {
 
   loadSampleProject() {
     this.project = PROJECT;
-    this.onLoad.next(this.project);
+    // this.onLoad.next(this.project);
     this.projectLoaded = true;
   }
 
@@ -175,7 +163,7 @@ export class JsonLoaderComponent implements OnInit {
   }
 
   onInsert() {
-    this.onLoad.next(this.project);
+    // this.onLoad.next(this.project);
     this.projectLoaded = true;
   }
 

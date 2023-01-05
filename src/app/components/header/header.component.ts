@@ -40,7 +40,6 @@ export class HeaderComponent implements OnDestroy {
   }
 
   onSelectMVP(mvp?: string | number) {
-    console.log(mvp)
     this.nodeTreeService
     .onSelectMVP(mvp);
   }

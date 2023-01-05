@@ -12,7 +12,7 @@ export interface IProject {
 }
 
 export interface INode {
-    id?: string;
+    id: string;
     title?: string;
     code: string;
     link?: string;
@@ -35,7 +35,7 @@ export interface INode {
     blockedByParents: boolean;
     test?: any;
     type?: INodeType;
-    order?: number;
+    order: number;
     enabled: boolean;
     mvp: {
         name: string;
@@ -62,7 +62,7 @@ export interface IBoxconstraintsPx {
     height: string
 }
   
-type INodeStatus = 'NEW' | 'DONE' | 'BLOCKED' | 'PROGRESS'
+type INodeStatus = 'NEW' | 'DONE' | 'BLOCKED' | 'PROGRESS' | 'UNDEFINED' | 'REVIEW'
   
 export const NodeStatus = {
     undefined: <INodeStatus> 'UNDEFINED',

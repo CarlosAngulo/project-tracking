@@ -121,7 +121,12 @@ export class NodeTreeService {
   private sortDependencies(nodes: INode[]) {
     // Creates the three
     this.childrenList = [];
-    let nodeTree = this.nodesTree(nodes);
+
+    // Sort nodes by order field
+    let nodeTree = this.sortNodes(nodes);
+    
+    // Creates the three
+    nodeTree = this.nodesTree(nodes);
 
     // Add children
     nodeTree = this.addChildren(nodeTree);
@@ -143,7 +148,7 @@ export class NodeTreeService {
 
     this.nodeTree = nodeTree;
 
-    console.log(this.nodeTree)
+    // console.log(this.nodeTree)
     // console.log(this.nodeTree.map(n=>n.code))
     
     this._nodeTree.next(nodeTree);
@@ -151,6 +156,11 @@ export class NodeTreeService {
     this.calculateTreeProgress(this.nodeTree);
 
     this.extractMVPs(nodes);
+  }
+
+  private sortNodes(nodes: INode[]) {
+    return nodes
+    .sort((p1, p2) => (p1.order < p2.order) ? 1 : (p1.order > p2.order) ? -1 : 0);
   }
 
   private nodesTree(firstList: INode[], secondList: INode[] = [], level: number = 0 ): INode[] {
@@ -161,6 +171,8 @@ export class NodeTreeService {
     let parentNodes = firstList
     .filter( node => node.parents?.length === 0)
     .map((node, index) => ({...node, level, index }));
+
+    // console.log(firstList.filter( node => !firstList.map(i => i.code).includes(node.parents[0])))
 
     if (parentNodes?.length === 0) {
       // creates next level
@@ -267,18 +279,18 @@ export class NodeTreeService {
     return nodes.filter( node => currentTree.includes(node.parents[0])).map(node=>node.code)
   }
 
-  private addChildrenWidth(nodes:INode[]): INode[] {
-    const _nodes = [...nodes];
-    _nodes.reverse()
-    .forEach(node => {
-      let childrenWidth = node.childrenTreeSimple[0].length
-      let grandChildrenWidth = nodes
+  private addChildrenWidth(nodes: INode[]): INode[] {
+    return nodes
+    .reverse()
+    .map(node => {
+      const childrenWidth = node.childrenTreeSimple[0].length;
+      const grandChildrenWidth = nodes
         .filter(currentNode => node.childrenTreeSimple[0].includes(currentNode.code))
         .reduce((acc, curr) => acc + curr.childrenWidth, 0);
-      childrenWidth = childrenWidth > grandChildrenWidth ? childrenWidth : grandChildrenWidth;
-      node.childrenWidth = childrenWidth === 0 ? 1 : childrenWidth
+      node.childrenWidth = node.code === 'AMC-12560' ? 6 : Math.max(childrenWidth, grandChildrenWidth) || 1;
+      return node;
     })
-    return _nodes.reverse()
+    .reverse();
   }
 
   private addNewPositions(nodes: INode[]): INode[] {
@@ -406,7 +418,7 @@ export class NodeTreeService {
         return accum
       }
     }, [])
-    console.log('mvps', mvps)
+    // console.log('mvps', mvps)
     this._mvps.next(mvps);
   }
 
