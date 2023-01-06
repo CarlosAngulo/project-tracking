@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference, DocumentData } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, forkJoin, Observable, switchMap } from 'rxjs';
 import { INode } from 'src/app/interfaces/nodes.inteface';
 
 @Injectable({
@@ -18,11 +18,17 @@ export class FirebaseService {
     }
     
     getProject(projectID: string): Observable<any> {
-        return this.firestore.doc(`epics/${projectID}`).valueChanges();
+        return this.firestore.doc(`epics/${projectID}`).valueChanges({ idField: 'docId' });
     }
 
     addTicketsToProject(projectID: string, tickets: string[]): Promise<any> {
         return this.firestore.doc(`epics/${projectID}`).update({tickets})
+    }
+    
+    addTicketToProject(projectID: string, ticket: DocumentReference): Promise<any> {
+        return this.firestore.doc(`epics/${projectID}`).update({
+            tickets: firebase.firestore.FieldValue.arrayUnion(ticket)
+        })
     }
     // People
     getPeople(): Observable<any> {
@@ -51,8 +57,14 @@ export class FirebaseService {
         return this.firestore.doc(`tickets/${ticketID}`).valueChanges();
     }
 
-    createTicket(node: INode): Promise<DocumentReference<DocumentData>> {
-        return this.firestore.collection<DocumentData>('tickets').add(node);
+    createTicket(node: INode, projectID: string): Promise<any> {
+        return this.firestore.collection<DocumentData>('tickets').add(node)
+        .then(
+            (res:any) => {
+                console.log(projectID, res)
+                return this.addTicketToProject(projectID, res)
+            }
+        );
     }
 
     sliceIntoChunks(arr:any[], chunkSize :number):any[] {

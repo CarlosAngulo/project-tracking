@@ -1,27 +1,29 @@
 <form [formGroup]="form" (ngSubmit)="onSave()">
     <div class="modal-window">
-        <ng-container *ngIf="data">
+        <ng-container *ngIf="data !== undefined || mode === modes.CREATE">
             <div class="modal-window-header">
-
                 <div class="field_editable" (click)="onEditField($event, editableFields.CODE)">
-                    <ng-container *ngIf="editingField === editableFields.CODE; else codeEdit">
+                    <ng-container *ngIf="editingField === editableFields.CODE || mode === modes.CREATE; else codeEdit">
                         <input
                             type="text"
                             class="field_paragraph"
+                            [class]="mode"
                             formControlName="code"
+                            placeholder="code"
                             [class.field_error]="form.get('code')?.status?.includes('INVALID') && form.get('code')?.touched">
                     </ng-container>
                     <ng-template #codeEdit>
-                        <span class="field_paragraph">{{form.get(editableFields.CODE)?.value}}</span>
+                        <span class="field_paragraph">{{data.code}}</span>
                         <span class="material-symbols-outlined field_editable_icon"> edit </span>
                     </ng-template>
                 </div>
 
                 <div class="field_editable" (click)="onEditField($event, editableFields.ESTIMATION)">
-                    <ng-container *ngIf="editingField === editableFields.ESTIMATION; else estimationEdit">
+                    <ng-container *ngIf="editingField === editableFields.ESTIMATION || mode === modes.CREATE; else estimationEdit">
                         <input
                             class="field_paragraph"
                             type="number"
+                            [class]="mode"
                             formControlName="estimation"
                             [class.field_error]="form.get('estimation')?.status?.includes('INVALID') && form.get('estimation')?.touched">
                     </ng-container>
@@ -32,11 +34,12 @@
                 </div>
 
                 <div class="field_editable" (click)="onEditField($event, editableFields.STATUS)">
-                    <ng-container *ngIf="editingField === editableFields.STATUS; else statusEdit">
+                    <ng-container *ngIf="editingField === editableFields.STATUS || mode === modes.CREATE; else statusEdit">
                         <app-dropdown
+                            [class]="mode"
                             formControlName="status" 
                             (onSelect)="onEditedField($event)"
-                            [defaultOption]="data.status"
+                            [defaultOption]="form.get(editableFields.STATUS)?.value"
                             [options]="statuses"
                             [clickable]="true">
                         </app-dropdown>
@@ -54,10 +57,11 @@
             <div class="modal-window-body">
 
                 <div class="field_editable" (click)="onEditField($event, editableFields.TITLE)">
-                    <ng-container *ngIf="editingField === editableFields.TITLE; else titleEdit">
+                    <ng-container *ngIf="editingField === editableFields.TITLE || mode === modes.CREATE; else titleEdit">
                         <input
                             class="field_title"
                             type="text"
+                            [class]="mode"
                             formControlName="title"
                             [class.field_error]="form.get('title')?.status?.includes('INVALID') && form.get('title')?.touched"/>
                     </ng-container>
@@ -73,9 +77,10 @@
                         Asignee:
                     </h5>
                     <div class="field_editable" (click)="onEditField($event, editableFields.ASIGNEE)">
-                        <ng-container *ngIf="editingField === editableFields.ASIGNEE; else asigneeEdit">
+                        <ng-container *ngIf="editingField === editableFields.ASIGNEE || mode === modes.CREATE; else asigneeEdit">
                             <input
                             type="text"
+                            [class]="mode"
                             class="field_paragraph"
                             formControlName="asignee"
                             [class.field_error]="form.get('asignee')?.status?.includes('INVALID') && form.get('asignee')?.touched">
@@ -115,8 +120,12 @@
                         Description:
                     </h5>
                     <div class="field_editable" (click)="onEditField($event, editableFields.DESCRIPTION)">
-                            <ng-container *ngIf="editingField === editableFields.DESCRIPTION; else descriptionEdit">
-                                <textarea class="field_textarea" formControlName="description"></textarea>
+                            <ng-container *ngIf="editingField === editableFields.DESCRIPTION || mode === modes.CREATE; else descriptionEdit">
+                                <textarea
+                                    [class]="mode"
+                                    class="field_textarea"
+                                    formControlName="description">
+                                </textarea>
                             </ng-container>
                             <ng-template #descriptionEdit>
                                 <div class="field_textarea" [innerHTML]="data.description">

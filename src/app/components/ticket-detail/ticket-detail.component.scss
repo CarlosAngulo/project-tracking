@@ -35,7 +35,7 @@ h5, p {
         gap: 16px;
         padding: 10px 20px;
         flex-grow: 2;
-        overflow-Y: scroll;
+        overflow-Y: auto;
     }
 }
 
@@ -61,6 +61,14 @@ h5, p {
             .field_paragraph,
             .field_textarea {
                 border-color: rgba(0,0,0,0.05);
+            }
+        }
+        .field_title,
+        .field_paragraph,
+        .field_textarea {
+            &.create {
+                border: 1px solid rgba(0,0,0,0.2);
+                border-radius: 4px;
             }
         }
     }

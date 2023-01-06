@@ -6,6 +6,7 @@ export const ImportType = {
 };
 
 export interface IProject {
+    docId: string;
     leader: string;
     name: string;
     tickets: INode[];
@@ -62,7 +63,7 @@ export interface IBoxconstraintsPx {
     height: string
 }
   
-type INodeStatus = 'NEW' | 'DONE' | 'BLOCKED' | 'PROGRESS' | 'UNDEFINED' | 'REVIEW'
+export type INodeStatus = 'NEW' | 'DONE' | 'BLOCKED' | 'PROGRESS' | 'UNDEFINED' | 'REVIEW'
   
 export const NodeStatus = {
     undefined: <INodeStatus> 'UNDEFINED',

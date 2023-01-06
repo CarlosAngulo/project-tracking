@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { combineLatest, Observable, Subject } from 'rxjs';
+import { combineLatest, map, Observable, Subject, tap } from 'rxjs';
 import { INode, IProject } from 'src/app/interfaces/nodes.inteface';
 import { FirebaseService } from './firebase.service';
 
@@ -50,12 +50,23 @@ export class ProjectService {
         return this.project$;
     }
 
-    loadProject(projectID: string) {
-        const projectData = this.projects.find(project => project.docId === projectID);
-        const tickets: INode[] = projectData?.tickets || [];
+    loadProjectData(project: IProject) {
+        const tickets: INode[] = project?.tickets || [];
         return combineLatest([
-          this.firebaseService.getPeopleByID([projectData.assigned.id]),
+          this.firebaseService.getPeopleByID([project.leader]),
           this.firebaseService.getTicketsChunk(tickets.map(ticket => ticket.id))
-        ]);
+        ])
+        .pipe(
+            map( res => {
+                const projectSetup = {
+                    leader: 'res[0][0].name',
+                    docId: project.docId,
+                    name: project.name,
+                    tickets: res[1].flat()
+                }
+                this.project = projectSetup;
+                return projectSetup
+            })
+        );
     }
 }

@@ -64,7 +64,6 @@ export class DependencyComponent implements OnInit {
   }
 
   onInfoNode(nodeData: INode) {
-    console.log('click')
     this.ticketService.setNodeData(nodeData);
   }
 

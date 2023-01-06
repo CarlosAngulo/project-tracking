@@ -3,9 +3,10 @@ import { INode, IProject, NodeStatus } from 'src/app/interfaces/nodes.inteface';
 import { TicketService } from 'src/app/services/tickets/ticket.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
-import { forkJoin, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { FirebaseService } from 'src/app/services/project-loader/firebase.service';
 import { ProjectService } from 'src/app/services/project-loader/project.service';
+import { Mode } from 'src/app/services/tickets/ticket.service';
 
 export enum EditableFields {
   NONE = '',
@@ -16,6 +17,7 @@ export enum EditableFields {
   CODE = 'code',
   ASIGNEE = 'asignee',
 }
+
 @Component({
   selector: 'app-ticket-detail',
   templateUrl: './ticket-detail.component.html',
@@ -26,6 +28,8 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   project!: IProject;
   nodeStaus = NodeStatus;
   editableFields = EditableFields;
+  modes = Mode;
+  mode = Mode.CREATE;
   form!: FormGroup;
   editingField = EditableFields.NONE;
   ticketList: Partial<INode>[] = [];
@@ -52,31 +56,29 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   }
   
   ngOnInit(): void {
-    this.setupData(this.ticketService.getnodeData(), this.projectService.project)
+    this.setupData(this.projectService.project, this.ticketService.getnodeData())
 
     this.nodeTreeService.getNodeTree()
     .pipe(takeUntil(this.unsub$))
-    .subscribe((res) => this.ticketList = res)
+    .subscribe((res) => this.ticketList = res);
 
-    forkJoin([
-      this.ticketService.getNodeData$(),
-      this.projectService.getProject()
-    ])
+    this.ticketService.getNodeData$()
     .pipe(takeUntil(this.unsub$))
-    .subscribe(([node, project]) => {
-      this.setupData(node, project)
+    .subscribe((node: INode) => {
+      this.setupData(this.projectService.project, node)
     });
-    this.setupForm();
+
   }
 
-  setupData(node: INode, project: IProject) {
-    this.data = node;
+  setupData( project: IProject, node: INode ) {
     this.project = project;
     this.ticketList = project.tickets.map(ticket => ({
       code: ticket.code,
       id: ticket.id,
       title: ticket.title
     }));
+    this.mode = this.ticketService.mode;
+    this.data = node;
     this.parents = [];
     this.data.parents.forEach(parent => {
       const ticket = this.ticketList.find(ticket => ticket.code === parent);
@@ -85,16 +87,17 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
       }
     });
     this.uptadeFilteredTickets();
+    this.setupForm();
   }
 
   setupForm(){
     this.form = this.fb.group({
-      title: [this.data.title, Validators.required],
-      status: [this.data.status],
-      estimation: [this.data.estimation, Validators.required],
-      description: [this.data.description],
-      code: [this.data.code, Validators.required],
-      asignee: [this.data.asignee.name, Validators.required],
+      asignee: [this.data?.asignee?.name],
+      code: [this.data?.code, Validators.required],
+      description: [this.data?.description],
+      estimation: [this.data?.estimation, Validators.required],
+      status: [this.data?.status, Validators.required],
+      title: [this.data?.title, Validators.required],
     });
   }
 
@@ -103,9 +106,27 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   }
 
   onSave() {
-    this.firebaseService.updateTicket(this.data?.id, this.form.value)
-    .then( res => this.closeModal())
-    .catch(console.error);
+    if( this.mode == Mode.EDIT ) {
+      const controls = this.form.controls;
+      let modifiedFields = {};
+      for (const field in controls) {
+        if (controls[field].dirty) {
+          modifiedFields = {
+            ...modifiedFields,
+            [field]: controls[field].value
+          }
+        }
+      }
+      this.firebaseService.updateTicket(this.data?.id, modifiedFields)
+      .then( res => this.closeModal())
+      .catch(console.error);
+    } else if( this.mode == Mode.CREATE ) {
+      this.firebaseService.createTicket(this.form.value, this.project.docId)
+      .then( res => {
+        this.closeModal();
+      })
+      .catch(console.error);
+    }
   }
 
   onEditField(evt: MouseEvent, field: EditableFields) {
@@ -114,8 +135,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
 
   onEditedField(val: any) {
     this.form.get(this.editingField)?.patchValue(val);
-    console.log(this.form.value)
-    // this.editingField = EditableFields.NONE;
+    console.log(this.form.value);
   }
 
   uptadeFilteredTickets() {

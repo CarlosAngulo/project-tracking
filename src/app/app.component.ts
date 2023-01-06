@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, switchMap, takeUntil } from 'rxjs';
 import { IProject } from './interfaces/nodes.inteface';
 import { NodeTreeService } from './services/nodetree.service';
 import { FirebaseService } from './services/project-loader/firebase.service';
@@ -50,17 +50,13 @@ export class AppComponent implements OnDestroy, OnInit{
   }
 
   loadProject(projectID: string) {
-    this.project = this.projects.find(project => project.docId === projectID);
-    this.projectService.loadProject(projectID)
+    this.firebaseService.getProject(projectID)
+    .pipe(
+      switchMap( res => this.projectService.loadProjectData(res))
+    )
     .subscribe(
-      (res: any[]) => {
-        const project = {
-          leader: res[0][0].name,
-          name: this.project.name,
-          tickets: res[1].flat()
-        }
+      (project: any) => {
         this.onShowLoader(false);
-        this.projectService.project = project;
         this.nodeTreeService.loadProject(project)
         this.onShowLoader(false);
       }

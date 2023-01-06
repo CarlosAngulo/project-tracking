@@ -95,6 +95,7 @@ export class NodeTreeService {
       ...project,
       tickets: project.tickets.map((ticket:INode) => ({
         ...ticket,
+        parents: ticket.parents || [],
         children: [],
         childrenTree: [],
         childrenTreeSimple: [],
@@ -167,13 +168,14 @@ export class NodeTreeService {
     if (firstList.length === 0) {
       return secondList;
     }
-    
+    // console.log(firstList.filter( node => node.parents?.length === 0 || node.parents === undefined)
+    // .map((node, index) => ({...node, level, index })))
     let parentNodes = firstList
-    .filter( node => node.parents?.length === 0)
+    .filter( node => node.parents?.length === 0 || node.parents === undefined)
     .map((node, index) => ({...node, level, index }));
 
     // console.log(firstList.filter( node => !firstList.map(i => i.code).includes(node.parents[0])))
-
+    // console.log('---', parentNodes)
     if (parentNodes?.length === 0) {
       // creates next level
       secondList.map((parentNode) => {
@@ -287,7 +289,8 @@ export class NodeTreeService {
       const grandChildrenWidth = nodes
         .filter(currentNode => node.childrenTreeSimple[0].includes(currentNode.code))
         .reduce((acc, curr) => acc + curr.childrenWidth, 0);
-      node.childrenWidth = node.code === 'AMC-12560' ? 6 : Math.max(childrenWidth, grandChildrenWidth) || 1;
+      node.childrenWidth = Math.max(childrenWidth, grandChildrenWidth) || 1;
+      // node.childrenWidth = node.code === 'AMC-12560' ? 6 : Math.max(childrenWidth, grandChildrenWidth) || 1;
       return node;
     })
     .reverse();
@@ -403,6 +406,7 @@ export class NodeTreeService {
 
   private extractMVPs(nodes:INode[]) {
     const mvps: IDropDown[] = nodes.reduce((accum: any, current) => {
+      if (current.mvp === undefined) return; 
       const name = current.mvp.name;
       const id = current.mvp.id;
       const mvpIndex = accum.findIndex((item:IDropDown) => item.value === current.mvp.id)

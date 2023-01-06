@@ -107,6 +107,7 @@ export class JsonLoaderComponent implements OnInit {
       const csvPrimitive = this.CSVParser.csvToArray(project);
       const csvParsed = this.CSVParser.parseArray(csvPrimitive)
       this.project = {
+        docId: 'AAA',
         name: 'Project Name',
         leader: 'N N',
         tickets: csvParsed

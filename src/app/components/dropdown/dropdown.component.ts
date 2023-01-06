@@ -104,16 +104,14 @@ export class DropdownComponent implements ControlValueAccessor {
   }
 
   registerOnChange(fn: (value: string) => void): void {
-    console.log('registerOnChange')
     this.propagateChange = fn;
   }
 
   registerOnTouched(fn: (value: string) => void): void {
-    console.log('registerOnTouched')
     this.propagateChange = fn;
   }
 
   propagateChange = (value: any) => {
-    console.log('propagate', value)
+    // console.log('propagate', value)
   };
 }
