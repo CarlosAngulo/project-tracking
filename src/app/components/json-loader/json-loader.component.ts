@@ -1,7 +1,10 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { IProject } from 'src/app/interfaces/nodes.inteface';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { DocumentData, DocumentReference } from '@angular/fire/compat/firestore';
+import { forkJoin, combineLatest } from 'rxjs';
+import { INode, IProject } from 'src/app/interfaces/nodes.inteface';
 import { CSVParserService } from 'src/app/services/csv-parser.service';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
+import { FirebaseService } from 'src/app/services/project-loader/firebase.service';
 import { PROJECT } from './projects';
 
 type AllowedExtensions = fileExtensions.CSV | fileExtensions.JSON;
@@ -15,8 +18,14 @@ enum fileExtensions {
   styleUrls: ['./json-loader.component.scss']
 })
 export class JsonLoaderComponent implements OnInit {
-  @Output() onLoad: EventEmitter<any> = new EventEmitter();
+  @Output() onLoad: EventEmitter<string> = new EventEmitter();
   @Output() onCancel: EventEmitter<boolean> = new EventEmitter();
+  @Input() set projects(val: any[]) {
+    this.projectNames = val.map((project:any) => ({
+      name: project.name,
+      value: project.docId
+    }));
+  };
 
   parseJSONError = false;
   projectLoaded = false;
@@ -25,6 +34,9 @@ export class JsonLoaderComponent implements OnInit {
   fileExtensions = fileExtensions;
   uploadStatus = 'default';
   project!: IProject;
+  projectNames!: {name: string, value: string}[];
+  selectedProjectID!: string;
+
   loadProjectMessages = {
     success: {
       message: 'Congrats! Your projec is valid. Please click on the next button.'
@@ -37,7 +49,11 @@ export class JsonLoaderComponent implements OnInit {
     }
   }
 
-  constructor(readonly nodeTreeService: NodeTreeService, readonly CSVParser: CSVParserService) {
+  constructor(
+    readonly nodeTreeService: NodeTreeService, 
+    readonly CSVParser: CSVParserService,
+    readonly firebaseService: FirebaseService  
+  ) {
     const localStorageProject: any = localStorage.getItem('project');
     if (localStorageProject) {
       this.project = JSON.parse(localStorageProject);
@@ -50,6 +66,24 @@ export class JsonLoaderComponent implements OnInit {
     // console.log(this.PROJECT.tickets[1])
     // console.log(csvParsed[1]);
     // console.log(this.jsonToCSV(this.PROJECT))
+
+    // this.loadFirebaseTemp();
+  }
+
+  // loadFirebaseTemp() {
+  //   this.firebaseService.getProjects()
+  //   .subscribe(projects => {
+  //     this.projects = projects;
+  //     this.projectNames = projects.map((project:any) => project.name);
+  //   });
+  // }
+
+  onSelecProject(evt: string | number) {
+    this.selectedProjectID = evt.toString();
+  }
+
+  onLoadProject(projectID: string) {
+    this.onLoad.next(projectID);
   }
 
   onUploadFile(event: any) {
@@ -64,7 +98,7 @@ export class JsonLoaderComponent implements OnInit {
 
   loadSampleProject() {
     this.project = PROJECT;
-    this.onLoad.next(this.project);
+    // this.onLoad.next(this.project);
     this.projectLoaded = true;
   }
 
@@ -73,6 +107,7 @@ export class JsonLoaderComponent implements OnInit {
       const csvPrimitive = this.CSVParser.csvToArray(project);
       const csvParsed = this.CSVParser.parseArray(csvPrimitive)
       this.project = {
+        docId: 'AAA',
         name: 'Project Name',
         leader: 'N N',
         tickets: csvParsed
@@ -112,8 +147,8 @@ export class JsonLoaderComponent implements OnInit {
   }
 
   jsonToCSV(project: IProject): string {
-    const header = 'CODE;ASIGNEE;TITLE;ESTIMATION;STATUS;EFFORT;PARENTS;MVP';
-    const csv = project.tickets.map(ticket => `${ticket.code};${ticket.asignee.name},${ticket.asignee.role.join(',')};${ticket.title};${ticket.estimation};${ticket.status};${ticket.effort?.join(',')};${ticket.parents.join(',')};${ticket.mvp.id},${ticket.mvp.name}`
+    const header = 'CODE;ASSIGNED;TITLE;ESTIMATION;STATUS;EFFORT;PARENTS;MVP';
+    const csv = project.tickets.map(ticket => `${ticket.code};${ticket.assigned.name},${ticket.assigned.role.join(',')};${ticket.title};${ticket.estimation};${ticket.status};${ticket.effort?.join(',')};${ticket.parents.join(',')};${ticket.mvp.id},${ticket.mvp.name}`
     );
     return header + '\n' + csv.join('\n');
   }
@@ -129,7 +164,7 @@ export class JsonLoaderComponent implements OnInit {
   }
 
   onInsert() {
-    this.onLoad.next(this.project);
+    // this.onLoad.next(this.project);
     this.projectLoaded = true;
   }
 

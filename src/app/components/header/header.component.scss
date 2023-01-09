@@ -1,12 +1,15 @@
+@import '../../../scss/variables';
+
 .header {
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid #CCC;
     font-size: 14px;
     font-weight: 700;
     height: 52px;
-    div {
-        border-right: 1px solid #CCC;
+    background-color: $main_accent;
+    color: white;
+    > div {
+        border-right: 1px solid rgba(255, 255, 255, 0.3);
         padding: 0 16px;
         align-items: center;
         display: flex;
@@ -27,7 +30,7 @@
         border-right: 1px solid #CCC;
         padding: 0 30px;
         span {
-            background-color: #333;
+            background-color: white;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -35,7 +38,7 @@
             border-radius: 50%;
             width: 30px;
             height: 30px;
-            color: white;
+            color: #333;
         }
     }
 }

@@ -1,3 +1,5 @@
+@import '../../../scss/variables';
+
 .card {
     font-size: 10px;
     border-radius: 4px;
@@ -110,7 +112,7 @@
                 text-decoration: underline;
             }
         }
-        &-asignee {
+        &-assigned {
             color: white;
             background-color: #333;
             width: 20px;
@@ -167,22 +169,22 @@
 
 .card-header-status {
     &.blocked {
-        background-color: #F00;
+        background-color: $blocked;
     }
     &.new {
-        background-color: rgb(0, 221, 74);
+        background-color: $new;
     }
     &.progress {
-        background-color: rgb(0, 157, 255);
+        background-color: $progress;
     }
     &.done {
-        background-color: rgb(0, 61, 99);
+        background-color: $done;
     }
     &.undefined {
-        background-color: rgb(111, 81, 0);
+        background-color: $undefined;
     }
     &.review {
-        background-color: rgb(8, 191, 26);
+        background-color: $review;
     }
 }
 

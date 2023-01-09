@@ -8,6 +8,7 @@ import { IDropDown } from '../components/dropdown/dropdown.component';
   providedIn: 'root'
 })
 export class NodeTreeService {
+  private people!: any[];
   private _mvps: Subject<any[]> = new Subject();
   private mvps$: Observable<any[]> = this._mvps.asObservable();
   
@@ -79,22 +80,25 @@ export class NodeTreeService {
     }
   }
   
-  loadProject(project: IProject) {
+  loadProject(project: IProject, people?: any[]) {
+    if (people) this.people = people;
     localStorage.setItem('project', JSON.stringify(project));
     this._name.next(project.name);
     this.name = project.name;
     this._leader.next(project.leader);
     this.leader = project.leader;
     this.isProjectLoaded = true;
-    const parsedProject = this.parseProject(project);
+    const parsedProject = this.parseProject(project, people || this.people);
     this.sortDependencies(parsedProject.tickets);
   }
 
-  parseProject(project:IProject):IProject {
+  parseProject(project:IProject, people: any[]):IProject {
     return {
       ...project,
       tickets: project.tickets.map((ticket:INode) => ({
         ...ticket,
+        assigned: people.find(person => person.id === ticket.assigned),
+        parents: ticket.parents || [],
         children: [],
         childrenTree: [],
         childrenTreeSimple: [],
@@ -121,7 +125,12 @@ export class NodeTreeService {
   private sortDependencies(nodes: INode[]) {
     // Creates the three
     this.childrenList = [];
-    let nodeTree = this.nodesTree(nodes);
+
+    // Sort nodes by order field
+    let nodeTree = this.sortNodes(nodes);
+    
+    // Creates the three
+    nodeTree = this.nodesTree(nodes);
 
     // Add children
     nodeTree = this.addChildren(nodeTree);
@@ -143,7 +152,7 @@ export class NodeTreeService {
 
     this.nodeTree = nodeTree;
 
-    console.log(this.nodeTree)
+    // console.log(this.nodeTree)
     // console.log(this.nodeTree.map(n=>n.code))
     
     this._nodeTree.next(nodeTree);
@@ -153,22 +162,30 @@ export class NodeTreeService {
     this.extractMVPs(nodes);
   }
 
+  private sortNodes(nodes: INode[]) {
+    return nodes
+    .sort((p1, p2) => (p1.order < p2.order) ? 1 : (p1.order > p2.order) ? -1 : 0);
+  }
+
   private nodesTree(firstList: INode[], secondList: INode[] = [], level: number = 0 ): INode[] {
     if (firstList.length === 0) {
       return secondList;
     }
-    
+    // console.log(firstList.filter( node => node.parents?.length === 0 || node.parents === undefined)
+    // .map((node, index) => ({...node, level, index })))
     let parentNodes = firstList
-    .filter( node => node.parents?.length === 0)
+    .filter( node => node.parents?.length === 0 || node.parents === undefined)
     .map((node, index) => ({...node, level, index }));
 
+    // console.log(firstList.filter( node => !firstList.map(i => i.code).includes(node.parents[0])))
+    // console.log('---', parentNodes)
     if (parentNodes?.length === 0) {
       // creates next level
       secondList.map((parentNode) => {
         parentNodes = parentNodes
         .concat(firstList
           // .filter(node => node.parents?.includes(parentNode.code))
-          .filter(node => node.parents[0] === parentNode.code)
+          .filter(node => node.parents[0] === parentNode.id)
           .map(node => ({...node, level, index: 0}))
         )
       });
@@ -176,7 +193,7 @@ export class NodeTreeService {
       parentNodes = parentNodes
       .filter((node, index, self) =>
         index === self.findIndex((t) => (
-          t.code === node.code
+          t.id === node.id
         ))
       )
       .map( (parentNode, index) => ({
@@ -191,8 +208,8 @@ export class NodeTreeService {
     firstList = firstList
     .filter(
       (node) => !secondList
-      .map(nodeLevel => nodeLevel.code)
-      .includes(node.code)
+      .map(nodeLevel => nodeLevel.id)
+      .includes(node.id)
     )
 
     level++;
@@ -204,14 +221,14 @@ export class NodeTreeService {
     let newNodes: INode[] = [...nodes];
     nodes.forEach(node => {
       node.parents?.forEach(parent => {
-        const parentIndex = newNodes.findIndex( newNode => newNode.code === parent);
-        newNodes[parentIndex].children = newNodes[parentIndex]?.children?.concat(node.code);
+        const parentIndex = newNodes.findIndex( newNode => newNode.id === parent);
+        newNodes[parentIndex].children = newNodes[parentIndex]?.children?.concat(node.id);
         newNodes[parentIndex].childrenTree = [newNodes[parentIndex].children];
       })
     });
     newNodes = newNodes.map(currentNode => ({
       ...currentNode,
-      childrenTreeSimple: [nodes.filter(node => node.parents[0] === currentNode.code).map(node=>node.code)]
+      childrenTreeSimple: [nodes.filter(node => node.parents[0] === currentNode.id).map(node=>node.id)]
     }))
     for (const node of newNodes) {
       this.addChildrenTree(nodes, node);
@@ -239,8 +256,8 @@ export class NodeTreeService {
     const currentTree = currentNode.childrenTree[currentNode.childrenTree.length - 1];
     let childrenNextLevel: string[] = []
     if (currentTree) {
-      childrenNextLevel = currentTree.map(nodeCode => nodes
-        .find( item => item.code === nodeCode)?.childrenTree[0] || []
+      childrenNextLevel = currentTree.map(nodeId => nodes
+        .find( item => item.id === nodeId)?.childrenTree[0] || []
       )
       .flat()
     }
@@ -264,27 +281,28 @@ export class NodeTreeService {
       return [];
     }
     const currentTree = currentNode.childrenTreeSimple[currentNode.childrenTreeSimple.length - 1];
-    return nodes.filter( node => currentTree.includes(node.parents[0])).map(node=>node.code)
+    return nodes.filter( node => currentTree.includes(node.parents[0])).map(node=>node.id)
   }
 
-  private addChildrenWidth(nodes:INode[]): INode[] {
-    const _nodes = [...nodes];
-    _nodes.reverse()
-    .forEach(node => {
-      let childrenWidth = node.childrenTreeSimple[0].length
-      let grandChildrenWidth = nodes
-        .filter(currentNode => node.childrenTreeSimple[0].includes(currentNode.code))
+  private addChildrenWidth(nodes: INode[]): INode[] {
+    return nodes
+    .reverse()
+    .map(node => {
+      const childrenWidth = node.childrenTreeSimple[0].length;
+      const grandChildrenWidth = nodes
+        .filter(currentNode => node.childrenTreeSimple[0].includes(currentNode.id))
         .reduce((acc, curr) => acc + curr.childrenWidth, 0);
-      childrenWidth = childrenWidth > grandChildrenWidth ? childrenWidth : grandChildrenWidth;
-      node.childrenWidth = childrenWidth === 0 ? 1 : childrenWidth
+      node.childrenWidth = Math.max(childrenWidth, grandChildrenWidth) || 1;
+      // node.childrenWidth = node.code === 'AMC-12560' ? 6 : Math.max(childrenWidth, grandChildrenWidth) || 1;
+      return node;
     })
-    return _nodes.reverse()
+    .reverse();
   }
 
   private addNewPositions(nodes: INode[]): INode[] {
     const _nodes = [...nodes];
     _nodes.forEach(currentNode => {
-      const parent = nodes.find(node => currentNode.parents[0] === node.code);
+      const parent = nodes.find(node => currentNode.parents[0] === node.id);
       const offsetBySlibing = this.previousPositions(currentNode, nodes, parent);
       currentNode.position.x = (parent?.position.x || 0) - (((parent?.childrenWidth || 0) - currentNode.childrenWidth) * (cardProps.width + cardProps.gap.x) / 2) + offsetBySlibing;
       currentNode.position.y= currentNode.level * (cardProps.height + cardProps.gap.y) + cardProps.margin.y;
@@ -311,7 +329,7 @@ export class NodeTreeService {
         if (parent === undefined) {
           return lowerIndex && sameLevel;
         }
-        return lowerIndex && parent?.childrenTreeSimple[0].includes(node.code);
+        return lowerIndex && parent?.childrenTreeSimple[0].includes(node.id);
       })
       .map(node => node.childrenWidth * (cardProps.width + cardProps.gap.x))
       .reduce((acc, curr) => acc + curr, 0);
@@ -320,10 +338,10 @@ export class NodeTreeService {
   private addParentCoodrs(nodes: INode[]) {
     return nodes?.map( node =>({
       ...node,
-      paretsPosition: node.parents?.map((parentCode) => {
-        const parentCoords = nodes.find(ticket => ticket.code === parentCode)?.position;
+      paretsPosition: node.parents?.map((parentId) => {
+        const parentCoords = nodes.find(ticket => ticket.id === parentId)?.position;
         return {
-          code: parentCode,
+          id: parentId,
           x: parentCoords?.x || 0,
           y: parentCoords?.y || 0
         }
@@ -348,15 +366,15 @@ export class NodeTreeService {
 
   private selectDescendant(nodes: INode[], nodeID: string, reclutedNodes: string[][] = []): string[] {
     if (!reclutedNodes[0]) {
-      const parentNode = nodes.find(t => t.code === nodeID);
+      const parentNode = nodes.find(t => t.id === nodeID);
       if (parentNode) {
-        reclutedNodes[0] = [parentNode.code];
+        reclutedNodes[0] = [parentNode.id];
         reclutedNodes.push(parentNode.childrenTree[0]);
       }
     } else {
       let nextLevelNodes: string[] = [];
       reclutedNodes[reclutedNodes.length - 1].map((nodeID) => {
-        const parentNode = nodes.find(t => t.code === nodeID)?.childrenTree[0];
+        const parentNode = nodes.find(t => t.id === nodeID)?.childrenTree[0];
         if (parentNode) {
           nextLevelNodes = nextLevelNodes.concat(parentNode);
         }
@@ -374,23 +392,24 @@ export class NodeTreeService {
   private blockByParents(nodes: INode[]): INode[] {
     const blockedByParentNodes = nodes
       .filter(node => node.status === NodeStatus.blocked)
-      .map(node => this.selectDescendant(nodes, node.code))
+      .map(node => this.selectDescendant(nodes, node.id))
       .flat();
     return nodes.map(node => ({
       ...node,
-      blockedByParents: blockedByParentNodes.includes(node.code)
+      blockedByParents: blockedByParentNodes.includes(node.id)
     }));
   }
 
   private highlightNodes(nodes: INode[], selectedNodes: string[], selected: boolean): INode[] {
     return nodes.map(node => ({
       ...node,
-      selected: selectedNodes.includes(node.code)
+      selected: selectedNodes.includes(node.id)
     }))
   }
 
   private extractMVPs(nodes:INode[]) {
     const mvps: IDropDown[] = nodes.reduce((accum: any, current) => {
+      if (current.mvp === undefined) return; 
       const name = current.mvp.name;
       const id = current.mvp.id;
       const mvpIndex = accum.findIndex((item:IDropDown) => item.value === current.mvp.id)
@@ -406,7 +425,7 @@ export class NodeTreeService {
         return accum
       }
     }, [])
-    console.log('mvps', mvps)
+    // console.log('mvps', mvps)
     this._mvps.next(mvps);
   }
 
@@ -445,7 +464,7 @@ export class NodeTreeService {
     return nodes.map(currentNode => ({
       ...currentNode,
       enabled: nodes
-      .filter(node => currentNode.parents.includes(node.code))
+      .filter(node => currentNode.parents.includes(node.id))
       .every(node => node.status === NodeStatus.done)
     }))
   }
@@ -457,13 +476,13 @@ export class NodeTreeService {
   }
 
   onInfoNode(nodeData: INode) {
-    console.log(nodeData)
+    // console.log(nodeData)
   }
 
   onSelectMVP(mvp?: string | number) {
     const nodes = this.nodeTree.filter(node=> node.mvp.id === mvp)
-    const codes = nodes.map(t=>t.code) || [];
-    this.nodeTree = this.highlightNodes(this.nodeTree, codes, false);
+    const ids = nodes.map(t=>t.id) || [];
+    this.nodeTree = this.highlightNodes(this.nodeTree, ids, false);
     const nodesToCalculate = mvp === '' ? this.nodeTree : nodes;
     this._nodeTree.next(this.nodeTree);
     this.calculateTreeProgress(nodesToCalculate);

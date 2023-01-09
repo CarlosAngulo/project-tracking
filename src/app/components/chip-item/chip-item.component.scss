@@ -1,0 +1,60 @@
+@import '../../../scss/variables';
+
+.chip {
+    background-color: #f4edff;
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    &:hover {
+        background-color: #e9dbff;
+    }
+    .material-symbols-outlined {
+        font-size: 16px;
+        color: rgba(0,0,0,0.4);
+    }
+    &-content {
+        display: flex;
+        gap: 8px;
+        padding: 6px;
+    }
+    &-confirmation {
+        padding: 5px 12px;
+        height: 100%;
+        position: absolute;
+        left: 110%;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: left 0.3s ease-in-out;
+        background-color: $main_accent;
+        color: white;
+        top: 0;
+        font-size: 12px;
+        &.visible {
+            left: 0;
+        }
+        .material-symbols-outlined {
+            color: $highlighted-accent;
+        }
+        > div {
+            align-items: center;
+            display: flex;
+            gap: 8px;
+        }
+    }
+}
+
+button {
+    background-color: #f4edff;
+    border: medium none;
+    border-radius: 8px;
+    font-size: 10px;
+    margin-left: 8px;
+    padding: 3px 8px;
+}
+
+.aligned_right {
+    margin-left: auto;
+}

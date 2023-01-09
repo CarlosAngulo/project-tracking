@@ -3,7 +3,7 @@
         <thead>
             <tr>
                 <th>Code</th>
-                <th>Asignee</th>
+                <th>Assigned</th>
                 <th>title</th>
                 <th>MVP</th>
                 <th>estimation</th>
@@ -16,13 +16,17 @@
             <ng-container *ngFor="let ticket of ticketList; let i = index" >
                 <tr [class.selected]="ticket.selected">
                     <td><a [href]="ticket.link" target="_blank">{{ticket.code}}</a></td>
-                    <td>{{ticket.asignee.name | initials}}</td>
+                    <td><ng-container *ngIf="ticket.assigned">
+                        {{ticket.assigned.name | initials}}
+                    </ng-container></td>
                     <td>{{ticket.title}}</td>
-                    <td>{{ticket.mvp.id}}. {{ticket.mvp.name}}</td>
+                    <td><ng-container *ngIf="ticket.mvp">
+                        {{ticket.mvp.id}}. {{ticket.mvp.name}}
+                    </ng-container></td>
                     <td>{{ticket.estimation}}</td>
                     <td>{{ticket.status}}</td>
                     <td>{{ticket.effort}}</td>
-                    <td>{{ticket.parents}}</td>
+                    <td>{{ticket.parents.join(', ')}}</td>
                 </tr>
             </ng-container>
         </tbody>

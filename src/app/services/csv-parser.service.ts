@@ -1,15 +1,4 @@
 import { Injectable } from '@angular/core';
-import { INode } from '../interfaces/nodes.inteface';
-
-interface IPrimitiveTicket {
-    asignee: string;
-    code: string;
-    effort: string;
-    estimation: string;
-    parents: string;
-    status: string;
-    title: string;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -41,9 +30,9 @@ export class CSVParserService {
                 id: ticket.mvp.split(',')[0],
                 name: ticket.mvp.split(',')[1],
             },
-            asignee: {
-                name: ticket.asignee.split(',')[0],
-                role: ticket.asignee.split(',').slice(1,ticket.asignee.split(',').length)
+            assigned: {
+                name: ticket.assigned.split(',')[0],
+                role: ticket.assigned.split(',').slice(1,ticket.assigned.split(',').length)
             }
         }))
     }

@@ -1,0 +1,159 @@
+<form [formGroup]="form" (ngSubmit)="onSave()">
+    <div class="modal-window">
+        <ng-container *ngIf="data !== undefined || mode === modes.CREATE">
+            <div class="modal-window-header">
+                <div class="field_editable" (click)="onEditField($event, editableFields.CODE)">
+                    <ng-container *ngIf="editingField === editableFields.CODE || mode === modes.CREATE; else codeEdit">
+                        <input
+                            type="text"
+                            class="field_paragraph"
+                            [class]="mode"
+                            formControlName="code"
+                            placeholder="code"
+                            [class.field_error]="form.get('code')?.status?.includes('INVALID') && form.get('code')?.touched">
+                    </ng-container>
+                    <ng-template #codeEdit>
+                        <span class="field_paragraph">{{data.code}}</span>
+                        <span class="material-symbols-outlined field_editable_icon"> edit </span>
+                    </ng-template>
+                </div>
+
+                <div class="field_editable" (click)="onEditField($event, editableFields.ESTIMATION)">
+                    <ng-container *ngIf="editingField === editableFields.ESTIMATION || mode === modes.CREATE; else estimationEdit">
+                        <input
+                            class="field_paragraph"
+                            type="number"
+                            [class]="mode"
+                            formControlName="estimation"
+                            [class.field_error]="form.get('estimation')?.status?.includes('INVALID') && form.get('estimation')?.touched">
+                    </ng-container>
+                    <ng-template #estimationEdit>
+                        <p class="field_paragraph">{{data.estimation}} pts</p>
+                        <span class="material-symbols-outlined field_editable_icon"> edit </span>
+                    </ng-template>
+                </div>
+
+                <div class="field_editable" (click)="onEditField($event, editableFields.STATUS)">
+                    <ng-container *ngIf="editingField === editableFields.STATUS || mode === modes.CREATE; else statusEdit">
+                        <app-dropdown
+                            [class]="mode"
+                            formControlName="status" 
+                            (onSelect)="onEditedField($event)"
+                            [defaultOption]="form.get(editableFields.STATUS)?.value"
+                            [options]="statuses"
+                            [clickable]="true">
+                        </app-dropdown>
+                    </ng-container>
+                    <ng-template #statusEdit>
+                        <span class="status" [class]="data.status">{{form.get(editableFields.STATUS)?.value}}</span>
+                        <span class="material-symbols-outlined field_editable_icon"> edit </span>
+                    </ng-template>
+                </div>
+
+                <span class="material-symbols-outlined close-modal" (click)="closeModal()">
+                    close
+                </span>
+            </div>
+            <div class="modal-window-body">
+
+                <div class="field_editable" (click)="onEditField($event, editableFields.TITLE)">
+                    <ng-container *ngIf="editingField === editableFields.TITLE || mode === modes.CREATE; else titleEdit">
+                        <input
+                            class="field_title"
+                            type="text"
+                            [class]="mode"
+                            formControlName="title"
+                            [class.field_error]="form.get('title')?.status?.includes('INVALID') && form.get('title')?.touched"/>
+                    </ng-container>
+                    <ng-template #titleEdit>
+                        <h3 class="field_title">{{data.title}}</h3>
+                        <span class="material-symbols-outlined field_editable_icon"> edit </span>
+                    </ng-template>
+                </div>
+
+                <section class="field_section">
+                    <h5 class="field_section_title">
+                        <span class="material-symbols-outlined field_section_expand"> expand_more </span>
+                        Assigned:
+                    </h5>
+                    <div class="field_editable" (click)="onEditField($event, editableFields.ASSIGNED)">
+                        <ng-container *ngIf="editingField === editableFields.ASSIGNED || mode === modes.CREATE; else assignedEdit">
+                            <app-dropdown
+                                class="field_section_dropdown"
+                                formControlName="assigned"
+                                [class]="mode"
+                                [class.field_error]="form.get('assigned')?.status?.includes('INVALID') && form.get('assigned')?.touched"
+                                (onSelect)="onAssignedChanged($event)"
+                                [defaultOption]="assigned?.name"
+                                [options]="filteredPeople">
+                            </app-dropdown>
+                        </ng-container>
+                        <ng-template #assignedEdit>
+                            <span class="field_paragraph">{{assigned?.name || '--'}}</span>
+                            <span class="material-symbols-outlined field_editable_icon"> edit </span>
+                        </ng-template>
+                    </div>
+                </section>
+
+                <section class="field_section">
+                    <h5 class="field_section_title">
+                        <span class="material-symbols-outlined field_section_expand"> expand_more </span>
+                        Parents:
+                        <div class="field_section_title_right">
+                            <ng-container *ngIf="activeDropdown !== editableFields.PARENTS; else hideLoadParents">
+                                <span class="material-symbols-outlined" (click)="onShowDropdown(editableFields.PARENTS)"> add_box </span>
+                            </ng-container>
+                            <ng-template #hideLoadParents>
+                                <span class="material-symbols-outlined" (click)="onShowDropdown(editableFields.NONE)"> disabled_by_default </span>
+                            </ng-template>
+                        </div>
+                    </h5>
+                    <div>
+                        <ul class="parents">
+                            <li *ngFor="let parent of parents">
+                                <app-chip-item
+                                    [id]= "parent.id"
+                                    [text]="parent.code + ' - ' + parent.title"
+                                    [confirmation]="'Are you sure you want to remove this parent?'"
+                                    (onDelete)="onParentDelete($event)">
+                                </app-chip-item>
+                            </li>
+                        </ul>
+                    </div>
+                    <ng-container *ngIf="activeDropdown === editableFields.PARENTS">
+                        <app-dropdown
+                            class="field_section_dropdown"
+                            (onSelect)="onParentSelect($event)"
+                            [defaultOption]="'Select a parent node'"
+                            [options]="ticketListFiltered">
+                        </app-dropdown>
+                    </ng-container>
+                </section>
+
+                <section class="field_section">
+                    <h5 class="field_section_title">
+                        <span class="material-symbols-outlined field_section_expand"> expand_more </span>
+                        Description:
+                    </h5>
+                    <div class="field_editable" (click)="onEditField($event, editableFields.DESCRIPTION)">
+                            <ng-container *ngIf="editingField === editableFields.DESCRIPTION || mode === modes.CREATE; else descriptionEdit">
+                                <textarea
+                                    [class]="mode"
+                                    class="field_textarea"
+                                    formControlName="description">
+                                </textarea>
+                            </ng-container>
+                            <ng-template #descriptionEdit>
+                                <div class="field_textarea" [innerHTML]="data.description">
+                                </div>
+                                <span class="material-symbols-outlined field_editable_icon"> edit </span>
+                            </ng-template>
+                        </div>
+                </section>
+            </div>
+            <div class="modal-window-footer">
+                <input type="submit" value="save" [disabled]="!form.dirty || !form.valid">
+            </div>
+        </ng-container>
+    </div>
+</form>

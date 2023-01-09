@@ -2,11 +2,34 @@
     <div class="modal">
         <div class="modal-header">
             <h2>Load your project</h2>
-            <button [disabled]="!projectLoaded" (click)="onClose()" class="modal-close material-symbols-outlined">close</button>
+            <button
+                [disabled]="!projectLoaded"
+                (click)="onClose()"
+                class="modal-close material-symbols-outlined">
+                close
+            </button>
         </div>
         <div class="modal-body">
+            <div class="drop-down">
+                <app-dropdown
+                    (onSelect)="onSelecProject($event)"
+                    [defaultOption]="'Select a project'"
+                    [options]="projectNames">
+                </app-dropdown>
+                <button
+                    class="primary"
+                    [disabled]="!selectedProjectID"
+                    (click)="onLoadProject(selectedProjectID)">
+                    Load
+                </button>
+            </div>
             <div class="file-container">
-                <input type="file" id="file" class="file-button-hidden" (change)="onUploadFile($event)" accept=".csv, .json">
+                <input
+                    type="file"
+                    id="file"
+                    class="file-button-hidden"
+                    (change)="onUploadFile($event)"
+                    accept=".csv, .json">
                 <label class="file-button file-button-upload" for="file" [class]="uploadStatus">
                     <img class="file-img" src="assets/file_001.png" alt="">
                     <p>Load a project from your local machine</p>
