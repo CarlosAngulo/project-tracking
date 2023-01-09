@@ -230,10 +230,10 @@ export class NodeTreeService {
       ...currentNode,
       childrenTreeSimple: [nodes.filter(node => node.parents[0] === currentNode.id).map(node=>node.id)]
     }))
-    newNodes.forEach(node => {
+    for (const node of newNodes) {
       this.addChildrenTree(nodes, node);
       this.addSimpleChildrenTree(nodes, node)
-    });
+    };
     return newNodes;
   }
 
