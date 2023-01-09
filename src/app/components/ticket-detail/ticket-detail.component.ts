@@ -1,12 +1,14 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { INode, IProject, NodeStatus } from 'src/app/interfaces/nodes.inteface';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { INode, IPerson, IProject, NodeStatus } from 'src/app/interfaces/nodes.inteface';
 import { TicketService } from 'src/app/services/tickets/ticket.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
 import { Subject, takeUntil } from 'rxjs';
 import { FirebaseService } from 'src/app/services/project-loader/firebase.service';
 import { ProjectService } from 'src/app/services/project-loader/project.service';
 import { Mode } from 'src/app/services/tickets/ticket.service';
+import { PeopleService } from 'src/app/services/people/people.service';
+import { IDropDown } from '../dropdown/dropdown.component';
 
 export enum EditableFields {
   NONE = '',
@@ -15,7 +17,8 @@ export enum EditableFields {
   ESTIMATION = 'estimation',
   DESCRIPTION = 'description',
   CODE = 'code',
-  ASIGNEE = 'asignee',
+  ASSIGNED = 'assigned',
+  PARENTS = 'parents',
 }
 
 @Component({
@@ -24,6 +27,7 @@ export enum EditableFields {
   styleUrls: ['./ticket-detail.component.scss']
 })
 export class TicketDetailComponent implements OnInit, OnDestroy {
+  assigned!: any;
   data!: INode;
   project!: IProject;
   nodeStaus = NodeStatus;
@@ -32,9 +36,12 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   mode = Mode.CREATE;
   form!: FormGroup;
   editingField = EditableFields.NONE;
+  peopleList: IPerson[] = [];
+  filteredPeople!: IDropDown[];
   ticketList: Partial<INode>[] = [];
-  ticketListFiltered: Partial<INode>[] = [];
+  ticketListFiltered: any[] = [];
   parents: Partial<INode>[] = [];
+  activeDropdown = EditableFields.NONE;
   private unsub$ = new Subject<void>();
   
   statuses = [
@@ -51,12 +58,15 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     private nodeTreeService: NodeTreeService,
     private firebaseService: FirebaseService,
     private projectService: ProjectService,
+    private peopleService: PeopleService,
     private fb: FormBuilder
   ) {
   }
   
   ngOnInit(): void {
-    this.setupData(this.projectService.project, this.ticketService.getnodeData())
+    this.peopleList = this.peopleService.people;
+
+    this.setupData(this.projectService.project, this.ticketService.getnodeData());
 
     this.nodeTreeService.getNodeTree()
     .pipe(takeUntil(this.unsub$))
@@ -67,7 +77,6 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     .subscribe((node: INode) => {
       this.setupData(this.projectService.project, node)
     });
-
   }
 
   setupData( project: IProject, node: INode ) {
@@ -81,23 +90,26 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     this.data = node;
     this.parents = [];
     this.data.parents.forEach(parent => {
-      const ticket = this.ticketList.find(ticket => ticket.code === parent);
+      const ticket = this.ticketList.find(ticket => ticket.id === parent);
       if (ticket !== undefined) {
         this.parents.push(ticket);
       }
     });
-    this.uptadeFilteredTickets();
+    this.assigned = this.data?.assigned;
+    this.updateFilteredTickets();
+    this.updateFilteredPeople()
     this.setupForm();
   }
 
   setupForm(){
     this.form = this.fb.group({
-      asignee: [this.data?.asignee?.name],
+      assigned: [this.assigned?.name],
       code: [this.data?.code, Validators.required],
       description: [this.data?.description],
       estimation: [this.data?.estimation, Validators.required],
       status: [this.data?.status, Validators.required],
       title: [this.data?.title, Validators.required],
+      parents: [this.data.parents]
     });
   }
 
@@ -108,7 +120,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   onSave() {
     if( this.mode == Mode.EDIT ) {
       const controls = this.form.controls;
-      let modifiedFields = {};
+      let modifiedFields: any = {};
       for (const field in controls) {
         if (controls[field].dirty) {
           modifiedFields = {
@@ -116,9 +128,12 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
             [field]: controls[field].value
           }
         }
+        if (field === this.editableFields.ASSIGNED) {
+          modifiedFields.assigned = controls[field].value;
+        }
       }
+      this.closeModal();
       this.firebaseService.updateTicket(this.data?.id, modifiedFields)
-      .then( res => this.closeModal())
       .catch(console.error);
     } else if( this.mode == Mode.CREATE ) {
       this.firebaseService.createTicket(this.form.value, this.project.docId)
@@ -134,12 +149,73 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   }
 
   onEditedField(val: any) {
-    this.form.get(this.editingField)?.patchValue(val);
-    console.log(this.form.value);
+    const field = this.form.get(this.editingField)
+    field?.patchValue(val);
+    this.markAsDirty(field);
   }
 
-  uptadeFilteredTickets() {
-    this.ticketListFiltered = this.ticketList.filter(ticket => !this.parents.map(parent=> parent.code).includes(ticket.code));
+  onShowDropdown(val: EditableFields) {
+    this.activeDropdown = val;
+  }
+
+  onParentSelect(event: string | number) {
+    if (event === '') return;
+    const selectedTicket = this.ticketList.find(ticket => ticket.id === event);
+    if (selectedTicket) {
+      this.parents.push(selectedTicket);
+      const parentsField = this.form.get('parents');
+      parentsField?.patchValue(this.parents.map(parent => parent.id));
+      this.markAsDirty(parentsField);
+      this.updateFilteredTickets();
+    }
+  }
+
+  onParentDelete(event: string) {
+    this.parents = this.parents.filter(parent => parent.id !== event);
+    const parentsField = this.form.get('parents');
+    parentsField?.patchValue(this.parents.map(parent => parent.id));
+    this.markAsDirty(parentsField);
+    this.updateFilteredTickets();
+  }
+
+  onAssignedChanged(event: string | number) {
+    if (event === '') return;
+    const assigned = this.peopleList.find(person => person.id === event);
+    if (assigned) {
+      this.assigned = {
+        name: assigned.name,
+        value: assigned.id
+      };
+      this.editingField = EditableFields.NONE;
+      const assignedField = this.form.get('assigned');
+      this.updateFilteredPeople();
+      assignedField?.patchValue(assigned);
+      this.markAsDirty(assignedField);
+      this.updateFilteredPeople();
+    }
+  }
+
+  updateFilteredTickets() {
+    this.ticketListFiltered = this.ticketList
+      .filter(ticket => !this.parents.map(parent=> parent.id).includes(ticket.id) && ticket.id !== this.data.id)
+      .map(ticket => ({
+        name: ticket.code + ' - ' + ticket.title,
+        value: ticket.id,
+      }));
+  }
+
+  updateFilteredPeople() {
+    this.filteredPeople = this.peopleList
+    .filter(person => person.id !== this.assigned?.id)
+    .map(person => ({
+      name: person.name,
+      value: person.id
+    }));
+  }
+
+  markAsDirty(field: AbstractControl<any, any> | null) {
+    field?.markAsDirty({onlySelf: true});
+    this.form.markAsDirty();
   }
 
   ngOnDestroy() {

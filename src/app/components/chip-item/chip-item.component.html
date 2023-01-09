@@ -1,0 +1,24 @@
+
+<li class="chip">
+    <div class="chip-content">
+        <span class="material-symbols-outlined">
+            more_vert
+        </span>
+        <span>
+            {{text}}
+        </span>
+        <span class="material-symbols-outlined aligned_right" (click)="onDeleteClick()">
+            delete
+        </span>
+    </div>
+    <div class="chip-confirmation" [class.visible]="confirmationVisible">
+        <div>
+            <span class="material-symbols-outlined"> warning </span>
+            {{confirmation}}
+        </div>
+        <div>
+            <button type="button" (click)="confirmDelete()">Confirm</button>
+            <button type="button" (click)="cancelDelete()">Cancel</button>
+        </div>
+    </div>
+</li>

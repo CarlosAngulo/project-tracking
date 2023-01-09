@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { cardProps } from 'src/app/cards/card/card.props';
 import { Iconstraints, INode} from 'src/app/interfaces/nodes.inteface';

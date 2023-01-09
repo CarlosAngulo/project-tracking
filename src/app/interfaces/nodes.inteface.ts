@@ -5,6 +5,15 @@ export const ImportType = {
     csv: <TImportType> 'CSV'
 };
 
+export interface IPerson {
+    id: string;
+    name: string;
+    active?: boolean;
+    companies?: string[];
+    projects?: string[];
+    roles?: string[];
+}
+
 export interface IProject {
     docId: string;
     leader: string;
@@ -15,7 +24,7 @@ export interface IProject {
 export interface INode {
     id: string;
     title?: string;
-    code: string;
+    code?: string;
     link?: string;
     description?: string;
     status: INodeStatus;
@@ -23,7 +32,7 @@ export interface INode {
     effort?: IRoles[];
     parents: string[];
     treeParents?: string[];
-    asignee: IDeveloper;
+    assigned?: any;
     position: {x: number, y: number};
     level: number;
     index: number;
@@ -45,7 +54,7 @@ export interface INode {
 }
   
 export interface IRelativesPos {
-    code: string;
+    id: string;
     x: number;
     y: number;
     arrow?: {

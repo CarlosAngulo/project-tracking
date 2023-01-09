@@ -17,9 +17,7 @@ export class ProjectService {
 
     constructor(
         readonly firebaseService: FirebaseService  
-    ){
-        this.loadProjects();
-    }
+    ){}
 
     set project(project: IProject) {
         this._project.next(project);
@@ -34,15 +32,22 @@ export class ProjectService {
         return this.project$;
     }
 
-    loadProjects() {
-        this.firebaseService.getProjects()
-        .subscribe((projects) => {
-            this.projects = projects;
-            this._projects.next(projects);
-        });
+    getProjectsByCompany(companyIDs: string[]) {
+        return this.firebaseService.getProjecsByCompany(companyIDs)
+        .pipe(
+            map( projects => projects.flat()),
+            tap( projects => {
+                this.projects = projects;
+                this._projects.next(projects)
+            })
+        )
     }
 
     getProjects(): Observable<any[]>{
+        return this.projects$;
+    }
+    
+    getProjectsByID(projectIDs:string[]): Observable<any[]>{
         return this.projects$;
     }
 
@@ -54,7 +59,7 @@ export class ProjectService {
         const tickets: INode[] = project?.tickets || [];
         return combineLatest([
           this.firebaseService.getPeopleByID([project.leader]),
-          this.firebaseService.getTicketsChunk(tickets.map(ticket => ticket.id))
+          this.firebaseService.getTickets(tickets.map(ticket => ticket.id))
         ])
         .pipe(
             map( res => {

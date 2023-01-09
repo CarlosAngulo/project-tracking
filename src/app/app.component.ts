@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, switchMap, takeUntil } from 'rxjs';
+import { map, Subject, switchMap, takeUntil } from 'rxjs';
 import { IProject } from './interfaces/nodes.inteface';
+import { CompanyService } from './services/company/company.service';
 import { NodeTreeService } from './services/nodetree.service';
+import { PeopleService } from './services/people/people.service';
 import { FirebaseService } from './services/project-loader/firebase.service';
 import { ProjectService } from './services/project-loader/project.service';
 import { TicketService } from './services/tickets/ticket.service';
@@ -16,12 +18,15 @@ export class AppComponent implements OnDestroy, OnInit{
   isDetailPanelOpen = false;
   projects: any[] = [];
   project!: IProject;
+  currentCompanyID = "frCRG0OZ2ytX2GvgYk50";
   private unsub$ = new Subject<void>();
 
   constructor(
     private nodeTreeService: NodeTreeService,
     private ticketService: TicketService,
     private projectService: ProjectService,
+    private companyService: CompanyService,
+    private peopleService: PeopleService,
     readonly firebaseService: FirebaseService  
   ) {}
 
@@ -33,6 +38,27 @@ export class AppComponent implements OnDestroy, OnInit{
       this.showLoader = false;
     }
 
+    this.companyService.loadCompanies()
+    .pipe(
+      takeUntil(this.unsub$),
+      switchMap((companies: any[]) => {
+        const kinesso = companies.find(company => company.docId === this.currentCompanyID);
+        return this.companyService.loadCompany(kinesso.docId);
+      }),
+      switchMap((company:any) => {
+        return this.peopleService.loadPeople(this.companyService.company.people);
+      }),
+      switchMap((people:any) => {
+        return this.projectService.getProjectsByCompany(this.companyService.company.projects);
+      })
+    )
+    .subscribe(projects => {
+      // console.log('company', this.companyService.company);
+      // console.log('people', this.peopleService.people);
+      // console.log('res', projects);
+      this.projects = projects;
+    })
+
     this.nodeTreeService.isLoadWindowOpen()
     .pipe(takeUntil(this.unsub$))
     .subscribe(res => this.showLoader = res);
@@ -42,11 +68,6 @@ export class AppComponent implements OnDestroy, OnInit{
     .subscribe((res:boolean) => {
       this.isDetailPanelOpen = res;
     });
-
-    this.projectService.getProjects()
-    .subscribe( projects => {
-      this.projects = projects
-    })
   }
 
   loadProject(projectID: string) {
@@ -57,7 +78,7 @@ export class AppComponent implements OnDestroy, OnInit{
     .subscribe(
       (project: any) => {
         this.onShowLoader(false);
-        this.nodeTreeService.loadProject(project)
+        this.nodeTreeService.loadProject(project, this.peopleService.people)
         this.onShowLoader(false);
       }
     )

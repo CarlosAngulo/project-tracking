@@ -21,7 +21,10 @@ export class TicketListComponent implements OnDestroy {
     nodeTreeService.getNodeTree()
     .pipe(takeUntil(this.unsub$))
     .subscribe((nodeTree: INode[]) => {
-      this.ticketList = nodeTree;
+      this.ticketList = nodeTree.map(node => ({
+        ...node,
+        parents: node.parents.map(parent => nodeTree.find(item => item.id === parent)?.code || '')
+      }))
     })
   }
 

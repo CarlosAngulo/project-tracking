@@ -60,7 +60,6 @@ export class DropdownComponent implements ControlValueAccessor {
       this.onElementClick(0);
     }
   }
-
   isActive = false;
   selectedIndex: number = 0;
   selectedValue: string | number = this.defaultOption;

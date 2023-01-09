@@ -21,6 +21,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { environment } from '../environments/environment';
 import { TicketDetailComponent } from './components/ticket-detail/ticket-detail.component';
 import { FirebaseService } from './services/project-loader/firebase.service';
+import { ChipItemComponent } from './components/chip-item/chip-item.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { FirebaseService } from './services/project-loader/firebase.service';
     MenuComponent,
     HeaderComponent,
     TicketListComponent,
-    TicketDetailComponent
+    TicketDetailComponent,
+    ChipItemComponent
   ],
   imports: [
     BrowserModule,

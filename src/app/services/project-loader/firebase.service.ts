@@ -13,12 +13,24 @@ export class FirebaseService {
 
     constructor(private firestore: AngularFirestore){}
 
-    getProjects(): Observable<any> {
+    getAllProjects(): Observable<any> {
         return this.firestore.collection('epics').valueChanges({ idField: 'docId' });
     }
     
     getProject(projectID: string): Observable<any> {
         return this.firestore.doc(`epics/${projectID}`).valueChanges({ idField: 'docId' });
+    }
+
+    getProjectsByID(projectIDs: string[]) {
+        return this.firestore.collection('epics', ref => ref
+            .where( firebase.firestore.FieldPath.documentId() , 'in', projectIDs))
+            .valueChanges({ idField: 'docId' }
+        );
+    }
+
+    getProjecsByCompany(projectIDs: string[]) {
+        const chunks = this.sliceIntoChunks(projectIDs, 10);
+        return combineLatest(chunks.map(chunk => this.getProjectsByID(chunk)))
     }
 
     addTicketsToProject(projectID: string, tickets: string[]): Promise<any> {
@@ -30,9 +42,19 @@ export class FirebaseService {
             tickets: firebase.firestore.FieldValue.arrayUnion(ticket)
         })
     }
+
+    // Company
+    getCompanies() {
+        return this.firestore.collection('companies').valueChanges({ idField: 'docId' });
+    }
+    
+    getCompany(companyID:string) {
+        return this.firestore.doc(`companies/${companyID}`).valueChanges({ idField: 'docId' });
+    }
     // People
-    getPeople(): Observable<any> {
-        return this.firestore.collection('people').valueChanges();
+    getPeople(personIDs: string[]) {
+        const chunks = this.sliceIntoChunks(personIDs, 10);
+        return combineLatest(chunks.map(chunk => this.getPeopleByID(chunk)))
     }
 
     getPeopleByID(personIDs: string[]) {
@@ -44,7 +66,7 @@ export class FirebaseService {
     }
 
     // Tickets
-    getTicketsChunk(ticketIDs: string[]) {
+    getTickets(ticketIDs: string[]) {
         const chunks = this.sliceIntoChunks(ticketIDs, 10);
         return combineLatest(chunks.map(chunk => this.getTicketsByID(chunk)))
     }
@@ -61,7 +83,6 @@ export class FirebaseService {
         return this.firestore.collection<DocumentData>('tickets').add(node)
         .then(
             (res:any) => {
-                console.log(projectID, res)
                 return this.addTicketToProject(projectID, res)
             }
         );

@@ -147,8 +147,8 @@ export class JsonLoaderComponent implements OnInit {
   }
 
   jsonToCSV(project: IProject): string {
-    const header = 'CODE;ASIGNEE;TITLE;ESTIMATION;STATUS;EFFORT;PARENTS;MVP';
-    const csv = project.tickets.map(ticket => `${ticket.code};${ticket.asignee.name},${ticket.asignee.role.join(',')};${ticket.title};${ticket.estimation};${ticket.status};${ticket.effort?.join(',')};${ticket.parents.join(',')};${ticket.mvp.id},${ticket.mvp.name}`
+    const header = 'CODE;ASSIGNED;TITLE;ESTIMATION;STATUS;EFFORT;PARENTS;MVP';
+    const csv = project.tickets.map(ticket => `${ticket.code};${ticket.assigned.name},${ticket.assigned.role.join(',')};${ticket.title};${ticket.estimation};${ticket.status};${ticket.effort?.join(',')};${ticket.parents.join(',')};${ticket.mvp.id},${ticket.mvp.name}`
     );
     return header + '\n' + csv.join('\n');
   }

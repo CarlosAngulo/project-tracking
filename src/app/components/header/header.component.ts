@@ -55,7 +55,6 @@ export class HeaderComponent implements OnDestroy {
   }
   
   onCreateNode() {
-    console.log('nuevo');
     this.ticketService.setNodeData();
   }
 

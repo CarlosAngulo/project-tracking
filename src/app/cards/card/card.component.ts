@@ -132,7 +132,7 @@ export class CardComponent implements OnInit, AfterViewInit {
   onNodeClick() {}
 
   onTreeClick() {
-    this.selectNode.next(this.nodeData.code);
+    this.selectNode.next(this.nodeData.id);
   }
 
   onInfoClick() {

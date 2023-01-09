@@ -91,9 +91,21 @@ h5, p {
             display: flex;
             gap: 4px;
             align-items: center;
+            &_right {
+                justify-self: flex-end;
+                margin-left: auto;
+            }
         }
-        &_expand {
+        .material-symbols-outlined {
             font-size: 16px;
+        }
+        &_dropdown {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            padding: 0 4px;
+            margin: 4px 0px 8px 8px;
+            display: block;
+            width: 100%;
         }
     }
     &_paragraph, &_textarea, &_title {
@@ -141,22 +153,9 @@ h5, p {
     margin: 0 0 0 8px;
     padding: 0;
     li {
-        background-color: #f4edff;
-        padding: 6px;
-        border-radius: 4px;
         margin: 0 0 4px 0;
-        display: flex;
-        gap: 8px;
-        cursor: pointer;
-        &:hover {
-            background-color: #e9dbff;
-        }
         &:last-child {
             margin: 0;
-        }
-        .material-symbols-outlined {
-            font-size: 16px;
-            color: rgba(0,0,0,0.4);
         }
     }
 }

@@ -14,7 +14,7 @@ export class Node implements INode {
   estimation = 0;
   effort = [];
   parents = [];
-  asignee = { name: '', role: [] };
+  assigned = { name: '', id: '' };
   children = [];
   order = 0;
   enabled = true;
