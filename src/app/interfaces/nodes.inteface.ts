@@ -1,3 +1,5 @@
+import { DocumentReference } from "@angular/fire/compat/firestore";
+
 type TImportType = 'JSON' | 'CSV';
 
 export const ImportType = {
@@ -14,6 +16,12 @@ export interface IPerson {
     roles?: string[];
 }
 
+export interface IRawProject {
+    docId: string;
+    leader: string;
+    name: string;
+    tickets: DocumentReference[];
+}
 export interface IProject {
     docId: string;
     leader: string;

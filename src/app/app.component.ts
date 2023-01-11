@@ -14,9 +14,10 @@ import { TicketService } from './services/tickets/ticket.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnDestroy, OnInit{
-  showLoader = true;
+  showProjectLoader = true;
   isDetailPanelOpen = false;
   projects: any[] = [];
+  people: any[] = [];
   project!: IProject;
   currentCompanyID = "frCRG0OZ2ytX2GvgYk50";
   private unsub$ = new Subject<void>();
@@ -35,7 +36,7 @@ export class AppComponent implements OnDestroy, OnInit{
     this.nodeTreeService.loadFromLocalStorage();
 
     if (localStorage.getItem('project')) {
-      this.showLoader = false;
+      this.showProjectLoader = false;
     }
 
     this.companyService.loadCompanies()
@@ -57,11 +58,12 @@ export class AppComponent implements OnDestroy, OnInit{
       // console.log('people', this.peopleService.people);
       // console.log('res', projects);
       this.projects = projects;
+      this.people = this.peopleService.people;
     })
 
     this.nodeTreeService.isLoadWindowOpen()
     .pipe(takeUntil(this.unsub$))
-    .subscribe(res => this.showLoader = res);
+    .subscribe(res => this.showProjectLoader = res);
 
     this.ticketService.isDetailsPanelOpen()
     .pipe(takeUntil(this.unsub$))
@@ -78,14 +80,13 @@ export class AppComponent implements OnDestroy, OnInit{
     .subscribe(
       (project: any) => {
         this.onShowLoader(false);
-        this.nodeTreeService.loadProject(project, this.peopleService.people)
-        this.onShowLoader(false);
+        // this.nodeTreeService.loadProject(project, this.peopleService.people)
       }
     )
   }
   
   onShowLoader(event:boolean) {
-    this.showLoader = event;
+    this.showProjectLoader = event;
   }
 
   ngOnDestroy() {

@@ -9,11 +9,11 @@
                             class="field_paragraph"
                             [class]="mode"
                             formControlName="code"
-                            placeholder="code"
+                            placeholder="Ticket Code"
                             [class.field_error]="form.get('code')?.status?.includes('INVALID') && form.get('code')?.touched">
                     </ng-container>
                     <ng-template #codeEdit>
-                        <span class="field_paragraph">{{data.code}}</span>
+                        <span class="field_paragraph" [class.field_error]="form.get('code')?.status?.includes('INVALID') && form.get('code')?.touched">{{form.get('code')?.value}}</span>
                         <span class="material-symbols-outlined field_editable_icon"> edit </span>
                     </ng-template>
                 </div>
@@ -24,6 +24,7 @@
                             class="field_paragraph"
                             type="number"
                             [class]="mode"
+                            placeholder="estimation"
                             formControlName="estimation"
                             [class.field_error]="form.get('estimation')?.status?.includes('INVALID') && form.get('estimation')?.touched">
                     </ng-container>
@@ -38,10 +39,9 @@
                         <app-dropdown
                             [class]="mode"
                             formControlName="status" 
-                            (onSelect)="onEditedField($event)"
+                            (onSelect)="onStatusChange($event)"
                             [defaultOption]="form.get(editableFields.STATUS)?.value"
-                            [options]="statuses"
-                            [clickable]="true">
+                            [options]="statuses">
                         </app-dropdown>
                     </ng-container>
                     <ng-template #statusEdit>
@@ -63,10 +63,11 @@
                             type="text"
                             [class]="mode"
                             formControlName="title"
+                            placeholder="Ticket title"
                             [class.field_error]="form.get('title')?.status?.includes('INVALID') && form.get('title')?.touched"/>
                     </ng-container>
                     <ng-template #titleEdit>
-                        <h3 class="field_title">{{data.title}}</h3>
+                        <h3 class="field_title">{{form.get('title')?.value}}</h3>
                         <span class="material-symbols-outlined field_editable_icon"> edit </span>
                     </ng-template>
                 </div>
@@ -144,7 +145,7 @@
                                 </textarea>
                             </ng-container>
                             <ng-template #descriptionEdit>
-                                <div class="field_textarea" [innerHTML]="data.description">
+                                <div class="field_textarea" [innerHTML]="form.get('description')?.value">
                                 </div>
                                 <span class="material-symbols-outlined field_editable_icon"> edit </span>
                             </ng-template>
@@ -152,7 +153,16 @@
                 </section>
             </div>
             <div class="modal-window-footer">
-                <input type="submit" value="save" [disabled]="!form.dirty || !form.valid">
+                <div class="btn-section-between">
+                    <button class="btn btn-alert" type="button" (click)="moveToTrash()" *ngIf="mode !== modes.CREATE">
+                        <span class="material-symbols-outlined">delete</span>
+                        Move to trash
+                    </button>
+                    <div class="btn-section">
+                        <input class="btn btn-primary" type="button" value="cancel">
+                        <input class="btn btn-primary" type="submit" value="save" [disabled]="!form.dirty || !form.valid">
+                    </div>
+                </div>
             </div>
         </ng-container>
     </div>

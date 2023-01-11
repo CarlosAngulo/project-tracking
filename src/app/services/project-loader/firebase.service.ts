@@ -101,6 +101,13 @@ export class FirebaseService {
     updateTicket(ticketID: string | undefined, data: Partial<firebase.firestore.DocumentData>): Promise<any> {
         return this.firestore.collection<DocumentData>('tickets').doc(ticketID).update(data);
     }
+
+    deleteTicketFromProject(ticketRef:DocumentReference<DocumentData>, projectID: string): Promise<any> {
+        console.log(ticketRef, projectID)
+        return this.firestore.doc(`epics/${projectID}`).update({
+            tickets: firebase.firestore.FieldValue.arrayRemove(ticketRef)
+        })
+    }
   
     // https://console.firebase.google.com/project/kinesso-project-tracking/firestore/data/~2Fpeople~2F8GjRLn6nSHTCtnzpO6j4?hl=es-419
     // https://github.com/angular/angularfire/blob/master/docs/install-and-setup.md

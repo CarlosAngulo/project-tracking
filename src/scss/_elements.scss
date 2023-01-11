@@ -1,0 +1,31 @@
+@import './variables';
+
+.btn {
+    background-color: $main_accent;
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+    padding: 8px 12px;
+    border: medium none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    &:hover {
+        background-color: transparentize($color: $main_accent, $amount: 0.2);
+    }
+    &[disabled] {
+        opacity: 0.6;
+        cursor: default;
+        &:hover {
+            background-color: $main_accent;
+        }
+    }
+    &-alert {
+        background-color: $alert_accent;
+    }
+    .material-symbols-outlined {
+        font-size: 18px;
+    }
+}

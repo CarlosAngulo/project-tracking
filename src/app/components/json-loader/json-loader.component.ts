@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { DocumentData, DocumentReference } from '@angular/fire/compat/firestore';
-import { forkJoin, combineLatest } from 'rxjs';
-import { INode, IProject } from 'src/app/interfaces/nodes.inteface';
+import { IProject } from 'src/app/interfaces/nodes.inteface';
 import { CSVParserService } from 'src/app/services/csv-parser.service';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
 import { FirebaseService } from 'src/app/services/project-loader/firebase.service';
+import { IDropDown } from '../dropdown/dropdown.component';
 import { PROJECT } from './projects';
 
 type AllowedExtensions = fileExtensions.CSV | fileExtensions.JSON;
@@ -34,7 +33,7 @@ export class JsonLoaderComponent implements OnInit {
   fileExtensions = fileExtensions;
   uploadStatus = 'default';
   project!: IProject;
-  projectNames!: {name: string, value: string}[];
+  projectNames!: IDropDown[];
   selectedProjectID!: string;
 
   loadProjectMessages = {

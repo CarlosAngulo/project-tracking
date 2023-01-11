@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
+import { DocumentData, DocumentReference } from '@angular/fire/compat/firestore';
 import { combineLatest, map, Observable, Subject, tap } from 'rxjs';
-import { INode, IProject } from 'src/app/interfaces/nodes.inteface';
+import { INode, IProject, IRawProject } from 'src/app/interfaces/nodes.inteface';
+import { NodeTreeService } from '../nodetree.service';
+import { PeopleService } from '../people/people.service';
 import { FirebaseService } from './firebase.service';
 
 @Injectable({
@@ -15,8 +18,12 @@ export class ProjectService {
     private _projects: Subject<any[]> = new Subject();
     private projects$: Observable<any[]> = this._projects.asObservable();
 
+    private _ticketsRef!: DocumentReference[];
+
     constructor(
-        readonly firebaseService: FirebaseService  
+        readonly firebaseService: FirebaseService,
+        private nodeTreeService: NodeTreeService,
+        private peopleService: PeopleService
     ){}
 
     set project(project: IProject) {
@@ -26,6 +33,14 @@ export class ProjectService {
 
     get project(): IProject {
         return this.currentProject;
+    }
+
+    get ticketsRef(): DocumentReference<DocumentData>[] {
+        return this._ticketsRef;
+    }
+
+    getTicketRefById(ticketID:string): DocumentReference<DocumentData> | undefined {
+        return this._ticketsRef.find(ticketRef => ticketRef.id === ticketID);
     }
 
     getProject(): Observable<IProject> {
@@ -55,11 +70,11 @@ export class ProjectService {
         return this.project$;
     }
 
-    loadProjectData(project: IProject) {
-        const tickets: INode[] = project?.tickets || [];
+    loadProjectData(project: IRawProject) {
+        this._ticketsRef = project?.tickets || [];
         return combineLatest([
           this.firebaseService.getPeopleByID([project.leader]),
-          this.firebaseService.getTickets(tickets.map(ticket => ticket.id))
+          this.firebaseService.getTickets(this._ticketsRef.map(ticket => ticket.id))
         ])
         .pipe(
             map( res => {
@@ -69,9 +84,18 @@ export class ProjectService {
                     name: project.name,
                     tickets: res[1].flat()
                 }
-                this.project = projectSetup;
-                return projectSetup
+                this.nodeTreeService.loadProject(projectSetup, this.peopleService.people)
+                this.project = {
+                    ...projectSetup,
+                    tickets: this.nodeTreeService.getStaticNodeTree()
+                };
+                return this.project
             })
         );
+    }
+
+    moveTicketToTrash(ticketRef: DocumentReference<DocumentData> | undefined) {
+        if (ticketRef === undefined) return;
+        this.firebaseService.deleteTicketFromProject(ticketRef, this.project.docId)
     }
 }

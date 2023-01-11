@@ -22,6 +22,7 @@ import { environment } from '../environments/environment';
 import { TicketDetailComponent } from './components/ticket-detail/ticket-detail.component';
 import { FirebaseService } from './services/project-loader/firebase.service';
 import { ChipItemComponent } from './components/chip-item/chip-item.component';
+import { ProjectLoaderComponent } from './components/project-loader/project-loader.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ChipItemComponent } from './components/chip-item/chip-item.component';
     HeaderComponent,
     TicketListComponent,
     TicketDetailComponent,
-    ChipItemComponent
+    ChipItemComponent,
+    ProjectLoaderComponent
   ],
   imports: [
     BrowserModule,

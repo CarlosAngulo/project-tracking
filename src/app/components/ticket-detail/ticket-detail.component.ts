@@ -75,7 +75,8 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     this.ticketService.getNodeData$()
     .pipe(takeUntil(this.unsub$))
     .subscribe((node: INode) => {
-      this.setupData(this.projectService.project, node)
+      this.onEditField(undefined, EditableFields.NONE);
+      this.setupData(this.projectService.project, node);
     });
   }
 
@@ -84,7 +85,8 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     this.ticketList = project.tickets.map(ticket => ({
       code: ticket.code,
       id: ticket.id,
-      title: ticket.title
+      title: ticket.title,
+      childrenTree: ticket.childrenTree
     }));
     this.mode = this.ticketService.mode;
     this.data = node;
@@ -122,14 +124,14 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
       const controls = this.form.controls;
       let modifiedFields: any = {};
       for (const field in controls) {
-        if (controls[field].dirty) {
+        if (controls[field].dirty === true) {
           modifiedFields = {
             ...modifiedFields,
             [field]: controls[field].value
           }
-        }
-        if (field === this.editableFields.ASSIGNED) {
-          modifiedFields.assigned = controls[field].value;
+          if (field === this.editableFields.ASSIGNED) {
+            modifiedFields.assigned = controls[field].value.id;
+          }
         }
       }
       this.closeModal();
@@ -144,14 +146,15 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  onEditField(evt: MouseEvent, field: EditableFields) {
+  onEditField(evt: MouseEvent | undefined, field: EditableFields) {
     this.editingField = field;
   }
 
-  onEditedField(val: any) {
-    const field = this.form.get(this.editingField)
-    field?.patchValue(val);
-    this.markAsDirty(field);
+  onStatusChange(status: string | number) {
+    this.editingField = EditableFields.NONE;
+    const statusField = this.form.get('status');
+    statusField?.patchValue(status);
+    this.markAsDirty(statusField);
   }
 
   onShowDropdown(val: EditableFields) {
@@ -196,8 +199,21 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   }
 
   updateFilteredTickets() {
+    // console.log('parents:', this.parents.map(t=>t.code))
+    // console.log('ancestors', this.ticketList.filter(ticket => ticket.childrenTree?.flat().includes(this.data.id)).map(t=>t.code))
+    // console.log('childrentree', this.ticketList.find(ticket => ticket.code === this.data.code)?.childrenTree?.flat())
+
     this.ticketListFiltered = this.ticketList
-      .filter(ticket => !this.parents.map(parent=> parent.id).includes(ticket.id) && ticket.id !== this.data.id)
+      .filter(ticket => 
+        // removes this ticket
+        ticket.id !== this.data.id &&
+        // removes direct parents
+        !this.parents.map(t => t.id).includes(ticket.id) &&
+        // removes ancestors
+        (ticket.id && !this.ticketList.find(ticket => ticket.id === this.data.id)?.childrenTree?.flat().includes(ticket.id)) &&
+        // removes childrenTree
+        !ticket.childrenTree?.flat().includes(this.data.id)
+      )
       .map(ticket => ({
         name: ticket.code + ' - ' + ticket.title,
         value: ticket.id,
@@ -221,6 +237,11 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsub$.next();
     this.unsub$.unsubscribe();
+  }
+
+  moveToTrash() {
+    this.closeModal();
+    this.projectService.moveTicketToTrash(this.projectService.getTicketRefById(this.data.id));
   }
 
 }

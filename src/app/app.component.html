@@ -2,10 +2,11 @@
     <app-header></app-header>
     <router-outlet></router-outlet>
     <app-ticket-detail *ngIf="isDetailPanelOpen"></app-ticket-detail>
-    <app-json-loader 
-        *ngIf="showLoader"
+    <app-project-loader 
+        *ngIf="showProjectLoader"
         [projects]="projects"
+        [people]="people"
         (onCancel)="onShowLoader($event)"
         (onLoad)="loadProject($event)"
-    ></app-json-loader>
+    ></app-project-loader>
 </div>

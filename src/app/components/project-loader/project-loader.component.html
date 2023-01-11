@@ -1,0 +1,62 @@
+<div class="overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>{{title}}</h2>
+            <button
+                [disabled]="!projectLoaded"
+                (click)="onClose()"
+                class="modal-close material-symbols-outlined">
+                close
+            </button>
+        </div>
+        <div class="modal-body">
+            <ng-container *ngIf="mode === modes.LOAD; else createProject">
+                <div class="projects">
+                    <ng-container *ngIf="projectNames.length > 0; else projects">
+                        <ul>
+                            <li *ngFor="let project of projectNames" (click)="onLoadProject(project.value)">
+                                <span class="material-symbols-outlined">
+                                    family_history
+                                </span>
+                                {{project.name}}
+                            </li>
+                        </ul>
+                    </ng-container>
+                    <ng-template #projects>
+                        Loading projects...
+                    </ng-template >
+                </div>
+                <div class="file-container">
+                    <div class="file-button" (click)="goToView(modes.NEW)">
+                        <img class="file-img" src="assets/file_001.png" alt="">
+                        <p>Create a new project</p>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-template #createProject>
+                <form [formGroup]="form" (ngSubmit)="onCreateNewProject()">
+                    <div class="new_project">
+                        <p class="new_project_label">Project name</p>
+                        <input class="new_project_input" type="text" placeholder="Project Name" formControlName="title">
+                        <p class="new_project_label">Please select a leader for this project.</p>
+                        <app-dropdown class="new_project_dropdown" [defaultOption]="'None'" [options]="peopleNames" (onSelect)="selectProjectAssigned($event)"></app-dropdown>
+                    </div>
+                </form>
+            </ng-template>
+        </div>
+        <div class="modal-footer">
+            <div class="btn-section">
+                <button class="btn btn_primary" (click)="onCancelClick()" type="button">Cancel</button>
+                <button
+                    class="btn btn_primary"
+                    [disabled]="!form.dirty || !form.valid"
+                    *ngIf="mode === modes.NEW"
+                    (click)="onCreateNewProject()"
+                    type="submit">
+                    Create
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>

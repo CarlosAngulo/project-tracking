@@ -51,13 +51,13 @@ export class DropdownComponent implements ControlValueAccessor {
     if (this._defaultOption) {
       const defaultOptIndex = this._options.map(opt => opt.name).indexOf(this._defaultOption.name);
       if (defaultOptIndex >= 0) {
-        this.onElementClick(defaultOptIndex);
-      } else {
+        this.selectElement(defaultOptIndex);
+      } else if(this._defaultOption.name !== '' && this._defaultOption.name !== undefined) {
         this._options.unshift(this._defaultOption);
-        this.onElementClick(0);
+        this.selectElement(0);
       }
     } else {
-      this.onElementClick(0);
+      this.selectElement(0);
     }
   }
   isActive = false;
@@ -71,13 +71,17 @@ export class DropdownComponent implements ControlValueAccessor {
     return 'name' in object && 'value' in object;
   }
 
-  onElementClick(index: number) {
+  selectElement(index: number) {
     if (index < 0 || this._options.length === 0) return;
     this.selectedIndex = index;
     this.selectedValue = this._options[index]?.name;
-    this.onSelect.next(this._options[index].value);
     this.isActive = false;
-    // this.propagateChange(this.selectedValue)
+  }
+
+  onElementClick(index: number) {
+    if (index < 0 || this._options.length === 0) return;
+    this.selectElement(index);
+    this.onSelect.next(this._options[index].value);
   }
 
   onMouseOver() {

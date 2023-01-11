@@ -1,4 +1,5 @@
 @import '../../../scss/variables';
+@import '../../../scss/elements';
 
 h5, p {
     margin: 0;
@@ -69,6 +70,12 @@ h5, p {
             &.create {
                 border: 1px solid rgba(0,0,0,0.2);
                 border-radius: 4px;
+                &.field_error {
+                    border-color: red;
+                }
+            }
+            &:focus {
+                border-radius: 4px;
             }
         }
     }
@@ -125,7 +132,12 @@ h5, p {
         padding: 8px;
     }
     &_error {
-        border-color: red;
+        border-color: $alert_accent !important;
+        + .field_editable_icon {
+            display: flex;
+            color: white;
+            background-color: $alert_accent;
+        }
     }
 }
 
@@ -157,5 +169,15 @@ h5, p {
         &:last-child {
             margin: 0;
         }
+    }
+}
+
+.btn-section {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    &-between {
+        display: flex;
+        justify-content: space-between;
     }
 }

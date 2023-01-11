@@ -16,7 +16,7 @@
         </div>
         <div class="partial">
             <div *ngFor="let status of statuses" [class]="status.name | lowercase" [style.width]="status[selectBy] * 100 / total[selectBy] + '%'">
-                {{status[selectBy] * 100 / total[selectBy]| number: '1.1-1'}} %
+                {{status[selectBy]}} : {{status[selectBy] * 100 / total[selectBy]| number: '1.1-1'}} %
             </div>
         </div>
     </div>
