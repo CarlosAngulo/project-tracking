@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DocumentData, DocumentReference } from '@angular/fire/compat/firestore';
-import { combineLatest, map, Observable, Subject, tap } from 'rxjs';
+import { combineLatest, map, Observable, of, Subject, tap } from 'rxjs';
 import { INode, IProject, IRawProject } from 'src/app/interfaces/nodes.inteface';
 import { NodeTreeService } from '../nodetree.service';
 import { PeopleService } from '../people/people.service';
@@ -95,7 +95,7 @@ export class ProjectService {
     }
 
     moveTicketToTrash(ticketRef: DocumentReference<DocumentData> | undefined) {
-        if (ticketRef === undefined) return;
-        this.firebaseService.deleteTicketFromProject(ticketRef, this.project.docId)
+        if (ticketRef === undefined) return of({});
+        return this.firebaseService.deleteTicketFromProject(ticketRef, this.project.docId)
     }
 }

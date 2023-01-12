@@ -98,7 +98,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
       }
     });
     this.assigned = this.data?.assigned;
-    this.updateFilteredTickets();
+    this.updateFilteredParentList();
     this.updateFilteredPeople()
     this.setupForm();
   }
@@ -169,7 +169,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
       const parentsField = this.form.get('parents');
       parentsField?.patchValue(this.parents.map(parent => parent.id));
       this.markAsDirty(parentsField);
-      this.updateFilteredTickets();
+      this.updateFilteredParentList();
     }
   }
 
@@ -178,7 +178,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     const parentsField = this.form.get('parents');
     parentsField?.patchValue(this.parents.map(parent => parent.id));
     this.markAsDirty(parentsField);
-    this.updateFilteredTickets();
+    this.updateFilteredParentList(event);
   }
 
   onAssignedChanged(event: string | number) {
@@ -198,12 +198,13 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateFilteredTickets() {
+  updateFilteredParentList(ticketToAdd?: string) {
     // console.log('parents:', this.parents.map(t=>t.code))
     // console.log('ancestors', this.ticketList.filter(ticket => ticket.childrenTree?.flat().includes(this.data.id)).map(t=>t.code))
     // console.log('childrentree', this.ticketList.find(ticket => ticket.code === this.data.code)?.childrenTree?.flat())
 
     this.ticketListFiltered = this.ticketList
+    // TODO: Remove siblings
       .filter(ticket => 
         // removes this ticket
         ticket.id !== this.data.id &&
@@ -218,6 +219,20 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
         name: ticket.code + ' - ' + ticket.title,
         value: ticket.id,
       }));
+    
+    if (ticketToAdd) {
+      this.ticketListFiltered = this.ticketListFiltered.concat(
+        this.ticketList
+        .filter(ticket => 
+          ticket.id === ticketToAdd ||
+          ticket.childrenTree?.flat().includes(ticketToAdd)
+        )
+        .map( ticket => ({
+            name: ticket.code + ' - ' + ticket.title,
+            value: ticket.id,
+        }))
+      )
+    }
   }
 
   updateFilteredPeople() {
@@ -241,7 +256,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
 
   moveToTrash() {
     this.closeModal();
-    this.projectService.moveTicketToTrash(this.projectService.getTicketRefById(this.data.id));
+    this.ticketService.moveToTrash(this.projectService.getTicketRefById(this.data.id), this.data.children)
+    .subscribe();
   }
-
 }

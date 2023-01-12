@@ -152,7 +152,7 @@ export class NodeTreeService {
 
     this.nodeTree = nodeTree;
 
-    console.log(this.nodeTree)
+    // console.log(this.nodeTree)
     // console.log(this.nodeTree.map(n=>n.code))
     
     this._nodeTree.next(nodeTree);

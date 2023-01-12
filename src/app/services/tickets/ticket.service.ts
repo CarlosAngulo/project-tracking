@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { DocumentData, DocumentReference } from '@angular/fire/compat/firestore';
+import { Observable, ObservableInput, of, Subject, switchMap } from 'rxjs';
 import { INode, NodeStatus } from 'src/app/interfaces/nodes.inteface';
+import { FirebaseService } from '../project-loader/firebase.service';
+import { ProjectService } from '../project-loader/project.service';
 
 export enum Mode {
   CREATE = 'create',
@@ -45,6 +48,11 @@ export class TicketService {
   private _showDetailsPanel: Subject<boolean> = new Subject();
   private showDetailsPanel$: Observable<boolean> = this._showDetailsPanel.asObservable();
 
+  constructor(
+    private firebaseService: FirebaseService,
+    private projectService: ProjectService
+  ){}
+
   openDetailsPanel(open: boolean) {
     this._showDetailsPanel.next(open);
   }
@@ -70,5 +78,13 @@ export class TicketService {
 
   get mode(): Mode {
     return this._mode;
+  }
+  
+  moveToTrash(ticket: DocumentReference<DocumentData> | undefined, children: string[]): Observable<any> {
+    if (ticket === undefined) return of({});
+    return this.firebaseService.deleteParentsOnTickets(children, [ticket.id])
+    .pipe(
+      switchMap(res => this.projectService.moveTicketToTrash(ticket))
+    )
   }
 }

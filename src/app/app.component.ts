@@ -54,9 +54,9 @@ export class AppComponent implements OnDestroy, OnInit{
       })
     )
     .subscribe(projects => {
-      // console.log('company', this.companyService.company);
-      // console.log('people', this.peopleService.people);
-      // console.log('res', projects);
+      console.log('company', this.companyService.company);
+      console.log('people', this.peopleService.people);
+      console.log('res', projects);
       this.projects = projects;
       this.people = this.peopleService.people;
     })
@@ -77,12 +77,7 @@ export class AppComponent implements OnDestroy, OnInit{
     .pipe(
       switchMap( res => this.projectService.loadProjectData(res))
     )
-    .subscribe(
-      (project: any) => {
-        this.onShowLoader(false);
-        // this.nodeTreeService.loadProject(project, this.peopleService.people)
-      }
-    )
+    .subscribe((project: any) => this.onShowLoader(false))
   }
   
   onShowLoader(event:boolean) {

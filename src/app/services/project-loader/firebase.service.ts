@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference, DocumentData } from '@angular/fire/compat/firestore';
-import firebase from 'firebase/compat/app';
-import { combineLatest, forkJoin, Observable, switchMap } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { INode } from 'src/app/interfaces/nodes.inteface';
+import firebase from 'firebase/compat/app';
 
 @Injectable({
   providedIn: 'root'
@@ -29,8 +29,8 @@ export class FirebaseService {
     }
 
     getProjecsByCompany(projectIDs: string[]) {
-        const chunks = this.sliceIntoChunks(projectIDs, 10);
-        return combineLatest(chunks.map(chunk => this.getProjectsByID(chunk)))
+        const chunk = this.sliceIntoChunks(projectIDs, 10);
+        return combineLatest(chunk.map(item => this.getProjectsByID(item)))
     }
 
     addTicketsToProject(projectID: string, tickets: string[]): Promise<any> {
@@ -53,8 +53,8 @@ export class FirebaseService {
     }
     // People
     getPeople(personIDs: string[]) {
-        const chunks = this.sliceIntoChunks(personIDs, 10);
-        return combineLatest(chunks.map(chunk => this.getPeopleByID(chunk)))
+        const chunk = this.sliceIntoChunks(personIDs, 10);
+        return combineLatest(chunk.map(item => this.getPeopleByID(item)))
     }
 
     getPeopleByID(personIDs: string[]) {
@@ -67,8 +67,8 @@ export class FirebaseService {
 
     // Tickets
     getTickets(ticketIDs: string[]) {
-        const chunks = this.sliceIntoChunks(ticketIDs, 10);
-        return combineLatest(chunks.map(chunk => this.getTicketsByID(chunk)))
+        const chunk = this.sliceIntoChunks(ticketIDs, 10);
+        return combineLatest(chunk.map(item => this.getTicketsByID(item)))
     }
 
     getTicketsByID(ticketIDs: string[]) {
@@ -98,22 +98,24 @@ export class FirebaseService {
     }
 
     //Update Ticket
+    deleteParentsOnTickets(ticketIDs: string[], parents: string[]) {
+        return combineLatest(ticketIDs.map(ticketID => this.deleteParents(ticketID, parents)))
+    }
+    
+    deleteParents(ticketID: string, parents: string[]) {
+        console.log(ticketID, parents)
+        return this.firestore.doc(`tickets/${ticketID}`).update({
+            parents: firebase.firestore.FieldValue.arrayRemove(...parents)
+        })
+    }
+
     updateTicket(ticketID: string | undefined, data: Partial<firebase.firestore.DocumentData>): Promise<any> {
         return this.firestore.collection<DocumentData>('tickets').doc(ticketID).update(data);
     }
 
     deleteTicketFromProject(ticketRef:DocumentReference<DocumentData>, projectID: string): Promise<any> {
-        console.log(ticketRef, projectID)
         return this.firestore.doc(`epics/${projectID}`).update({
             tickets: firebase.firestore.FieldValue.arrayRemove(ticketRef)
         })
     }
-  
-    // https://console.firebase.google.com/project/kinesso-project-tracking/firestore/data/~2Fpeople~2F8GjRLn6nSHTCtnzpO6j4?hl=es-419
-    // https://github.com/angular/angularfire/blob/master/docs/install-and-setup.md
-    // https://developers.google.com/codelabs/building-a-web-app-with-angular-and-firebase#10
-    // https://github.com/angular/angularfire/blob/master/docs/firestore/querying-collections.md
-    // https://www.makeuseof.com/angular-firebase-complex-queries/
-    // https://www.bezkoder.com/angular-10-firestore-crud-angularfire/
-
 }
