@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { IBlockStatus, NodeStatus } from 'src/app/interfaces/nodes.inteface';
 
 export enum SelectBy {
@@ -13,6 +13,8 @@ export enum SelectBy {
 })
 export class ProgressBarComponent implements OnChanges {
   @Input() statuses: IBlockStatus[] = [];
+  @Output() onStatusSelected: EventEmitter<string> = new EventEmitter();
+  selectedStatus = '';
   completed!: IBlockStatus;
   total!: {
     count: number,
@@ -43,6 +45,11 @@ export class ProgressBarComponent implements OnChanges {
 
   selectType(evt: any) {
     this.selectBy = evt
+  }
+
+  onStatusSelect(status: string) {
+    this.selectedStatus = this.selectedStatus === status ? '' : status;
+    this.onStatusSelected.next(this.selectedStatus);
   }
 
 }

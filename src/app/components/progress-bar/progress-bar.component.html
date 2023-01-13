@@ -8,7 +8,11 @@
                 <span *ngIf="completed">{{completed[selectBy]}} / {{total[selectBy]}} : {{completed[selectBy] * 100 / total[selectBy]| number: '1.0-0'}}</span>%
             </span>
             <div class="convention">
-                <div class="convention-item" *ngFor="let status of statuses">
+                <div 
+                    class="convention-item" 
+                    *ngFor="let status of statuses" 
+                    (click)="onStatusSelect(status.name)"
+                    [class.selected]="selectedStatus === status.name">
                     <span class="dot" [class]="status.name | lowercase"></span>
                     {{status.name | titlecase}}
                 </div>

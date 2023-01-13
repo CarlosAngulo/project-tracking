@@ -10,7 +10,7 @@
         </app-dropdown>
     </div>
     <div class="header-progress">
-        <app-progress-bar [statuses]="progressStatus"></app-progress-bar>
+        <app-progress-bar [statuses]="progressStatus" (onStatusSelected)="statusSelect($event)"></app-progress-bar>
     </div>
 </div>
 

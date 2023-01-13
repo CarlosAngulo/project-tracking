@@ -62,4 +62,8 @@ export class HeaderComponent implements OnDestroy {
     this.unsub$.next();
     this.unsub$.unsubscribe();
   }
+
+  statusSelect(event: string) {
+    this.nodeTreeService.onSelectStatus(event);
+  }
 }

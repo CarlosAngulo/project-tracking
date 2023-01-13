@@ -45,8 +45,13 @@
     color: white;
     flex-grow: 2;
     &-item {
+        opacity: 0.6;
         display: flex;
         align-items: center;
+        cursor: pointer;
+        &:hover, &.selected {
+            opacity: 1;
+        }
     }
     .dot {
         width: 10px;
