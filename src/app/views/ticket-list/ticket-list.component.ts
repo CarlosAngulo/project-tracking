@@ -16,16 +16,20 @@ export class TicketListComponent implements OnDestroy {
     readonly nodeTreeService: NodeTreeService
   ) {
     if (localStorage.getItem('project')) {
-      this.ticketList = nodeTreeService.getStaticNodeTree();
+      this.ticketList = this.parsedNodes(nodeTreeService.getStaticNodeTree());
     }
     nodeTreeService.getNodeTree()
     .pipe(takeUntil(this.unsub$))
     .subscribe((nodeTree: INode[]) => {
-      this.ticketList = nodeTree.map(node => ({
-        ...node,
-        parents: node.parents.map(parent => nodeTree.find(item => item.id === parent)?.code || '')
-      }))
+      this.ticketList = this.parsedNodes(nodeTree);
     })
+  }
+
+  parsedNodes(nodeTree: INode[]){
+    return nodeTree.map(node => ({
+      ...node,
+      parents: node.parents.map(parent => nodeTree.find(item => item.id === parent)?.code || '')
+    }))
   }
 
   ngOnDestroy() {

@@ -9,7 +9,7 @@
                 <th>estimation</th>
                 <th>status</th>
                 <th>effort</th>
-                <th>parents</th>
+                <th class="mw">parents</th>
             </tr>
         </thead>
         <tbody>
@@ -17,7 +17,7 @@
                 <tr [class.selected]="ticket.selected">
                     <td><a [href]="ticket.link" target="_blank">{{ticket.code}}</a></td>
                     <td><ng-container *ngIf="ticket.assigned">
-                        {{ticket.assigned.name | initials}}
+                        {{ticket.assigned.name}}
                     </ng-container></td>
                     <td>{{ticket.title}}</td>
                     <td><ng-container *ngIf="ticket.mvp">
@@ -26,7 +26,7 @@
                     <td>{{ticket.estimation}}</td>
                     <td>{{ticket.status}}</td>
                     <td>{{ticket.effort}}</td>
-                    <td>{{ticket.parents.join(', ')}}</td>
+                    <td class="mw">{{ticket.parents.join(', ')}}</td>
                 </tr>
             </ng-container>
         </tbody>

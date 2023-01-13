@@ -27,6 +27,7 @@ export class ProgressBarComponent implements OnChanges {
 
   ngOnChanges(): void {
     if (this.statuses) {
+      this.selectedStatus = '';
       this.total = this.statuses
       .reduce((acc, curr) =>  ({
         count: curr.count + acc.count,
