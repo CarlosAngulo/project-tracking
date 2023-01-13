@@ -91,4 +91,8 @@ export class AppComponent implements OnDestroy, OnInit{
     this.unsub$.next();
     this.unsub$.unsubscribe();
   }
+  
+  onCreateNode() {
+    this.ticketService.setNodeData();
+  }
 }

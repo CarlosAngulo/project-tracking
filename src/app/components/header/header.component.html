@@ -1,6 +1,6 @@
 <div class="header">
     <div class="header-leader"><span>{{leader | initials}}</span></div>
-    <div class="header-title"><h1>{{title}}</h1></div>
+    <div class="header-title" (click)="onProjectClick()"><h1>{{title}}</h1></div>
     <div class="header-sprint" *ngIf="mvps">
         <app-dropdown
             [options]="mvps"
@@ -14,8 +14,4 @@
     </div>
 </div>
 
-<app-menu
-    (onUploadClick)="onUploadClick($event)"
-    (onZoomClick)="onZoomClick($event)"
-    (onCreateNode)="onCreateNode()">
-</app-menu>
+<app-menu (onZoomClick)="onZoomClick($event)"></app-menu>

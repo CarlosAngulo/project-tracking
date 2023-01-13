@@ -17,6 +17,10 @@
     }
     &-title {
         font-size: 16px;
+        cursor: pointer;
+        &:hover {
+            color: #cc8fe9;
+        }
     }
     &-progress {
         flex-basis: 50%;

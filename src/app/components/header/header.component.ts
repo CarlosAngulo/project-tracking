@@ -46,16 +46,12 @@ export class HeaderComponent implements OnDestroy {
     .onSelectMVP(mvp);
   }
 
-  onUploadClick(evt: boolean) {
+  onProjectClick() {
     this.nodeTreeService.openLoadWindow();
   }
 
   onZoomClick(evt: number) {
     this.viewService.setZoom(evt)
-  }
-  
-  onCreateNode() {
-    this.ticketService.setNodeData();
   }
 
   ngOnDestroy() {
