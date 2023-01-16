@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, switchMap, takeUntil } from 'rxjs';
+import { UserService } from './features/users/user.service';
 import { IProject } from './interfaces/nodes.inteface';
 import { CompanyService } from './services/company/company.service';
 import { NodeTreeService } from './services/nodetree.service';
@@ -21,6 +22,7 @@ export class AppComponent implements OnDestroy, OnInit{
   project!: IProject;
   currentCompanyID = "frCRG0OZ2ytX2GvgYk50";
   private unsub$ = new Subject<void>();
+  showAuthentication = false;
 
   constructor(
     private nodeTreeService: NodeTreeService,
@@ -28,7 +30,8 @@ export class AppComponent implements OnDestroy, OnInit{
     private projectService: ProjectService,
     private companyService: CompanyService,
     private peopleService: PeopleService,
-    readonly firebaseService: FirebaseService  
+    readonly firebaseService: FirebaseService,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
@@ -38,6 +41,9 @@ export class AppComponent implements OnDestroy, OnInit{
     if (localStorage.getItem('project')) {
       this.showProjectLoader = false;
     }
+
+    this.userService.isProfileOpen()
+    .subscribe(res => this.showAuthentication = res)
 
     this.companyService.loadCompanies()
     .pipe(

@@ -1,0 +1,42 @@
+@import '../../../scss/variables';
+@import '../../../scss/elements';
+
+.overlay {
+    position: fixed;
+    z-index: 20000;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(180, 180, 180, 0.4);
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(3px);
+}
+
+.authentication {
+    position: absolute;
+    right: 10px;
+    top: 60px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 1px 1px 4px rgb(0 0 0 / 40%);
+    font-size: 12px;
+    &:before {
+        content: '';
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+        transform: rotate(45deg);
+        position: absolute;
+        right: 12px;
+        top: -10px;
+        background-color: white;
+    }
+}

@@ -2,7 +2,14 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference, DocumentData } from '@angular/fire/compat/firestore';
 import { combineLatest, Observable } from 'rxjs';
 import { INode } from 'src/app/interfaces/nodes.inteface';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { User } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
+import 'firebase/auth';
+
+export interface GetUSer {
+    (user: User | null): void;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +19,45 @@ export class FirebaseService {
     projects!: Observable<any>;
 
     constructor(private firestore: AngularFirestore){}
+
+    // Authentication
+    onUserChanged(callback: GetUSer) {
+        return onAuthStateChanged(getAuth(), (user: User | null) => callback(user));
+    }
+
+    createUserWithEmailAndPassword(email: string, password: string) {
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(response => {
+            console.log('Usuario exitoso: ', response);
+        })
+        .catch(error => {
+            console.log('Error al crear usuario: ', error);
+        });
+    }
+
+    signInWithEmailAndPassword(email: string, password: string) {
+        console.log(email, password)
+        firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(response => {
+            console.log('Inicio de sesión exitoso: ', response);
+        })
+        .catch(error => {
+            console.log('Error al iniciar sesión: ', error.message);
+        });
+    }
+
+    logout() {
+        firebase.auth().signOut()
+        .then(() => {
+            console.log('Cierre de sesión exitoso');
+            // Puedes manejar la redirección a una ruta no protegida aquí
+        })
+        .catch(error => {
+            console.log('Error al cerrar sesión: ', error);
+        });
+    }
+    
+    // Projects
 
     getAllProjects(): Observable<any> {
         return this.firestore.collection('epics').valueChanges({ idField: 'docId' });

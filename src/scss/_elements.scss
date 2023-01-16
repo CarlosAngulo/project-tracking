@@ -29,3 +29,32 @@
         font-size: 18px;
     }
 }
+
+.form {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+
+    &-group {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+
+        &-label {
+            flex-basis: 56px;
+        }
+
+        &-input {
+            border: 1px solid rgba(0,0,0,0.4);
+            border-radius: 4px;
+            outline: medium none;
+            padding: 8px;
+            flex-grow: 1;
+            
+            &:-internal-autofill-selected {
+                color: white;
+                background-color: white;
+            }
+        }
+    }
+}

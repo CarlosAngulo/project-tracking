@@ -1,5 +1,6 @@
 import { Component, OnDestroy} from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
+import { UserService } from 'src/app/features/users/user.service';
 import { IBlockStatus } from 'src/app/interfaces/nodes.inteface';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
 import { TicketService } from 'src/app/services/tickets/ticket.service';
@@ -18,11 +19,13 @@ export class HeaderComponent implements OnDestroy {
   progressStatus!: IBlockStatus[];
   title = '';
   private unsub$ = new Subject<void>();
+  hasUser = false;
 
   constructor(
     private nodeTreeService: NodeTreeService,
     private ticketService: TicketService,
-    private viewService: ViewService
+    private viewService: ViewService,
+    private userService: UserService
   ) {
     nodeTreeService.getMVPs()
     .pipe(takeUntil(this.unsub$))
@@ -39,6 +42,11 @@ export class HeaderComponent implements OnDestroy {
     nodeTreeService.getLeader()
     .pipe(takeUntil(this.unsub$))
     .subscribe((leader: string) => this.leader = leader);
+
+    userService.getUser$()
+    .subscribe(user => {
+      this.hasUser = user === null ? false : true;
+    })
   }
 
   onSelectMVP(mvp?: string | number) {
@@ -61,5 +69,9 @@ export class HeaderComponent implements OnDestroy {
 
   statusSelect(event: string) {
     this.nodeTreeService.onSelectStatus(event);
+  }
+
+  onProifleClick() {
+    this.userService.setProfileOpen(true);
   }
 }

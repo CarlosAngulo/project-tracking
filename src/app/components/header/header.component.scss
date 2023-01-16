@@ -42,7 +42,11 @@
             border-radius: 50%;
             width: 30px;
             height: 30px;
-            color: #333;
+            color: #199f39;
+            cursor: pointer;
+            &.wrong {
+                color: #b41d76;
+            }
         }
     }
 }

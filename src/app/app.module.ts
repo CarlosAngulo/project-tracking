@@ -24,6 +24,7 @@ import { FirebaseService } from './services/project-loader/firebase.service';
 import { ChipItemComponent } from './components/chip-item/chip-item.component';
 import { ProjectLoaderComponent } from './components/project-loader/project-loader.component';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
+import { UserModule } from './features/users/user.module';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import { DashboardComponent } from './views/dashboard/dashboard.component';
     TicketDetailComponent,
     ChipItemComponent,
     ProjectLoaderComponent,
-    DashboardComponent
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,6 +50,7 @@ import { DashboardComponent } from './views/dashboard/dashboard.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    UserModule,
     AngularFireModule.initializeApp(environment.firebaseConfig)
   ],
   providers: [

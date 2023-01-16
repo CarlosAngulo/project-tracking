@@ -1,5 +1,4 @@
 <div class="header">
-    <div class="header-leader"><span>{{leader | initials}}</span></div>
     <div class="header-title" (click)="onProjectClick()"><h1>{{title}}</h1></div>
     <div class="header-sprint" *ngIf="mvps">
         <app-dropdown
@@ -11,6 +10,10 @@
     </div>
     <div class="header-progress">
         <app-progress-bar [statuses]="progressStatus" (onStatusSelected)="statusSelect($event)"></app-progress-bar>
+    </div>
+    <div class="header-leader" (click)="onProifleClick()">
+        <span class="material-symbols-outlined" *ngIf="hasUser"> verified </span>
+        <span class="material-symbols-outlined wrong" *ngIf="!hasUser"> dangerous </span>
     </div>
 </div>
 
