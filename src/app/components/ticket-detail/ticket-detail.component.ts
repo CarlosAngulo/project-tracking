@@ -9,6 +9,9 @@ import { ProjectService } from 'src/app/services/project-loader/project.service'
 import { Mode } from 'src/app/services/tickets/ticket.service';
 import { PeopleService } from 'src/app/services/people/people.service';
 import { IDropDown } from '../dropdown/dropdown.component';
+import { UserService } from 'src/app/features/users/user.service';
+
+export interface IEditableFields extends Record<string, boolean> {}
 
 export enum EditableFields {
   NONE = '',
@@ -35,14 +38,25 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
   modes = Mode;
   mode = Mode.CREATE;
   form!: FormGroup;
-  editingField = EditableFields.NONE;
   peopleList: IPerson[] = [];
   filteredPeople!: IDropDown[];
   ticketList: Partial<INode>[] = [];
   ticketListFiltered: any[] = [];
   parents: Partial<INode>[] = [];
   activeDropdown = EditableFields.NONE;
+  editable = false;
   private unsub$ = new Subject<void>();
+
+  editingFields: IEditableFields =  {
+    [EditableFields.NONE]: false,
+    [EditableFields.STATUS]: false,
+    [EditableFields.TITLE]: false,
+    [EditableFields.ESTIMATION]: false,
+    [EditableFields.DESCRIPTION]: false,
+    [EditableFields.CODE]: false,
+    [EditableFields.ASSIGNED]: false,
+    [EditableFields.PARENTS]: false,
+  }
   
   statuses = [
     NodeStatus.blocked,
@@ -59,6 +73,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     private firebaseService: FirebaseService,
     private projectService: ProjectService,
     private peopleService: PeopleService,
+    private userService: UserService,
     private fb: FormBuilder
   ) {
   }
@@ -78,6 +93,19 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
       this.onEditField(undefined, EditableFields.NONE);
       this.setupData(this.projectService.project, node);
     });
+
+    this.editable = this.userService.hasSession;
+
+    this.userService.getUser$()
+    .pipe(takeUntil(this.unsub$))
+    .subscribe(res => {
+      if(res === null) {
+        this.editable = false;
+        this.resetEditingFields()
+      } else {
+        this.editable = true;
+      }
+    })
   }
 
   setupData( project: IProject, node: INode ) {
@@ -89,6 +117,9 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
       childrenTree: ticket.childrenTree
     }));
     this.mode = this.ticketService.mode;
+    if (this.mode === Mode.CREATE) {
+      this.resetEditingFields(undefined, true);
+    }
     this.data = node;
     this.parents = [];
     this.data.parents.forEach(parent => {
@@ -146,12 +177,21 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  resetEditingFields(objKey?: string, val: boolean = false) {
+    Object
+    .keys(this.editingFields)
+    .forEach((key) => {
+      this.editingFields[key] = key === objKey ? true : val;
+    });
+  }
+
   onEditField(evt: MouseEvent | undefined, field: EditableFields) {
-    this.editingField = field;
+    if (this.editable)
+      this.resetEditingFields(field);
   }
 
   onStatusChange(status: string | number) {
-    this.editingField = EditableFields.NONE;
+    this.resetEditingFields(EditableFields.NONE);
     const statusField = this.form.get('status');
     statusField?.patchValue(status);
     this.markAsDirty(statusField);
@@ -189,7 +229,7 @@ export class TicketDetailComponent implements OnInit, OnDestroy {
         name: assigned.name,
         value: assigned.id
       };
-      this.editingField = EditableFields.NONE;
+      this.resetEditingFields(EditableFields.NONE);
       const assignedField = this.form.get('assigned');
       this.updateFilteredPeople();
       assignedField?.patchValue(assigned);

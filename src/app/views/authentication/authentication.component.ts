@@ -28,7 +28,6 @@ export class AuthenticationComponent implements OnInit {
     this.user = this.userService.user;
     this.userService.getUser$()
     .subscribe(res => {
-      console.log(res)
       this.user = res;
     });
   }

@@ -9,7 +9,8 @@
         (onCancel)="onShowLoader($event)"
         (onLoad)="loadProject($event)"
     ></app-project-loader>
-    <div class="floating-icon">
+    {{editable}}
+    <div class="floating-icon" *ngIf="editable">
         <span class="material-symbols-outlined" (click)="onCreateNode()">
             add
         </span>

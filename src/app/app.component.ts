@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, switchMap, takeUntil } from 'rxjs';
+import { Subject, subscribeOn, switchMap, takeUntil } from 'rxjs';
 import { UserService } from './features/users/user.service';
 import { IProject } from './interfaces/nodes.inteface';
 import { CompanyService } from './services/company/company.service';
@@ -23,6 +23,7 @@ export class AppComponent implements OnDestroy, OnInit{
   currentCompanyID = "frCRG0OZ2ytX2GvgYk50";
   private unsub$ = new Subject<void>();
   showAuthentication = false;
+  editable = false;
 
   constructor(
     private nodeTreeService: NodeTreeService,
@@ -43,22 +44,31 @@ export class AppComponent implements OnDestroy, OnInit{
     }
 
     this.userService.isProfileOpen()
-    .subscribe(res => this.showAuthentication = res)
+    .pipe(takeUntil(this.unsub$))
+    .subscribe(res => this.showAuthentication = res);
+  
+    this.editable = this.userService.hasSession;
+    
+    this.userService.hasSession$()
+    .pipe(takeUntil(this.unsub$))
+    .subscribe(res => {
+      this.editable = res
+    })
 
     this.companyService.loadCompanies()
     .pipe(
       takeUntil(this.unsub$),
       switchMap((companies: any[]) => {
         const kinesso = companies.find(company => company.docId === this.currentCompanyID);
-        // console.log('companies', companies)
+        console.log('companies', companies)
         return this.companyService.loadCompany(kinesso.docId);
       }),
       switchMap((company:any) => {
-        // console.log('company', company)
+        console.log('company', company)
         return this.peopleService.loadPeople(this.companyService.company.people);
       }),
       switchMap((people:any) => {
-        // console.log('people', people)
+        console.log('people', people)
         return this.projectService.getProjectsByCompany(this.companyService.company.projects);
       })
     )

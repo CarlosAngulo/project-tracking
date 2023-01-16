@@ -13,6 +13,7 @@ export class UserService {
   private profileOpen$: Observable<boolean> = this._profileOpen.asObservable();
 
   private currentUser: IUserData | null = null;
+  private _hasSession: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private _user: Subject<IUserData | null> = new Subject();
   private user$: Observable<IUserData | null> = this._user.asObservable();
   
@@ -29,6 +30,7 @@ export class UserService {
         uid: user.uid,
       } : null;
       this._user.next(loggedUser);
+      this._hasSession.next( loggedUser !== null);
       this.currentUser = loggedUser;
     });
   }
@@ -37,8 +39,16 @@ export class UserService {
     return this.currentUser;
   }
 
+  get hasSession() {
+    return this.currentUser ? true : false;
+  }
+
   getUser$(): Observable<IUserData | null> {
     return this.user$;
+  }
+
+  hasSession$(): Observable<boolean> {
+    return this._hasSession.asObservable();
   }
 
   isProfileOpen(): Observable<boolean> {
