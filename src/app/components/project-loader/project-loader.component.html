@@ -37,9 +37,13 @@
                 <form [formGroup]="form" (ngSubmit)="onCreateNewProject()">
                     <div class="new_project">
                         <p class="new_project_label">Project name</p>
-                        <input class="new_project_input" type="text" placeholder="Project Name" formControlName="title">
+                        <input class="new_project_input" type="text" placeholder="Project Name" formControlName="name">
                         <p class="new_project_label">Please select a leader for this project.</p>
                         <app-dropdown class="new_project_dropdown" [defaultOption]="'None'" [options]="peopleNames" (onSelect)="selectProjectAssigned($event)"></app-dropdown>
+                        <div>
+                            <label class="new_project_label">Keep the project as private </label>
+                            <input type="checkbox" name="private" id="" formControlName="private">
+                        </div>
                     </div>
                 </form>
             </ng-template>

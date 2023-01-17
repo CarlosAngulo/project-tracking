@@ -60,15 +60,15 @@ export class AppComponent implements OnDestroy, OnInit{
       takeUntil(this.unsub$),
       switchMap((companies: any[]) => {
         const kinesso = companies.find(company => company.docId === this.currentCompanyID);
-        console.log('companies', companies)
+        // console.log('companies', companies)
         return this.companyService.loadCompany(kinesso.docId);
       }),
       switchMap((company:any) => {
-        console.log('company', company)
+        // console.log('company', company)
         return this.peopleService.loadPeople(this.companyService.company.people);
       }),
       switchMap((people:any) => {
-        console.log('people', people)
+        // console.log('people', people)
         return this.projectService.getProjectsByCompany(this.companyService.company.projects);
       })
     )

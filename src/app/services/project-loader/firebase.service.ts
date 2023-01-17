@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference, DocumentData } from '@angular/fire/compat/firestore';
-import { combineLatest, Observable } from 'rxjs';
-import { INode } from 'src/app/interfaces/nodes.inteface';
+import { combineLatest, Observable, of } from 'rxjs';
+import { INode, IProject } from 'src/app/interfaces/nodes.inteface';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { User } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import 'firebase/auth';
+import { IProjectCreateDTO } from './project.service';
 
 export interface GetUSer {
     (user: User | null): void;
@@ -59,6 +60,22 @@ export class FirebaseService {
     
     // Projects
 
+    createProject(project: IProjectCreateDTO, companyID: string) {
+        return this.firestore.collection<DocumentData>('epics').add(project)
+        .then(
+            (res:any) => {
+                this.addProjectToCompany(companyID, res)
+                return res;
+            }
+        );
+    }
+
+    addProjectToCompany(companyID: string, project: DocumentReference): Promise<any> {
+        return this.firestore.doc<DocumentData>(`companies/${companyID}`).update({
+            projects: firebase.firestore.FieldValue.arrayUnion(project)
+        });
+    }
+
     getAllProjects(): Observable<any> {
         return this.firestore.collection('epics').valueChanges({ idField: 'docId' });
     }
@@ -75,6 +92,9 @@ export class FirebaseService {
     }
 
     getProjecsByCompany(projectIDs: string[]) {
+        if(projectIDs.length < 10) {
+            return combineLatest([this.getProjectsByID(projectIDs)])
+        }
         const chunk = this.sliceIntoChunks(projectIDs, 10);
         return combineLatest(chunk.map(item => this.getProjectsByID(item)))
     }
@@ -113,6 +133,7 @@ export class FirebaseService {
 
     // Tickets
     getTickets(ticketIDs: string[]) {
+        if (ticketIDs.length === 0) return of([]);
         const chunk = this.sliceIntoChunks(ticketIDs, 10);
         return combineLatest(chunk.map(item => this.getTicketsByID(item)))
     }
@@ -145,6 +166,8 @@ export class FirebaseService {
 
     //Update Ticket
     deleteParentsOnTickets(ticketIDs: string[], parents: string[]) {
+        console.log(ticketIDs, parents);
+        debugger;
         return combineLatest(ticketIDs.map(ticketID => this.deleteParents(ticketID, parents)))
     }
     
@@ -162,6 +185,18 @@ export class FirebaseService {
     deleteTicketFromProject(ticketRef:DocumentReference<DocumentData>, projectID: string): Promise<any> {
         return this.firestore.doc(`epics/${projectID}`).update({
             tickets: firebase.firestore.FieldValue.arrayRemove(ticketRef)
+        })
+    }
+
+    moveToTrash(ticketRef:DocumentReference<DocumentData>, projectID: string): Promise<any> {
+        return this.firestore.doc(`epics/${projectID}`).update({
+            trash: firebase.firestore.FieldValue.arrayUnion(ticketRef)
+        })
+    }
+
+    deleteFromTrash(ticketRef:DocumentReference<DocumentData>, projectID: string): Promise<any> {
+        return this.firestore.doc(`epics/${projectID}`).update({
+            trash: firebase.firestore.FieldValue.arrayRemove(ticketRef)
         })
     }
 }

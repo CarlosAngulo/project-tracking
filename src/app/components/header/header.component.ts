@@ -1,9 +1,8 @@
 import { Component, OnDestroy} from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { UserService } from 'src/app/features/users/user.service';
-import { IBlockStatus } from 'src/app/interfaces/nodes.inteface';
+import { IBlockStatus, INode } from 'src/app/interfaces/nodes.inteface';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
-import { TicketService } from 'src/app/services/tickets/ticket.service';
 import { ViewService } from 'src/app/services/view.service';
 import { IDropDown } from '../dropdown/dropdown.component';
 
@@ -20,10 +19,10 @@ export class HeaderComponent implements OnDestroy {
   title = '';
   private unsub$ = new Subject<void>();
   hasUser = false;
+  showProgressBar = false;
 
   constructor(
     private nodeTreeService: NodeTreeService,
-    private ticketService: TicketService,
     private viewService: ViewService,
     private userService: UserService
   ) {
@@ -47,6 +46,10 @@ export class HeaderComponent implements OnDestroy {
     .subscribe(user => {
       this.hasUser = user === null ? false : true;
     })
+
+    nodeTreeService.getNodeTree()
+    .pipe(takeUntil(this.unsub$))
+    .subscribe((nodeTree: INode[]) => this.showProgressBar = nodeTree.length > 0);
   }
 
   onSelectMVP(mvp?: string | number) {

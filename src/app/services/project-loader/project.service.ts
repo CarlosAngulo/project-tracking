@@ -1,10 +1,18 @@
 import { Injectable } from '@angular/core';
 import { DocumentData, DocumentReference } from '@angular/fire/compat/firestore';
-import { combineLatest, map, Observable, of, Subject, tap } from 'rxjs';
+import { combineLatest, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
 import { INode, IProject, IRawProject } from 'src/app/interfaces/nodes.inteface';
 import { NodeTreeService } from '../nodetree.service';
 import { PeopleService } from '../people/people.service';
 import { FirebaseService } from './firebase.service';
+
+
+export interface IProjectCreateDTO {
+    leader: string;
+    name: string;
+    private: boolean,
+    tickets?: []
+}
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +45,13 @@ export class ProjectService {
 
     get ticketsRef(): DocumentReference<DocumentData>[] {
         return this._ticketsRef;
+    }
+
+    createProject(project: IProjectCreateDTO, companyID: string) {
+        return this.firebaseService.createProject({
+            ...project,
+            tickets: [],
+        }, companyID);
     }
 
     getTicketRefById(ticketID:string): DocumentReference<DocumentData> | undefined {
@@ -96,6 +111,11 @@ export class ProjectService {
 
     moveTicketToTrash(ticketRef: DocumentReference<DocumentData> | undefined) {
         if (ticketRef === undefined) return of({});
-        return this.firebaseService.deleteTicketFromProject(ticketRef, this.project.docId)
+        return this.firebaseService.moveToTrash(ticketRef, this.project.docId)
+        .then( res => this.firebaseService.deleteTicketFromProject(ticketRef, this.project.docId));
     }
+
+    // restoreFromTrash(ticketRef: DocumentReference<DocumentData> | undefined) {
+    //     if (ticketRef === undefined) return of({});
+    // }
 }

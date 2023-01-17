@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DocumentData, DocumentReference } from '@angular/fire/compat/firestore';
-import { Observable, ObservableInput, of, Subject, switchMap } from 'rxjs';
+import { from, Observable, ObservableInput, of, Subject, switchMap } from 'rxjs';
 import { INode, NodeStatus } from 'src/app/interfaces/nodes.inteface';
 import { FirebaseService } from '../project-loader/firebase.service';
 import { ProjectService } from '../project-loader/project.service';
@@ -82,6 +82,9 @@ export class TicketService {
   
   moveToTrash(ticket: DocumentReference<DocumentData> | undefined, children: string[]): Observable<any> {
     if (ticket === undefined) return of({});
+    if (children.length === 0) {
+      return from(this.projectService.moveTicketToTrash(ticket));
+    }
     return this.firebaseService.deleteParentsOnTickets(children, [ticket.id])
     .pipe(
       switchMap(res => this.projectService.moveTicketToTrash(ticket))

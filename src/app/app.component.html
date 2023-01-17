@@ -5,6 +5,7 @@
     <app-project-loader 
         *ngIf="showProjectLoader"
         [projects]="projects"
+        [companyID]="currentCompanyID"
         [people]="people"
         (onCancel)="onShowLoader($event)"
         (onLoad)="loadProject($event)"

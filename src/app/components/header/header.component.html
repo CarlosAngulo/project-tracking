@@ -1,6 +1,6 @@
 <div class="header">
     <div class="header-title" (click)="onProjectClick()"><h1>{{title}}</h1></div>
-    <div class="header-sprint" *ngIf="mvps">
+    <div class="header-sprint" *ngIf="mvps.length > 0">
         <app-dropdown
             [options]="mvps"
             [label]="'MVP'"
@@ -8,7 +8,7 @@
             (onSelect)="onSelectMVP($event)">
         </app-dropdown>
     </div>
-    <div class="header-progress">
+    <div class="header-progress" *ngIf="showProgressBar">
         <app-progress-bar [statuses]="progressStatus" (onStatusSelected)="statusSelect($event)"></app-progress-bar>
     </div>
     <div class="header-leader" (click)="onProifleClick()">

@@ -125,9 +125,11 @@ export class NodeTreeService {
 
     // Sort nodes by order field
     let nodeTree = this.sortNodes(nodes);
+
+    nodeTree = this.cleanNullParents(nodeTree)
     
     // Creates the three
-    nodeTree = this.nodesTree(nodes);
+    nodeTree = this.nodesTree(nodeTree);
 
     // Add children
     nodeTree = this.addChildren(nodeTree);
@@ -159,6 +161,15 @@ export class NodeTreeService {
     this.extractMVPs(nodes);
   }
 
+  private cleanNullParents(nodes: INode[]) {
+    const simpleNodes = nodes.map(node => node.id);
+    return nodes.map(node => ({
+        ...node,
+        parents: node.parents.filter(parent => simpleNodes.includes(parent))
+      })
+    )
+  }
+
   private sortNodes(nodes: INode[]) {
     return nodes
     .sort((p1, p2) => (p1.order < p2.order) ? 1 : (p1.order > p2.order) ? -1 : 0);
@@ -176,6 +187,7 @@ export class NodeTreeService {
 
     // console.log(firstList.filter( node => !firstList.map(i => i.code).includes(node.parents[0])))
     // console.log('---', parentNodes)
+
     if (parentNodes?.length === 0) {
       // creates next level
       secondList.map((parentNode) => {

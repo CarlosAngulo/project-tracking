@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IProject } from 'src/app/interfaces/nodes.inteface';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
+import { ProjectService } from 'src/app/services/project-loader/project.service';
 import { IDropDown } from '../dropdown/dropdown.component';
 
 export enum Mode {
@@ -30,6 +31,7 @@ export class ProjectLoaderComponent implements OnInit {
       value: project.id
     }));
   };
+  @Input() companyID!: string;
 
   form!: FormGroup;
   parseJSONError = false;
@@ -37,7 +39,7 @@ export class ProjectLoaderComponent implements OnInit {
   project!: IProject;
   projectNames!: IDropDown[];
   peopleNames!: IDropDown[];
-  projectAssigned!: IDropDown;
+  projectAssigned!: IDropDown | undefined;
   projectTitle!: String;
   selectedProjectID!: string;
   title = Mode.LOAD;
@@ -47,6 +49,7 @@ export class ProjectLoaderComponent implements OnInit {
 
   constructor(
     readonly nodeTreeService: NodeTreeService,
+    private projectService: ProjectService,
     private fb: FormBuilder
   ) {
     const localStorageProject: any = localStorage.getItem('project');
@@ -57,8 +60,9 @@ export class ProjectLoaderComponent implements OnInit {
 
   setupForm(){
     this.form = this.fb.group({
-      assigned: [this.projectAssigned, Validators.required],
-      title: [this.projectTitle],
+      leader: ['', Validators.required],
+      name: [this.projectTitle],
+      private: [false]
     });
   }
 
@@ -95,7 +99,8 @@ export class ProjectLoaderComponent implements OnInit {
   }
 
   onCreateNewProject() {
-
+    this.projectService.createProject(this.form.value, this.companyID)
+    .then( project => this.onLoadProject(project.id))
   }
 
   goToView(view: Mode) {
@@ -108,11 +113,7 @@ export class ProjectLoaderComponent implements OnInit {
 
   selectProjectAssigned(event:any) {
     if (event === '') return;
-    this.projectAssigned = this.people.find(person => person.id === event);
-    const parentsField = this.form.get('parents');
-    // parentsField?.patchValue(this.parents.map(parent => parent.id));
-    // this.markAsDirty(parentsField);
-    // this.updateFilteredTickets();
+    this.form.get('leader')?.patchValue(event);
   }
 
   onSave() {
