@@ -416,13 +416,21 @@ export class NodeTreeService {
     }))
   }
 
-  private extractMVPs(nodes:INode[]) {
+  private extractMVPs(nodes:INode[]) { // Hacerlo genérico para que el filtro sea configurable
     const mvps: IDropDown[] = nodes.reduce((accum: any, current) => {
-      if (current.mvp === undefined) return accum; 
+      if (current.mvp === undefined) return accum; // Revisar, para incluir los que no lo tengan definido
       const name = current.mvp.name;
       const id = current.mvp.id;
-      const mvpIndex = accum.findIndex((item:IDropDown) => item.value === current.mvp.id)
+      const mvpIndex = accum.findIndex((item:IDropDown) => item.value === current.mvp.id);
+      console.log(accum)
       if (mvpIndex === -1) {
+        console.log([
+          ...accum,
+          {
+            name,
+            value: id
+          }
+        ]);
         return [
           ...accum,
           {

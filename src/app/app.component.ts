@@ -3,6 +3,7 @@ import { Subject, subscribeOn, switchMap, takeUntil } from 'rxjs';
 import { UserService } from './features/users/user.service';
 import { IProject } from './interfaces/nodes.inteface';
 import { CompanyService } from './services/company/company.service';
+import { JiraService } from './services/jira.service';
 import { NodeTreeService } from './services/nodetree.service';
 import { PeopleService } from './services/people/people.service';
 import { FirebaseService } from './services/project-loader/firebase.service';
@@ -33,6 +34,7 @@ export class AppComponent implements OnDestroy, OnInit{
     private peopleService: PeopleService,
     readonly firebaseService: FirebaseService,
     private userService: UserService,
+    private jiraService: JiraService
   ) {}
 
   ngOnInit(): void {
@@ -53,32 +55,35 @@ export class AppComponent implements OnDestroy, OnInit{
     .pipe(takeUntil(this.unsub$))
     .subscribe(res => {
       this.editable = res
-    })
+    });
 
-    this.companyService.loadCompanies()
-    .pipe(
-      takeUntil(this.unsub$),
-      switchMap((companies: any[]) => {
-        const kinesso = companies.find(company => company.docId === this.currentCompanyID);
-        // console.log('companies', companies)
-        return this.companyService.loadCompany(kinesso.docId);
-      }),
-      switchMap((company:any) => {
-        // console.log('company', company)
-        return this.peopleService.loadPeople(this.companyService.company.people);
-      }),
-      switchMap((people:any) => {
-        // console.log('people', people)
-        return this.projectService.getProjectsByCompany(this.companyService.company.projects);
-      })
-    )
-    .subscribe(projects => {
-      // console.log('company', this.companyService.company);
-      // console.log('people', this.peopleService.people);
-      // console.log('res', projects);
-      this.projects = projects;
-      this.people = this.peopleService.people;
-    })
+    this.jiraService.getEpic()
+    .subscribe(console.log)
+
+    // this.companyService.loadCompanies()
+    // .pipe(
+    //   takeUntil(this.unsub$),
+    //   switchMap((companies: any[]) => {
+    //     const kinesso = companies.find(company => company.docId === this.currentCompanyID);
+    //     // console.log('companies', companies)
+    //     return this.companyService.loadCompany(kinesso.docId);
+    //   }),
+    //   switchMap((company:any) => {
+    //     // console.log('company', company)
+    //     return this.peopleService.loadPeople(this.companyService.company.people);
+    //   }),
+    //   switchMap((people:any) => {
+    //     // console.log('people', people)
+    //     return this.projectService.getProjectsByCompany(this.companyService.company.projects);
+    //   })
+    // )
+    // .subscribe(projects => {
+    //   // console.log('company', this.companyService.company);
+    //   // console.log('people', this.peopleService.people);
+    //   // console.log('res', projects);
+    //   this.projects = projects;
+    //   this.people = this.peopleService.people;
+    // })
 
     this.nodeTreeService.isLoadWindowOpen()
     .pipe(takeUntil(this.unsub$))

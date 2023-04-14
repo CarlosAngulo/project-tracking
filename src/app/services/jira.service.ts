@@ -13,10 +13,11 @@ export class JiraService {
     }
 
     getEpic() {
-        return this.http.get('https://projects.mbww.com/rest/api/3/issue/AMC-10451', {
+        return this.http.get('https://carlosangulo.atlassian.net/rest/api/3/issue/PROY-3', {
             headers: {
                 'Content-Type':  'application/json',
                 'Authorization': 'Basic ' + btoa(`${this.credentials.user}:${this.credentials.token}`)
+                // 'Authorization': 'Basic Y2FybG9zYWxiZXJ0b2FuZ3Vsb21lbmRvemFAZ21haWwuY29tOnBnTEllZmJLbGZTQzZTdThrWnZtODFDRg=='
             }
         })
     }

@@ -2,7 +2,6 @@ import { Component, OnInit} from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { cardProps } from 'src/app/cards/card/card.props';
 import { Iconstraints, INode} from 'src/app/interfaces/nodes.inteface';
-import { JiraService } from 'src/app/services/jira.service';
 import { NodeTreeService } from 'src/app/services/nodetree.service';
 import { TicketService } from 'src/app/services/tickets/ticket.service';
 import { ViewService } from 'src/app/services/view.service';
@@ -19,7 +18,6 @@ export class DependencyComponent implements OnInit {
   private unsub$ = new Subject<void>();
 
   constructor(
-    readonly jiraService: JiraService,
     readonly nodeTreeService: NodeTreeService,
     readonly viewService: ViewService,
     readonly ticketService: TicketService

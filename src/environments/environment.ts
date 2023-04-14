@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   jira: {
-    user: '<your jira user>',
-    token: '<your token>',
+    user: 'carlosalbertoangulomendoza@gmail.com',
+    token: 'pgLIefbKlfSC6Su8kZvm81CF',
   },
   firebaseConfig: {
     apiKey: "AIzaSyBgVfJJ6uZIjmW6nT_C7b4cfgiOGur_6Cs",
